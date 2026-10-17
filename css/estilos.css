@@ -315,7 +315,7 @@ pre code {
   max-width: none;
 }
 
-/* Chips de temas dentro del banner (.hero-badge style) */
+/* Chips interactivos de temas dentro del banner (.hero-badge style) */
 .chips-banner {
   display: flex;
   flex-wrap: wrap;
@@ -327,21 +327,42 @@ pre code {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.36rem 0.85rem;
+  padding: 0.4rem 0.92rem;
   border-radius: 999px;
   font-family: var(--font-mono);
   font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   background: linear-gradient(145deg, #ffffff1b, #ffffff09);
-  border: 1px solid #ffffff25;
+  border: 1px solid #ffffff28;
   color: #e2e8f0;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: all 0.18s ease;
 }
 
 .chip i {
   color: #7dd3fc;
+  transition: color 0.18s ease;
+}
+
+.chip:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.48);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.chip.activo {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #091c3a;
+  box-shadow: 0 8px 20px rgba(7, 24, 45, 0.28);
+}
+
+.chip.activo i {
+  color: var(--section-accent);
 }
 
 /* ---------- Barra lateral colapsable (réplica de .sidebar) ---------- */
@@ -553,15 +574,26 @@ pre code {
   transition: width 0.3s ease;
 }
 
-/* ---------- Secciones de tema ---------- */
-.seccion {
-  padding: 2.85rem 0 2.35rem;
-  border-top: 1px solid var(--line);
+/* ---------- Secciones de tema (modo pestaña: una activa a la vez) ---------- */
+@keyframes fadeSeccion {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.seccion:first-of-type {
+.seccion {
+  padding: 1.95rem 0 2.35rem;
   border-top: 0;
-  padding-top: 1.75rem;
+  animation: fadeSeccion 0.22s ease;
+}
+
+.seccion[hidden] {
+  display: none !important;
 }
 
 /* Badge numérico de sección (.concept-index en sitio de muestra) */
@@ -1292,8 +1324,10 @@ pre code {
   .tarjeta-tema,
   .lectura-seccion,
   .tarjeta-pregunta,
-  .btn-tide {
+  .btn-tide,
+  .seccion {
     transition: none;
+    animation: none;
   }
 }
 

@@ -50,7 +50,7 @@
 
             <div class="grupo">
               <div class="grupo-cabecera">
-                <a class="grupo-enlace" href="#tema-1">
+                <a class="grupo-enlace activo" href="#tema-1" data-seccion="tema-1">
                   <span class="grupo-numero">1</span>
                   <span>Álgebra y lógica</span>
                 </a>
@@ -60,7 +60,7 @@
               </div>
               <div class="collapse show" id="grupo-tema-1">
                 <ul class="indice-lista">
-                  <li><a href="#tema-1-aprender">Aprender</a></li>
+                  <li><a href="#tema-1-aprender" class="activo">Aprender</a></li>
                   <li><a href="#tema-1-practicar">Practicar</a></li>
                   <li><a href="#tema-1-quiz">Quiz</a></li>
                 </ul>
@@ -69,7 +69,7 @@
 
             <div class="grupo">
               <div class="grupo-cabecera">
-                <a class="grupo-enlace" href="#tema-2">
+                <a class="grupo-enlace" href="#tema-2" data-seccion="tema-2">
                   <span class="grupo-numero">2</span>
                   <span>Aritmética y conteo</span>
                 </a>
@@ -88,7 +88,7 @@
 
             <div class="grupo">
               <div class="grupo-cabecera">
-                <a class="grupo-enlace" href="#tema-3">
+                <a class="grupo-enlace" href="#tema-3" data-seccion="tema-3">
                   <span class="grupo-numero">3</span>
                   <span>Geometría y patrones</span>
                 </a>
@@ -101,12 +101,20 @@
                   <li><a href="#tema-3-aprender">Aprender</a></li>
                   <li><a href="#tema-3-practicar">Practicar</a></li>
                   <li><a href="#tema-3-quiz">Quiz</a></li>
-                  <li><a href="#tema-3-tareas">Tareas en PDF</a></li>
                 </ul>
               </div>
             </div>
 
-            <a class="indice-enlace mt-2" href="#pendientes">
+            <div class="grupo">
+              <div class="grupo-cabecera">
+                <a class="grupo-enlace" href="#tareas-pdf" data-seccion="tareas-pdf">
+                  <span class="grupo-numero"><i class="fa-solid fa-file-pdf"></i></span>
+                  <span>Tareas en PDF</span>
+                </a>
+              </div>
+            </div>
+
+            <a class="indice-enlace mt-2" href="#pendientes" data-seccion="pendientes">
               <i class="fa-regular fa-clock" aria-hidden="true"></i> Próximamente
             </a>
           </nav>
@@ -124,30 +132,31 @@
       </aside>
 
       <!-- Contenido principal -->
-      <main class="col-lg-9 col-xl-10 px-3 px-md-4 px-lg-5 py-4">
+      <main class="col-lg-9 col-xl-10 px-3 px-md-4 px-lg-5 py-4" id="contenido-bloque">
 
         <header class="banner banner-compacto px-4 px-lg-5">
           <div class="container-fluid p-0">
             <h1 class="mb-2">Lógica, álgebra, aritmética y geometría básica</h1>
             <p class="subtitulo mb-0">Tres temas para aprender a razonar con reglas claras. Cada uno tiene una lectura, ejercicios de práctica y un quiz conceptual con retroalimentación inmediata.</p>
-            <div class="chips-banner" aria-hidden="true">
-              <span class="chip"><i class="fa-solid fa-scale-balanced"></i> Tema 1 · Álgebra y lógica</span>
-              <span class="chip"><i class="fa-solid fa-calculator"></i> Tema 2 · Aritmética y conteo</span>
-              <span class="chip"><i class="fa-solid fa-draw-polygon"></i> Tema 3 · Geometría y patrones</span>
+            <div class="chips-banner" role="tablist" aria-label="Selector rápido de temas del bloque">
+              <a class="chip activo" href="#tema-1" data-seccion="tema-1"><i class="fa-solid fa-scale-balanced"></i> Tema 1 · Álgebra y lógica</a>
+              <a class="chip" href="#tema-2" data-seccion="tema-2"><i class="fa-solid fa-calculator"></i> Tema 2 · Aritmética y conteo</a>
+              <a class="chip" href="#tema-3" data-seccion="tema-3"><i class="fa-solid fa-draw-polygon"></i> Tema 3 · Geometría y patrones</a>
+              <a class="chip" href="#tareas-pdf" data-seccion="tareas-pdf"><i class="fa-solid fa-file-pdf"></i> Cierre · Tareas en PDF</a>
             </div>
             <span class="credito d-inline-block"><span>Diseñado y organizado por: <strong>Prof. Rigoberto Santiago Garzón</strong></span></span>
           </div>
         </header>
 
         <!-- TEMA 1 -->
-        <section class="seccion" id="tema-1">
+        <section class="seccion" id="tema-1" data-vista-seccion="tema-1">
           <div class="numero-seccion" aria-hidden="true">1</div>
           <h2>Álgebra y lógica</h2>
           <p class="lead-tema">Variables, orden de operaciones, propiedades, ecuaciones de primer grado y el lenguaje de las condicionales y la negación.</p>
 
           <div class="pestanas" data-pestanas="1">
             <div class="tab-barra" role="tablist" aria-label="Contenido del Tema 1">
-              <button class="tab-btn" type="button" role="tab" data-tab="aprender" id="tab-1-aprender" aria-controls="tema-1-aprender" aria-selected="true">
+              <button class="tab-btn activa" type="button" role="tab" data-tab="aprender" id="tab-1-aprender" aria-controls="tema-1-aprender" aria-selected="true">
                 <i class="fa-solid fa-book-open"></i> Aprender
               </button>
               <button class="tab-btn" type="button" role="tab" data-tab="practicar" id="tab-1-practicar" aria-controls="tema-1-practicar" aria-selected="false" tabindex="-1">
@@ -181,19 +190,19 @@
 
           <div class="navegacion-seccion">
             <span></span>
-            <a href="#tema-2">Siguiente: Tema 2 <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#tema-2" data-seccion="tema-2">Siguiente: Tema 2 <i class="fa-solid fa-arrow-right"></i></a>
           </div>
         </section>
 
         <!-- TEMA 2 -->
-        <section class="seccion" id="tema-2">
+        <section class="seccion" id="tema-2" data-vista-seccion="tema-2" hidden>
           <div class="numero-seccion" aria-hidden="true">2</div>
           <h2>Aritmética, conteo y casos</h2>
           <p class="lead-tema">Paridad, divisibilidad, cociente y residuo, principio de la suma y del producto, y razonamiento por casos.</p>
 
           <div class="pestanas" data-pestanas="2">
             <div class="tab-barra" role="tablist" aria-label="Contenido del Tema 2">
-              <button class="tab-btn" type="button" role="tab" data-tab="aprender" id="tab-2-aprender" aria-controls="tema-2-aprender" aria-selected="true">
+              <button class="tab-btn activa" type="button" role="tab" data-tab="aprender" id="tab-2-aprender" aria-controls="tema-2-aprender" aria-selected="true">
                 <i class="fa-solid fa-book-open"></i> Aprender
               </button>
               <button class="tab-btn" type="button" role="tab" data-tab="practicar" id="tab-2-practicar" aria-controls="tema-2-practicar" aria-selected="false" tabindex="-1">
@@ -223,20 +232,20 @@
           </div>
 
           <div class="navegacion-seccion">
-            <a href="#tema-1"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 1</a>
-            <a href="#tema-3">Siguiente: Tema 3 <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#tema-1" data-seccion="tema-1"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 1</a>
+            <a href="#tema-3" data-seccion="tema-3">Siguiente: Tema 3 <i class="fa-solid fa-arrow-right"></i></a>
           </div>
         </section>
 
         <!-- TEMA 3 -->
-        <section class="seccion" id="tema-3">
+        <section class="seccion" id="tema-3" data-vista-seccion="tema-3" hidden>
           <div class="numero-seccion" aria-hidden="true">3</div>
           <h2>Geometría, trigonometría y patrones</h2>
           <p class="lead-tema">Ángulos y triángulos, teorema de Pitágoras, distancia entre puntos, razones trigonométricas básicas y secuencias aritméticas.</p>
 
           <div class="pestanas" data-pestanas="3">
             <div class="tab-barra" role="tablist" aria-label="Contenido del Tema 3">
-              <button class="tab-btn" type="button" role="tab" data-tab="aprender" id="tab-3-aprender" aria-controls="tema-3-aprender" aria-selected="true">
+              <button class="tab-btn activa" type="button" role="tab" data-tab="aprender" id="tab-3-aprender" aria-controls="tema-3-aprender" aria-selected="true">
                 <i class="fa-solid fa-book-open"></i> Aprender
               </button>
               <button class="tab-btn" type="button" role="tab" data-tab="practicar" id="tab-3-practicar" aria-controls="tema-3-practicar" aria-selected="false" tabindex="-1">
@@ -265,22 +274,40 @@
             </div>
           </div>
 
+          <div class="navegacion-seccion">
+            <a href="#tema-2" data-seccion="tema-2"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 2</a>
+            <a href="#tareas-pdf" data-seccion="tareas-pdf">Siguiente: Tareas en PDF <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </section>
+
+        <!-- CIERRE DEL BLOQUE: TAREAS EN PDF -->
+        <section class="seccion" id="tareas-pdf" data-vista-seccion="tareas-pdf" hidden>
+          <div class="numero-seccion" aria-hidden="true"><i class="fa-solid fa-file-pdf"></i></div>
+          <h2>Tareas en PDF · Cierre del Bloque 1</h2>
+          <p class="lead-tema">Compendio general de ejercicios y tareas de los tres temas del bloque para resolver en cuaderno, imprimir o trabajar sin conexión.</p>
+
           <div class="bloque-pestana" id="tema-3-tareas">
-            <h3><span class="icono-bloque amber"><i class="fa-solid fa-file-pdf"></i></span> Tareas en PDF</h3>
-            <p class="texto-suave">Práctica de cada tema y el compendio de tareas, para imprimir o trabajar sin conexión.</p>
-            <a class="enlace-recurso" href="../assets/docs/Ejercicios_y_tareas_Bloque1.pdf"><i class="fa-solid fa-file-pdf"></i> Ejercicios y tareas (PDF)</a>
+            <h3><span class="icono-bloque amber"><i class="fa-solid fa-file-pdf"></i></span> Cuadernillo de ejercicios y tareas del Bloque 1</h3>
+            <p class="texto-suave mb-3">Incluye problemas seleccionados de Álgebra y lógica, Aritmética y conteo, y Geometría, trigonometría y patrones para consolidar lo aprendido antes de pasar al siguiente bloque.</p>
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+              <a class="btn btn-tide" href="../assets/docs/Ejercicios_y_tareas_Bloque1.pdf" target="_blank" rel="noopener">
+                <i class="fa-solid fa-file-arrow-down me-1"></i> Descargar Ejercicios y tareas (PDF)
+              </a>
+            </div>
           </div>
 
           <div class="navegacion-seccion">
-            <a href="#tema-2"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 2</a>
-            <a href="#pendientes">Próximamente <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#tema-3" data-seccion="tema-3"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 3</a>
+            <a href="#pendientes" data-seccion="pendientes">Siguiente: Próximamente <i class="fa-solid fa-arrow-right"></i></a>
           </div>
         </section>
 
         <!-- PENDIENTES -->
-        <section class="seccion" id="pendientes">
-          <h2 class="h3 mb-3">Próximamente</h2>
-          <div class="row g-3">
+        <section class="seccion" id="pendientes" data-vista-seccion="pendientes" hidden>
+          <div class="numero-seccion" aria-hidden="true"><i class="fa-regular fa-clock"></i></div>
+          <h2>Próximamente</h2>
+          <p class="lead-tema">Materiales complementarios en preparación para la segunda etapa del Bloque 1.</p>
+          <div class="row g-3 mt-1">
             <div class="col-md-6">
               <div class="pendiente-card">
                 <span class="badge rounded-pill mb-2">En preparación</span>
@@ -295,6 +322,11 @@
                 <p class="texto-suave mb-0">Un problema de cada tipo, con solución y explicación.</p>
               </div>
             </div>
+          </div>
+
+          <div class="navegacion-seccion">
+            <a href="#tareas-pdf" data-seccion="tareas-pdf"><i class="fa-solid fa-arrow-left"></i> Anterior: Tareas en PDF</a>
+            <span></span>
           </div>
         </section>
 
