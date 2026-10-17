@@ -22,17 +22,14 @@ curso-cpp-web/
 
 ## Archivos que debes colocar en `assets/docs/`
 
-Los enlaces del Bloque 1 apuntan a estos nombres. Copia aquí tus archivos generados:
+Los enlaces del Bloque 1 apuntan a estos nombres. Ya están incluidos en el zip:
 
 | Nombre en el sitio | Archivo de origen |
 |---|---|
-| `Clase1_Algebra_y_logica.pptx` | Presentación de la clase 1 |
-| `Clase2_Aritmetica_conteo_y_casos.pptx` | Presentación de la clase 2 |
-| `Clase3_Geometria_trigonometria_y_patrones.pptx` | Presentación de la clase 3 |
-| `Notas_Clase1.pdf` | Notas del orador, clase 1 (renombrar el PDF generado) |
-| `Notas_Clase2.pdf` | Notas del orador, clase 2 (renombrar el PDF generado) |
-| `Notas_Clase3.pdf` | Notas del orador, clase 3 (renombrar el PDF generado) |
-| `Ejercicios_y_tareas_Bloque1.pdf` | PDF de ejercicios y tareas |
+| `Clase1_Algebra_y_logica.pptx` | Presentación del tema 1 |
+| `Clase2_Aritmetica_conteo_y_casos.pptx` | Presentación del tema 2 |
+| `Clase3_Geometria_trigonometria_y_patrones.pptx` | Presentación del tema 3 |
+| `Ejercicios_y_tareas_Bloque1.pdf` | PDF de ejercicios de práctica, tareas por tema y clave docente |
 
 ## Subir a GitHub y publicar en Vercel
 

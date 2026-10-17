@@ -1,11 +1,12 @@
 /* ==========================================================
    Motor de ejercicios interactivos con retroalimentación
-   Lee EJERCICIOS_BLOQUE1 (ejercicios-bloque1.js) y dibuja
-   las tarjetas, califica cada respuesta y actualiza el progreso.
+   Lee EJERCICIOS_BLOQUE1 (ejercicios-bloque1.js), dibuja
+   una pestaña por tema, califica cada respuesta y actualiza el progreso.
    ========================================================== */
 
 (function () {
 
+  const pestanas = document.getElementById("pestanas-temas");
   const contenedor = document.getElementById("lista-ejercicios");
   const barra = document.getElementById("barra-progreso");
   const textoProgreso = document.getElementById("texto-progreso");
@@ -14,10 +15,10 @@
 
   const total = EJERCICIOS_BLOQUE1.length;
   const resultados = {};   // id -> true (correcto) / false (incorrecto)
-  const NOMBRES_CLASE = {
-    1: "Clase 1 · Álgebra y lógica",
-    2: "Clase 2 · Aritmética, conteo y casos",
-    3: "Clase 3 · Geometría, trigonometría y patrones"
+  const NOMBRES_TEMA = {
+    1: "Tema 1 · Álgebra y lógica",
+    2: "Tema 2 · Aritmética, conteo y casos",
+    3: "Tema 3 · Geometría, trigonometría y patrones"
   };
   const NOMBRES_PARTE = {
     A: "Parte A · Ejercicios guiados (en parejas)",
@@ -65,20 +66,22 @@
     return ej.opciones[ej.correcta];
   }
 
-  /* Revisa la respuesta del alumno y devuelve true si es correcta. */
+  /* Revisa la respuesta del alumno. Devuelve true, false o null (sin respuesta). */
   function calificar(ej, id) {
     if (ej.tipo === "num") {
       const v = aNumero(document.getElementById(id + "-in").value);
-      return !isNaN(v) && Math.abs(v - ej.valor) < 1e-6;
+      if (isNaN(v)) return null;
+      return Math.abs(v - ej.valor) < 1e-6;
     }
     if (ej.tipo === "multi") {
-      return ej.campos.every(function (c, i) {
-        const v = aNumero(document.getElementById(id + "-" + i).value);
-        return !isNaN(v) && Math.abs(v - c.valor) < 1e-6;
+      const valores = ej.campos.map(function (c, i) {
+        return aNumero(document.getElementById(id + "-" + i).value);
       });
+      if (valores.some(isNaN)) return null;
+      return ej.campos.every(function (c, i) { return Math.abs(valores[i] - c.valor) < 1e-6; });
     }
     const sel = document.querySelector('input[name="' + id + '"]:checked');
-    if (!sel) return null;               // no eligió nada
+    if (!sel) return null;
     return Number(sel.value) === ej.correcta;
   }
 
@@ -87,7 +90,7 @@
     const caja = document.getElementById(id + "-fb");
     if (ok === null) {
       caja.className = "retroalimentacion p-3 rounded mt-3 bg-warning-subtle border border-warning";
-      caja.innerHTML = "<strong>Elige una opción</strong> antes de comprobar.";
+      caja.innerHTML = "<strong>Escribe o elige una respuesta</strong> antes de comprobar.";
       return;
     }
     if (ok) {
@@ -112,42 +115,57 @@
     textoAciertos.textContent = "Aciertos: " + aciertos + " / " + total;
   }
 
-  /* Dibuja todas las tarjetas, agrupadas por clase y parte. */
+  /* Dibuja las pestañas (una por tema) y, dentro de cada una, sus tarjetas. */
   function dibujar() {
-    let claseActual = null;
-    let parteActual = null;
-    let html = "";
+    const temas = [1, 2, 3];
+    let htmlPestanas = "";
+    let htmlPaneles = "";
 
-    EJERCICIOS_BLOQUE1.forEach(function (ej) {
-      if (ej.clase !== claseActual) {
-        claseActual = ej.clase;
-        parteActual = null;
-        html += '<h2 class="h4 mt-5 mb-2">' + NOMBRES_CLASE[ej.clase] + '</h2>';
-      }
-      if (ej.parte !== parteActual) {
-        parteActual = ej.parte;
-        html += '<p class="subtitulo-parte">' + NOMBRES_PARTE[ej.parte] + '</p>';
-      }
+    temas.forEach(function (tema, indice) {
+      const activo = indice === 0;
+      const idPanel = "tema-" + tema;
 
-      const id = idDe(ej);
-      html += '' +
-        '<div class="card ejercicio shadow-sm mb-4" id="' + id + '">' +
-          '<div class="card-body p-4">' +
-            '<p class="mb-3"><span class="numero">' + ej.n + '</span>' + ej.enunciado + '</p>' +
-            controlesDe(ej, id) +
-            '<div class="d-flex flex-wrap gap-2 mt-3">' +
-              '<button type="button" class="btn btn-acento btn-comprobar" data-id="' + id + '">' +
-                '<i class="fa-solid fa-check"></i> Comprobar</button>' +
+      htmlPestanas += '' +
+        '<li class="nav-item" role="presentation">' +
+          '<button class="nav-link fw-semibold' + (activo ? ' active' : '') + '" id="tab-' + tema + '" ' +
+            'data-bs-toggle="pill" data-bs-target="#' + idPanel + '" type="button" role="tab" ' +
+            'aria-controls="' + idPanel + '" aria-selected="' + activo + '">' + NOMBRES_TEMA[tema] + '</button>' +
+        '</li>';
+
+      let htmlTema = "";
+      let parteActual = null;
+      EJERCICIOS_BLOQUE1.filter(function (e) { return e.clase === tema; }).forEach(function (ej) {
+        if (ej.parte !== parteActual) {
+          parteActual = ej.parte;
+          htmlTema += '<p class="subtitulo-parte">' + NOMBRES_PARTE[ej.parte] + '</p>';
+        }
+        const id = idDe(ej);
+        htmlTema += '' +
+          '<div class="card ejercicio shadow-sm mb-4" id="' + id + '">' +
+            '<div class="card-body p-4">' +
+              '<p class="mb-3"><span class="numero">' + ej.n + '</span>' + ej.enunciado + '</p>' +
+              controlesDe(ej, id) +
+              '<div class="d-flex flex-wrap gap-2 mt-3">' +
+                '<button type="button" class="btn btn-acento btn-comprobar" data-id="' + id + '">' +
+                  '<i class="fa-solid fa-check"></i> Comprobar</button>' +
+              '</div>' +
+              '<div id="' + id + '-fb"></div>' +
             '</div>' +
-            '<div id="' + id + '-fb"></div>' +
-          '</div>' +
+          '</div>';
+      });
+
+      htmlPaneles += '' +
+        '<div class="tab-pane fade' + (activo ? ' show active' : '') + '" id="' + idPanel + '" role="tabpanel" ' +
+          'aria-labelledby="tab-' + tema + '" tabindex="0">' +
+          htmlTema +
         '</div>';
     });
 
-    contenedor.innerHTML = html;
+    pestanas.innerHTML = htmlPestanas;
+    contenedor.innerHTML = htmlPaneles;
   }
 
-  /* Eventos: al pulsar "Comprobar" se califica esa tarjeta. */
+  /* Al pulsar "Comprobar" se califica esa tarjeta. */
   contenedor.addEventListener("click", function (evento) {
     const boton = evento.target.closest(".btn-comprobar");
     if (!boton) return;
@@ -163,15 +181,15 @@
     actualizarMarcador();
   });
 
-  /* Reinicia el ejercicio: limpia respuestas y retroalimentación. */
+  /* Reinicia todo: limpia respuestas y retroalimentación. */
   btnReiniciar.addEventListener("click", function () {
     EJERCICIOS_BLOQUE1.forEach(function (ej) {
       const id = idDe(ej);
       delete resultados[id];
-      document.getElementById(id + "-fb").innerHTML = "";
-      document.getElementById(id + "-fb").className = "";
-      const card = document.getElementById(id);
-      card.querySelectorAll("input").forEach(function (campo) {
+      const caja = document.getElementById(id + "-fb");
+      caja.innerHTML = "";
+      caja.className = "";
+      document.getElementById(id).querySelectorAll("input").forEach(function (campo) {
         if (campo.type === "radio") campo.checked = false;
         else campo.value = "";
       });
