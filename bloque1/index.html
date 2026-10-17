@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
   <link rel="stylesheet" href="../css/estilos.css">
@@ -19,10 +19,11 @@
 </head>
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-dark navbar-curso sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-curso sticky-top">
     <div class="container-fluid px-lg-4">
-      <a class="navbar-brand fw-bold" href="../index.html">
-        <i class="fa-solid fa-code"></i> Programación Competitiva <span class="marca-bug">· Bug Squad</span>
+      <a class="navbar-brand" href="../index.html">
+        <i class="fa-solid fa-bug-slash" aria-hidden="true"></i>
+        <span>Programación Competitiva <span class="marca-bug">· Bug Squad</span></span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menú">
         <span class="navbar-toggler-icon"></span>
@@ -39,59 +40,103 @@
   <div class="container-fluid">
     <div class="row">
 
-      <!-- Barra lateral: índice y avance -->
+      <!-- Barra lateral: índice colapsable y avance -->
       <aside class="col-lg-3 col-xl-2 p-0 barra-lateral">
         <div class="p-4">
           <p class="titulo-curso mb-1">Bloque 1</p>
           <p class="small text-secondary mb-4">Lógica, álgebra, aritmética y geometría básica</p>
 
-          <ul class="indice-temas mb-4">
-            <li>
-              <a href="#tema-1">Tema 1 · Álgebra y lógica</a>
-              <ul class="indice-temas sub">
-                <li><a href="#tema-1-aprender">Aprender</a></li>
-                <li><a href="#tema-1-quiz">Quiz conceptual</a></li>
-                <li><a href="#tema-1-ejercicios">Ejercicios</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="#tema-2">Tema 2 · Aritmética y conteo</a>
-              <ul class="indice-temas sub">
-                <li><a href="#tema-2-aprender">Aprender</a></li>
-                <li><a href="#tema-2-quiz">Quiz conceptual</a></li>
-                <li><a href="#tema-2-ejercicios">Ejercicios</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="#tema-3">Tema 3 · Geometría y patrones</a>
-              <ul class="indice-temas sub">
-                <li><a href="#tema-3-aprender">Aprender</a></li>
-                <li><a href="#tema-3-quiz">Quiz conceptual</a></li>
-                <li><a href="#tema-3-ejercicios">Ejercicios</a></li>
-              </ul>
-            </li>
-            <li><a href="#pendientes">Próximamente</a></li>
-          </ul>
+          <nav class="indice" aria-label="Índice del bloque">
+
+            <div class="grupo">
+              <div class="grupo-cabecera">
+                <a class="grupo-enlace" href="#tema-1">
+                  <span class="grupo-numero">1</span>
+                  <span>Álgebra y lógica</span>
+                </a>
+                <button class="grupo-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-1" aria-expanded="true" aria-controls="grupo-tema-1" aria-label="Mostrar u ocultar Tema 1">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+              </div>
+              <div class="collapse show" id="grupo-tema-1">
+                <ul class="indice-lista">
+                  <li><a href="#tema-1-aprender">Aprender</a></li>
+                  <li><a href="#tema-1-quiz">Quiz conceptual</a></li>
+                  <li><a href="#tema-1-ejercicios">Ejercicios</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="grupo">
+              <div class="grupo-cabecera">
+                <a class="grupo-enlace" href="#tema-2">
+                  <span class="grupo-numero">2</span>
+                  <span>Aritmética y conteo</span>
+                </a>
+                <button class="grupo-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-2" aria-expanded="true" aria-controls="grupo-tema-2" aria-label="Mostrar u ocultar Tema 2">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+              </div>
+              <div class="collapse show" id="grupo-tema-2">
+                <ul class="indice-lista">
+                  <li><a href="#tema-2-aprender">Aprender</a></li>
+                  <li><a href="#tema-2-quiz">Quiz conceptual</a></li>
+                  <li><a href="#tema-2-ejercicios">Ejercicios</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="grupo">
+              <div class="grupo-cabecera">
+                <a class="grupo-enlace" href="#tema-3">
+                  <span class="grupo-numero">3</span>
+                  <span>Geometría y patrones</span>
+                </a>
+                <button class="grupo-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-3" aria-expanded="true" aria-controls="grupo-tema-3" aria-label="Mostrar u ocultar Tema 3">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+              </div>
+              <div class="collapse show" id="grupo-tema-3">
+                <ul class="indice-lista">
+                  <li><a href="#tema-3-aprender">Aprender</a></li>
+                  <li><a href="#tema-3-quiz">Quiz conceptual</a></li>
+                  <li><a href="#tema-3-ejercicios">Ejercicios</a></li>
+                  <li><a href="#tema-3-tareas">Tareas en PDF</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <a class="indice-enlace mt-2" href="#pendientes">
+              <i class="fa-regular fa-clock" aria-hidden="true"></i> Próximamente
+            </a>
+          </nav>
 
           <div class="avance">
-            <p class="etiqueta-avance mb-2">Quizzes aprobados</p>
+            <p class="etiqueta-avance mb-1">Quizzes aprobados</p>
             <p class="fw-semibold mb-3" id="avance-quiz-texto">0 de 3</p>
             <p class="etiqueta-avance mb-2">Ejercicios respondidos</p>
             <div class="progress mb-2" role="progressbar" aria-label="Ejercicios respondidos" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
               <div class="progress-bar" id="avance-ejercicios-barra" style="width: 0%"></div>
             </div>
-            <p class="small text-secondary mb-0" id="avance-ejercicios-texto">0 de 30</p>
+            <p class="small text-secondary mb-0 font-monospace" id="avance-ejercicios-texto">0 de 30</p>
           </div>
         </div>
       </aside>
 
       <!-- Contenido principal -->
-      <main class="col-lg-9 col-xl-10 px-4 px-lg-5 py-4">
+      <main class="col-lg-9 col-xl-10 px-3 px-md-4 px-lg-5 py-4">
 
-        <header class="banner banner-compacto rounded-3 px-4 px-lg-5 mb-2">
-          <h1 class="mb-2">Lógica, álgebra, aritmética y geometría básica</h1>
-          <p class="subtitulo mb-0">Tres temas para aprender a razonar con reglas claras. Cada uno tiene una presentación, un quiz conceptual y ejercicios con retroalimentación inmediata.</p>
-          <span class="credito d-inline-block"><span>Diseñado y organizado por: <strong>Prof. Rigoberto Santiago Garzón</strong></span></span>
+        <header class="banner banner-compacto px-4 px-lg-5">
+          <div class="container-fluid p-0">
+            <h1 class="mb-2">Lógica, álgebra, aritmética y geometría básica</h1>
+            <p class="subtitulo mb-0">Tres temas para aprender a razonar con reglas claras. Cada uno tiene una presentación, un quiz conceptual y ejercicios con retroalimentación inmediata.</p>
+            <div class="chips-banner" aria-hidden="true">
+              <span class="chip"><i class="fa-solid fa-scale-balanced"></i> Tema 1 · Álgebra y lógica</span>
+              <span class="chip"><i class="fa-solid fa-calculator"></i> Tema 2 · Aritmética y conteo</span>
+              <span class="chip"><i class="fa-solid fa-draw-polygon"></i> Tema 3 · Geometría y patrones</span>
+            </div>
+            <span class="credito d-inline-block"><span>Diseñado y organizado por: <strong>Prof. Rigoberto Santiago Garzón</strong></span></span>
+          </div>
         </header>
 
         <!-- TEMA 1 -->
@@ -101,29 +146,29 @@
           <p class="lead-tema">Variables, orden de operaciones, propiedades, ecuaciones de primer grado y el lenguaje de las condicionales y la negación.</p>
 
           <div class="bloque-pestana" id="tema-1-aprender">
-            <h3>Aprender</h3>
-            <p class="texto-suave">Presentación interactiva con ejemplos para manipular: deslizadores, tabla de verdad y ejecución de código. Se abre en una ventana dentro de la página.</p>
-            <button type="button" class="btn btn-ocean" data-bs-toggle="modal" data-bs-target="#modalPresentacion" data-src="presentacion-tema1.html" data-titulo="Presentación · Tema 1 · Álgebra y lógica">
+            <h3><span class="icono-bloque sky"><i class="fa-solid fa-display"></i></span> Aprender</h3>
+            <p class="texto-suave">Presentación interactiva con ejemplos para manipular: deslizadores, tablas de verdad y pasos de resolución. Se abre en una ventana dentro de la página.</p>
+            <button type="button" class="btn btn-tide" data-bs-toggle="modal" data-bs-target="#modalPresentacion" data-src="presentacion-tema1.html" data-titulo="Presentación · Tema 1 · Álgebra y lógica">
               <i class="fa-solid fa-display"></i> Ver presentación
             </button>
             <a class="enlace-recurso ms-2" href="../assets/docs/Tema1_Algebra_y_logica.pptx"><i class="fa-solid fa-file-powerpoint"></i> Descargar PPTX original</a>
           </div>
 
           <div class="bloque-pestana" id="tema-1-quiz">
-            <h3>Quiz conceptual</h3>
+            <h3><span class="icono-bloque purple"><i class="fa-solid fa-circle-question"></i></span> Quiz conceptual</h3>
             <p class="texto-suave">Ocho preguntas de conceptos. Aprueba con 6 o más.</p>
             <div data-quiz="1"></div>
           </div>
 
           <div class="bloque-pestana" id="tema-1-ejercicios">
-            <h3>Ejercicios</h3>
+            <h3><span class="icono-bloque emerald"><i class="fa-solid fa-pen-ruler"></i></span> Ejercicios</h3>
             <p class="texto-suave">Diez ejercicios guiados y diez independientes. Escribe tu respuesta y pulsa <strong>Comprobar</strong>.</p>
             <div data-ejercicios="1"></div>
           </div>
 
           <div class="navegacion-seccion">
             <span></span>
-            <a href="#tema-2" class="fw-semibold text-decoration-none">Siguiente: Tema 2 <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#tema-2">Siguiente: Tema 2 <i class="fa-solid fa-arrow-right"></i></a>
           </div>
         </section>
 
@@ -134,26 +179,26 @@
           <p class="lead-tema">Paridad, divisibilidad, cociente y residuo, principio de la suma y del producto, y razonamiento por casos.</p>
 
           <div class="bloque-pestana" id="tema-2-aprender">
-            <h3>Aprender</h3>
+            <h3><span class="icono-bloque sky"><i class="fa-solid fa-display"></i></span> Aprender</h3>
             <p class="texto-suave">Descarga la presentación del tema para repasar en tu equipo.</p>
             <a class="enlace-recurso" href="../assets/docs/Tema2_Aritmetica_conteo_y_casos.pptx"><i class="fa-solid fa-file-powerpoint"></i> Presentación (PPTX)</a>
           </div>
 
           <div class="bloque-pestana" id="tema-2-quiz">
-            <h3>Quiz conceptual</h3>
+            <h3><span class="icono-bloque purple"><i class="fa-solid fa-circle-question"></i></span> Quiz conceptual</h3>
             <p class="texto-suave">Ocho preguntas de conceptos. Aprueba con 6 o más.</p>
             <div data-quiz="2"></div>
           </div>
 
           <div class="bloque-pestana" id="tema-2-ejercicios">
-            <h3>Ejercicios</h3>
+            <h3><span class="icono-bloque emerald"><i class="fa-solid fa-pen-ruler"></i></span> Ejercicios</h3>
             <p class="texto-suave">Diez ejercicios guiados y diez independientes, con retroalimentación al momento.</p>
             <div data-ejercicios="2"></div>
           </div>
 
           <div class="navegacion-seccion">
-            <a href="#tema-1" class="fw-semibold text-decoration-none"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 1</a>
-            <a href="#tema-3" class="fw-semibold text-decoration-none">Siguiente: Tema 3 <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#tema-1"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 1</a>
+            <a href="#tema-3">Siguiente: Tema 3 <i class="fa-solid fa-arrow-right"></i></a>
           </div>
         </section>
 
@@ -164,32 +209,32 @@
           <p class="lead-tema">Ángulos y triángulos, teorema de Pitágoras, distancia entre puntos, razones trigonométricas básicas y secuencias aritméticas.</p>
 
           <div class="bloque-pestana" id="tema-3-aprender">
-            <h3>Aprender</h3>
+            <h3><span class="icono-bloque sky"><i class="fa-solid fa-display"></i></span> Aprender</h3>
             <p class="texto-suave">Descarga la presentación del tema para repasar en tu equipo.</p>
             <a class="enlace-recurso" href="../assets/docs/Tema3_Geometria_trigonometria_y_patrones.pptx"><i class="fa-solid fa-file-powerpoint"></i> Presentación (PPTX)</a>
           </div>
 
           <div class="bloque-pestana" id="tema-3-quiz">
-            <h3>Quiz conceptual</h3>
+            <h3><span class="icono-bloque purple"><i class="fa-solid fa-circle-question"></i></span> Quiz conceptual</h3>
             <p class="texto-suave">Ocho preguntas de conceptos. Aprueba con 6 o más.</p>
             <div data-quiz="3"></div>
           </div>
 
           <div class="bloque-pestana" id="tema-3-ejercicios">
-            <h3>Ejercicios</h3>
+            <h3><span class="icono-bloque emerald"><i class="fa-solid fa-pen-ruler"></i></span> Ejercicios</h3>
             <p class="texto-suave">Diez ejercicios guiados y diez independientes, con retroalimentación al momento.</p>
             <div data-ejercicios="3"></div>
           </div>
 
-          <div class="bloque-pestana">
-            <h3>Tareas en PDF</h3>
+          <div class="bloque-pestana" id="tema-3-tareas">
+            <h3><span class="icono-bloque amber"><i class="fa-solid fa-file-pdf"></i></span> Tareas en PDF</h3>
             <p class="texto-suave">Práctica de cada tema y el compendio de tareas, para imprimir o trabajar sin conexión.</p>
             <a class="enlace-recurso" href="../assets/docs/Ejercicios_y_tareas_Bloque1.pdf"><i class="fa-solid fa-file-pdf"></i> Ejercicios y tareas (PDF)</a>
           </div>
 
           <div class="navegacion-seccion">
-            <a href="#tema-2" class="fw-semibold text-decoration-none"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 2</a>
-            <a href="#pendientes" class="fw-semibold text-decoration-none">Próximamente <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#tema-2"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 2</a>
+            <a href="#pendientes">Próximamente <i class="fa-solid fa-arrow-right"></i></a>
           </div>
         </section>
 
@@ -261,6 +306,22 @@
       });
       modal.addEventListener("hidden.bs.modal", function () {
         document.getElementById("iframePresentacion").src = "about:blank";
+      });
+    })();
+
+    /* Resalta en la barra lateral la sección que se está leyendo */
+    (function () {
+      const enlaces = document.querySelectorAll(".indice a[href^='#']");
+      const observador = new IntersectionObserver(function (entradas) {
+        entradas.forEach(function (entrada) {
+          if (!entrada.isIntersecting) return;
+          enlaces.forEach(function (a) {
+            a.classList.toggle("activo", a.getAttribute("href") === "#" + entrada.target.id);
+          });
+        });
+      }, { rootMargin: "-35% 0px -55% 0px" });
+      document.querySelectorAll("[id^='tema-'], #pendientes").forEach(function (el) {
+        observador.observe(el);
       });
     })();
   </script>

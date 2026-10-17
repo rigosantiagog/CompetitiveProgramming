@@ -1,611 +1,1446 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tema 1 · Álgebra y lógica · Presentación interactiva</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script>
-    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
-  </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-  <style>
-    :root {
-      --ocean: #0F3D5E; --ocean-2: #0B2E47; --tide: #1FA6A0; --tide-2: #178A85;
-      --sand: #F4B942; --paper: #F5F7FA; --ink: #1F2933; --slate: #5B6B7A; --line: #DDE6EE;
-      --mist: #EEF4F8; --tint-blue: #E3EEF8; --tint-sea: #E2F3F1; --tint-sand: #FDF3DC; --fail: #C2413B;
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
-    body {
-      background: var(--ocean-2); color: var(--ink);
-      font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-      overflow: hidden;
-    }
-    h1, h2, h3 { font-family: "Fraunces", Georgia, serif; color: var(--ocean); margin: 0 0 .5rem; letter-spacing: -0.01em; }
-
-    /* ---------- Marco de la presentación ---------- */
-    .deck { position: relative; width: 100%; height: 100%; }
-    .slide {
-      position: absolute; inset: 0; display: none;
-      background: #ffffff; padding: clamp(1.4rem, 4vw, 3.4rem) clamp(1.4rem, 6vw, 5rem);
-      overflow-y: auto;
-    }
-    .slide.activa { display: flex; flex-direction: column; justify-content: center; }
-    .slide.portada { background: var(--ocean); color: #ffffff; }
-    .slide.portada h2 { color: #ffffff; font-size: clamp(2.4rem, 6vw, 4.2rem); line-height: 1.05; max-width: 18ch; }
-    .slide.portada p { color: #D5E6EF; font-size: 1.2rem; max-width: 50ch; }
-    .slide.portada .marca { color: var(--sand); font-weight: 600; margin-top: 2rem; }
-
-    .slide h2 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); }
-    .slide .sub { color: var(--slate); font-size: 1.1rem; margin-bottom: 1.6rem; }
-    .cuerpo { max-width: 960px; width: 100%; margin: 0 auto; }
-    .tarjeta {
-      border-radius: 14px; padding: 1.3rem 1.5rem; background: var(--mist);
-      border: 1px solid var(--line);
-    }
-    .tarjeta h3 { font-size: 1.2rem; }
-    .tarjeta p { margin: .3rem 0 0; color: var(--ink); }
-    .rejilla { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-    .t-azul { background: var(--tint-blue); border-color: #C9DCEE; }
-    .t-mar { background: var(--tint-sea); border-color: #BFE3DF; }
-    .t-arena { background: var(--tint-sand); border-color: #F2DDA6; }
-    .formula { font-size: 1.5rem; color: var(--ocean); margin: .6rem 0; }
-    .nota { color: var(--slate); font-size: .98rem; margin-top: .8rem; }
-    .codigo {
-      font-family: "IBM Plex Mono", Consolas, monospace; background: #17283A; color: #E6EDF5;
-      border-radius: 12px; padding: 1rem 1.2rem; font-size: 1rem; line-height: 1.7; white-space: pre;
-    }
-
-    /* ---------- Controles interactivos ---------- */
-    .ctrl { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; margin-top: 1rem; }
-    .ctrl label { font-weight: 500; }
-    input[type=range] { accent-color: var(--tide); width: min(360px, 70vw); }
-    .boton {
-      border: 0; border-radius: 999px; padding: .55rem 1.1rem; background: var(--ocean); color: #fff;
-      font: 600 .95rem "IBM Plex Sans", sans-serif; cursor: pointer;
-    }
-    .boton:hover { background: var(--ocean-2); }
-    .boton.sec { background: #ffffff; color: var(--ocean); border: 1px solid var(--line); }
-    .boton.tide { background: var(--tide); }
-    .valor { font-family: "IBM Plex Mono", monospace; font-size: 1.1rem; color: var(--ocean); }
-    .oculto { display: none !important; }
-    .pasos > div { margin: .45rem 0; padding: .7rem 1rem; border-left: 4px solid var(--tide); background: var(--mist); border-radius: 0 10px 10px 0; }
-    .verdad { width: 100%; border-collapse: collapse; margin-top: .8rem; }
-    .verdad th, .verdad td { border: 1px solid var(--line); padding: .55rem .6rem; text-align: center; font-size: 1.02rem; }
-    .verdad th { background: var(--tint-blue); color: var(--ocean); }
-    .verdad td.v { color: #17805A; font-weight: 600; }
-    .verdad td.f { color: var(--fail); font-weight: 600; }
-    .verdad tr.resaltada td { background: var(--tint-sand); }
-    .marco-balanza {
-      position: relative; height: 150px; margin: 1.2rem 0 .6rem;
-    }
-    .viga {
-      position: absolute; left: 8%; right: 8%; top: 40px; height: 8px; background: var(--ocean); border-radius: 4px;
-      transform-origin: 50% 50%; transition: transform .35s ease;
-    }
-    .pivote {
-      position: absolute; left: 50%; top: 40px; width: 10px; height: 100px; background: var(--ocean); transform: translateX(-50%);
-    }
-    .platillo {
-      position: absolute; top: 48px; width: 150px; text-align: center; font-family: "IBM Plex Mono", monospace; font-size: 1.1rem;
-      background: #ffffff; border: 2px solid var(--tide); border-radius: 12px; padding: .4rem .6rem; transition: transform .35s ease;
-    }
-    .platillo.izq { left: 3%; }
-    .platillo.der { right: 3%; }
-    .estado-balanza { font-weight: 600; color: var(--ocean); }
-
-    /* ---------- Notas y barra de progreso ---------- */
-    .barra { position: absolute; left: 0; bottom: 0; height: 4px; background: var(--tide); transition: width .3s ease; }
-    .pie {
-      position: absolute; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; justify-content: space-between;
-      padding: 0 1.2rem; background: rgba(15,61,94,.96); color: #D5E6EF; gap: .6rem; font-size: .95rem;
-    }
-    .pie .boton { padding: .4rem .9rem; font-size: .9rem; }
-    .pie .contador { font-family: "IBM Plex Mono", monospace; }
-    .pie-izq, .pie-der { display: flex; gap: .5rem; align-items: center; }
-    .ayuda-teclado { color: #A9BDCD; font-size: .85rem; }
-    .aviso-nota {
-      position: absolute; right: 1.2rem; bottom: 66px; max-width: 420px; background: #ffffff; border-radius: 12px;
-      padding: 1rem 1.2rem; box-shadow: 0 10px 30px rgba(0,0,0,.25); font-size: .95rem; border-top: 4px solid var(--sand);
-    }
-    .aviso-nota p { margin: 0; white-space: pre-line; }
-    .mini-titulo { font-family: "IBM Plex Sans", sans-serif; font-weight: 600; font-size: .95rem; color: var(--slate); margin-bottom: .3rem; }
-
-    @media (max-width: 640px) {
-      .slide { padding: 1.2rem 1.1rem 4.2rem; }
-      .formula { font-size: 1.2rem; }
-      .ayuda-teclado { display: none; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Álgebra y Lógica · BugSquad 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        soft: {
+                            bg: '#F8FAFC',
+                            surface: '#FFFFFF',
+                            panel: '#F1F5F9',
+                            border: '#E2E8F0',
+                            text: '#334155',
+                            heading: '#1E293B',
+                            sky: '#E0F2FE',
+                            skyText: '#0369A1',
+                            sage: '#DCFCE7',
+                            sageText: '#15803D',
+                            lavender: '#F3E8FF',
+                            lavenderText: '#6B21A8',
+                            peach: '#FEF3C7',
+                            peachText: '#B45309',
+                            rose: '#FFE4E6',
+                            roseText: '#BE123C'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F4F6F9;
+            color: #334155;
+            overflow-x: hidden;
+        }
+        .slide-enter {
+            animation: slideFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.995);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+    </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between select-none">
 
-<div class="deck" id="deck" role="region" aria-label="Presentación del tema 1">
+    <header class="w-full border-b border-slate-200/90 bg-white/85 backdrop-blur-md sticky top-0 z-30">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-sky-100 border border-sky-200 flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-bug-slash text-sky-700 text-lg"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold tracking-tight text-slate-800 text-sm sm:text-base">BugSquad 2026</span>
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200 font-mono font-medium">Tema 1 · Bloque 1</span>
+                    </div>
+                    <p class="text-xs text-slate-500 hidden sm:block">Club de Programación Competitiva · Álgebra y Lógica Explicada a Fondo</p>
+                </div>
+            </div>
 
-  <!-- 1. Portada -->
-  <section class="slide portada activa" aria-label="Portada">
-    <div class="cuerpo">
-      <h2>Álgebra y lógica</h2>
-      <p>Tema 1 · Bloque 1. Variables, propiedades, ecuaciones y condicionales.</p>
-      <p class="marca">Programación Competitiva en C++ · Bug Squad</p>
+            <!-- Controles de índice, profundización y pantalla completa -->
+            <div class="flex items-center gap-2 sm:gap-2.5">
+                <button onclick="toggleDeepNotes()" id="btn-deep-toggle" class="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs sm:text-sm font-medium flex items-center gap-2 border border-amber-200 transition">
+                    <i class="fa-solid fa-book-open-reader text-amber-600"></i>
+                    <span class="hidden lg:inline" id="deep-toggle-label">Para saber más...: Visible</span>
+                </button>
+                <button onclick="toggleIndexModal()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-700 text-xs sm:text-sm font-medium flex items-center gap-2 border border-slate-200 transition">
+                    <i class="fa-solid fa-table-cells-large text-sky-600"></i>
+                    <span class="hidden md:inline">Índice</span>
+                    <span id="slide-counter-badge" class="font-mono text-xs bg-white px-2 py-0.5 rounded-md text-sky-700 border border-slate-200">1 / 15</span>
+                </button>
+                <button onclick="toggleFullScreen()" title="Pantalla Completa" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-700 text-sm border border-slate-200 transition">
+                    <i class="fa-solid fa-expand" id="fullscreen-icon"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Barra de progreso suave -->
+        <div class="w-full h-1.5 bg-slate-100">
+            <div id="progress-bar" class="h-full bg-gradient-to-r from-sky-400 via-teal-400 to-indigo-400 transition-all duration-300" style="width: 6.66%"></div>
+        </div>
+    </header>
+
+    <main class="flex-1 flex items-center justify-center p-3 sm:p-6 md:p-8 relative overflow-y-auto">
+        <div class="w-full max-w-5xl bg-white border border-slate-200/90 rounded-3xl shadow-xl shadow-slate-200/60 p-5 sm:p-8 md:p-10 min-h-[580px] flex flex-col justify-between relative overflow-hidden">
+            
+            <!-- Luces pastel decorativas de fondo -->
+            <div class="-top-24 -right-24 w-80 h-80 bg-sky-100/60 rounded-full blur-3xl pointer-events-none absolute"></div>
+            <div class="-bottom-24 -left-24 w-80 h-80 bg-emerald-100/50 rounded-full blur-3xl pointer-events-none absolute"></div>
+
+            <!-- Contenedor dinámico de la diapositiva activa -->
+            <div id="slide-stage" class="flex-1 flex flex-col justify-between z-10">
+                <!-- Se inyecta por JS -->
+            </div>
+
+            <!-- Pie de diapositiva oficial -->
+            <div class="mt-8 pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2 z-10">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-code text-sky-600"></i>
+                    <span class="font-medium">Club de programación Competitiva - BugSquad 2026</span>
+                </div>
+                <div class="flex items-center gap-2 font-mono text-[11px] text-slate-500">
+                    <span>Usa <kbd class="px-1.5 py-0.5 bg-slate-100 rounded border border-slate-300 text-slate-700">←</kbd> <kbd class="px-1.5 py-0.5 bg-slate-100 rounded border border-slate-300 text-slate-700">→</kbd> o desliza para avanzar</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full py-3 px-4 bg-white/90 border-t border-slate-200/80 backdrop-blur-md z-20">
+        <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+            <button id="btn-prev" onclick="prevSlide()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-medium text-sm flex items-center gap-2 border border-slate-200 transition">
+                <i class="fa-solid fa-arrow-left text-slate-500"></i>
+                <span>Anterior</span>
+            </button>
+
+            <!-- Indicadores rápidos de puntos -->
+            <div id="dots-container" class="hidden sm:flex items-center gap-1.5 flex-wrap justify-center">
+                <!-- Puntos generados dinámicamente -->
+            </div>
+
+            <button id="btn-next" onclick="nextSlide()" class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 disabled:opacity-40 disabled:pointer-events-none text-white font-semibold text-sm flex items-center gap-2 shadow-sm shadow-sky-600/20 transition">
+                <span>Siguiente</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Modal de Índice de las 15 Diapositivas -->
+    <div id="index-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-layer-group text-sky-600 text-lg"></i>
+                    <h3 class="font-bold text-lg text-slate-800">Índice Completo de la Clase (15 Diapositivas)</h3>
+                </div>
+                <button onclick="toggleIndexModal()" class="w-8 h-8 rounded-lg bg-slate-200/70 hover:bg-slate-300/70 flex items-center justify-center text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="index-grid" class="p-5 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-white">
+                <!-- Tarjetas de diapositivas -->
+            </div>
+        </div>
     </div>
-  </section>
 
-  <!-- 2. Variables (interactiva) -->
-  <section class="slide" aria-label="Variables">
-    <div class="cuerpo">
-      <h2>Variables: cajas con nombre</h2>
-      <p class="sub">Una letra guarda un número que puede cambiar.</p>
-      <div class="rejilla">
-        <div class="tarjeta t-azul"><h3>Variable</h3><p class="formula">x = <span id="vx">4</span></p></div>
-        <div class="tarjeta t-mar"><h3>Expresión</h3><p class="formula">$2x + 3$</p></div>
-        <div class="tarjeta t-arena"><h3>Resultado</h3><p class="formula">2 · <span id="vx2">4</span> + 3 = <span id="res">11</span></p></div>
-      </div>
-      <div class="ctrl">
-        <label for="sx">Cambia el valor de $x$:</label>
-        <input type="range" id="sx" min="0" max="10" value="4" aria-describedby="vx">
-        <span class="valor" id="valorX">x = 4</span>
-      </div>
-      <p class="nota">Si cambia $x$, cambia el resultado. Mueve el control para verlo.</p>
-    </div>
-  </section>
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 15;
+        let showDeepNotes = true;
 
-  <!-- 3. Orden de operaciones (pasos que se revelan) -->
-  <section class="slide" aria-label="Orden de operaciones">
-    <div class="cuerpo">
-      <h2>Orden de operaciones</h2>
-      <p class="sub">Primero se multiplica, después se suma.</p>
-      <div class="pasos" id="pasosOrden">
-        <div class="oculto" data-paso>$2 + 3 \cdot 4$ · Empezamos aquí.</div>
-        <div class="oculto" data-paso>$2 + 12$ · Primero multiplicamos: $3 \cdot 4 = 12$.</div>
-        <div class="oculto" data-paso>$14$ · Después sumamos.</div>
-      </div>
-      <div class="ctrl"><button class="boton" id="btnOrden" type="button">Mostrar siguiente paso</button></div>
-      <p class="nota">Sin este orden, $2 + 3 \cdot 4$ daría $20$ por error.</p>
-    </div>
-  </section>
+        // Estado interactivo de cada laboratorio
+        const state = {
+            slide2X: 4,
+            slide3WrongMode: false,
+            slide4Tab: 'conmutativa',
+            slide5X: 2,
+            slide6Subtracted: false,
+            slide7Step: 3,
+            slide8CppX: 5,
+            slide9QuizIndex: 0,
+            slide9Feedback: null,
+            slide10P: true,
+            slide10Q: true,
+            slide11P: true,
+            slide11Q: false,
+            slide12Tab: 'condicional',
+            slide13Fixed: { 0: false, 1: false, 2: false, 3: false },
+            slide14Pillar: 'variables',
+            slide15SimX: 5,
+            slide15AnswerShown: true
+        };
 
-  <!-- 4. Propiedades -->
-  <section class="slide" aria-label="Propiedades">
-    <div class="cuerpo">
-      <h2>Propiedades para simplificar</h2>
-      <p class="sub">Cambian la forma de escribir, no el valor. Toca cada tarjeta para ver un ejemplo.</p>
-      <div class="rejilla">
-        <button class="tarjeta t-azul" type="button" data-ejemplo="conmutativa" style="text-align:left;cursor:pointer;font:inherit;color:inherit">
-          <h3>Conmutativa</h3><p class="formula">$a + b = b + a$</p>
-          <p class="ejemplo oculto" id="ej-conmutativa">Ejemplo: $3 + x = x + 3$</p>
-        </button>
-        <button class="tarjeta t-mar" type="button" data-ejemplo="asociativa" style="text-align:left;cursor:pointer;font:inherit;color:inherit">
-          <h3>Asociativa</h3><p class="formula">$(a + b) + c = a + (b + c)$</p>
-          <p class="ejemplo oculto" id="ej-asociativa">Ejemplo: agrupar no cambia el total. $25 \cdot 37 \cdot 4 = 100 \cdot 37 = 3700$</p>
-        </button>
-        <button class="tarjeta t-arena" type="button" data-ejemplo="distributiva" style="text-align:left;cursor:pointer;font:inherit;color:inherit">
-          <h3>Distributiva</h3><p class="formula">$a(b + c) = ab + ac$</p>
-          <p class="ejemplo oculto" id="ej-distributiva">Ejemplo: $3(x + 4) = 3x + 12$</p>
-        </button>
-      </div>
-    </div>
-  </section>
+        // Las 15 diapositivas exactas del archivo Clase1_Algebra_y_logica.pptx
+        const slidesMeta = [
+            { num: 1, title: "Álgebra y lógica", subtitle: "Tema 1 · Bloque 1 · Variables, propiedades, ecuaciones y condicionales", icon: "fa-scale-balanced" },
+            { num: 2, title: "Variables: cajas con nombre", subtitle: "Una letra guarda un número que puede cambiar", icon: "fa-box-open" },
+            { num: 3, title: "Orden de operaciones", subtitle: "Primero se multiplica, después se suma", icon: "fa-arrow-down-1-9" },
+            { num: 4, title: "Propiedades para simplificar", subtitle: "Cambian la forma de escribir, no el valor", icon: "fa-sliders" },
+            { num: 5, title: "La distributiva en acción", subtitle: "El número de afuera multiplica a cada término de adentro", icon: "fa-arrows-split-up-and-left" },
+            { num: 6, title: "Una ecuación es una balanza", subtitle: "Lo que haces de un lado, lo haces del otro", icon: "fa-scale-balanced" },
+            { num: 7, title: "Resolver paso a paso", subtitle: "Ejemplo: x + 5 = 12", icon: "fa-shoe-prints" },
+            { num: 8, title: "Igualdad y asignación", subtitle: "El mismo signo \"=\" significa cosas distintas. En C++, comparar se escribe ==.", icon: "fa-code" },
+            { num: 9, title: "Proposiciones: verdadero o falso", subtitle: "Una proposición tiene un valor de verdad", icon: "fa-circle-check" },
+            { num: 10, title: "Y, O y NO", subtitle: "Tablas de verdad (V = verdadero, F = falso)", icon: "fa-table" },
+            { num: 11, title: "Si p, entonces q", subtitle: "Solo es falso cuando p es verdadero y q es falso", icon: "fa-circle-question" },
+            { num: 12, title: "Negación de un condicional", subtitle: "Se niega con \"Y\", no con \"si no\"", icon: "fa-ban" },
+            { num: 13, title: "Errores frecuentes", subtitle: "Revísalos antes del examen", icon: "fa-triangle-exclamation" },
+            { num: 14, title: "Resumen de la clase", subtitle: "Variables, Propiedades, Ecuaciones y Lógica", icon: "fa-cubes" },
+            { num: 15, title: "¿Qué diferencia hay?", subtitle: "x = 5 en matemáticas · x = x + 1 en programación", icon: "fa-lightbulb" }
+        ];
 
-  <!-- 5. La distributiva en acción (interactiva) -->
-  <section class="slide" aria-label="La distributiva en acción">
-    <div class="cuerpo">
-      <h2>La distributiva en acción</h2>
-      <p class="sub">El número de afuera multiplica a cada término de adentro.</p>
-      <div class="rejilla">
-        <div class="tarjeta t-azul"><h3>Izquierda</h3><p class="formula">$3(x + 4)$</p></div>
-        <div class="tarjeta t-mar"><h3>Derecha</h3><p class="formula">$3x + 12$</p></div>
-      </div>
-      <div class="ctrl">
-        <label for="sd">Prueba con $x$:</label>
-        <input type="range" id="sd" min="-5" max="10" value="2">
-        <span class="valor" id="valD"></span>
-      </div>
-      <p class="nota" id="resD"></p>
-    </div>
-  </section>
+        // Componente reutilizable para las explicaciones profundizadas con tonos suaves
+        function renderDeepExplanation(title, mathExplanation, cppConnection) {
+            if (!showDeepNotes) return '';
+            return `
+                <div class="mt-4 p-4 sm:p-5 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-slate-700 shadow-sm transition-all">
+                    <div class="flex items-center gap-2 text-amber-800 font-bold text-xs sm:text-sm tracking-wide mb-2">
+                        <i class="fa-solid fa-graduation-cap text-amber-600 text-base"></i>
+                        <span>Para saber más... · ${title}</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm leading-relaxed">
+                        <div class="bg-white/80 p-3.5 rounded-xl border border-amber-100">
+                            <span class="font-bold text-slate-800 block mb-1"><i class="fa-solid fa-square-root-variable text-sky-600 mr-1.5"></i>¿Por qué funciona así en Matemáticas?</span>
+                            <p class="text-slate-600">${mathExplanation}</p>
+                        </div>
+                        <div class="bg-white/80 p-3.5 rounded-xl border border-amber-100">
+                            <span class="font-bold text-slate-800 block mb-1"><i class="fa-solid fa-terminal text-teal-600 mr-1.5"></i>Conexión con Programación Competitiva (C++)</span>
+                            <p class="text-slate-600">${cppConnection}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
 
-  <!-- 6. Ecuación como balanza (interactiva) -->
-  <section class="slide" aria-label="Una ecuación es una balanza">
-    <div class="cuerpo">
-      <h2>Una ecuación es una balanza</h2>
-      <p class="sub">Lo que haces de un lado, lo haces del otro. Mueve $x$ para equilibrarla.</p>
-      <div class="marco-balanza" aria-hidden="true">
-        <div class="pivote"></div>
-        <div class="viga" id="viga"></div>
-        <div class="platillo izq" id="platIzq">$x + 5$</div>
-        <div class="platillo der" id="platDer">$12$</div>
-      </div>
-      <div class="ctrl">
-        <label for="sb">Valor de $x$:</label>
-        <input type="range" id="sb" min="0" max="12" value="3">
-        <span class="valor" id="valB"></span>
-      </div>
-      <p class="estado-balanza" id="estadoB"></p>
-      <p class="nota">Restar $5$ a los dos lados da $x = 7$.</p>
-    </div>
-  </section>
+        function renderSlideContent(index) {
+            switch (index) {
+                // DIAPOSITIVA 1: Portada
+                case 0:
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col items-center justify-center text-center py-4">
+                            <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-sky-100 via-teal-50 to-indigo-100 border border-sky-200 flex items-center justify-center mb-5 shadow-md shadow-sky-100">
+                                <i class="fa-solid fa-scale-balanced text-4xl sm:text-5xl text-sky-700"></i>
+                            </div>
+                            <span class="px-3.5 py-1 rounded-full text-xs font-mono uppercase tracking-widest bg-sky-50 text-sky-700 border border-sky-200 mb-3 font-semibold">
+                                Club de programación Competitiva - BugSquad 2026
+                            </span>
+                            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-800 mb-3">
+                                Álgebra y lógica
+                            </h1>
+                            <p class="text-base sm:text-xl text-slate-600 max-w-2xl font-medium mb-6">
+                                Tema 1 · Bloque 1 · Variables, propiedades, ecuaciones y condicionales
+                            </p>
 
-  <!-- 7. Resolver paso a paso -->
-  <section class="slide" aria-label="Resolver paso a paso">
-    <div class="cuerpo">
-      <h2>Resolver paso a paso</h2>
-      <p class="sub">Ejemplo: $x + 5 = 12$</p>
-      <div class="rejilla">
-        <div class="tarjeta t-azul"><h3>Paso 1</h3><p class="formula">$x + 5 = 12$</p></div>
-        <div class="tarjeta t-arena oculto" data-paso2><h3>Paso 2</h3><p class="formula">$x = 12 - 5$</p></div>
-        <div class="tarjeta t-mar oculto" data-paso2><h3>Paso 3</h3><p class="formula">$x = 7$</p></div>
-      </div>
-      <div class="ctrl"><button class="boton" id="btnPasos" type="button">Siguiente paso</button></div>
-      <div class="tarjeta oculto" id="comprob" style="margin-top:1rem"><p>Comprobación: $7 + 5 = 12$. Siempre comprueba la respuesta.</p></div>
-    </div>
-  </section>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-3xl mb-6 text-left">
+                                <button onclick="goToSlide(1)" class="p-3.5 rounded-2xl bg-sky-50/70 hover:bg-sky-100/80 border border-sky-200/80 flex flex-col gap-1.5 transition group">
+                                    <div class="flex items-center justify-between">
+                                        <i class="fa-solid fa-cubes text-sky-600 text-lg"></i>
+                                        <span class="text-[11px] font-mono text-sky-700">Diap. 2-3</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">Variables y Orden</span>
+                                    <span class="text-[11px] text-slate-500">Sustitución y jerarquía operacional</span>
+                                </button>
+                                <button onclick="goToSlide(3)" class="p-3.5 rounded-2xl bg-purple-50/70 hover:bg-purple-100/80 border border-purple-200/80 flex flex-col gap-1.5 transition group">
+                                    <div class="flex items-center justify-between">
+                                        <i class="fa-solid fa-layer-group text-purple-600 text-lg"></i>
+                                        <span class="text-[11px] font-mono text-purple-700">Diap. 4-5</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">Propiedades</span>
+                                    <span class="text-[11px] text-slate-500">Conmutativa, asociativa y distributiva</span>
+                                </button>
+                                <button onclick="goToSlide(5)" class="p-3.5 rounded-2xl bg-emerald-50/70 hover:bg-emerald-100/80 border border-emerald-200/80 flex flex-col gap-1.5 transition group">
+                                    <div class="flex items-center justify-between">
+                                        <i class="fa-solid fa-scale-balanced text-emerald-600 text-lg"></i>
+                                        <span class="text-[11px] font-mono text-emerald-700">Diap. 6-8</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">Ecuaciones y C++</span>
+                                    <span class="text-[11px] text-slate-500">Despeje, balanza e igualdad vs asignación</span>
+                                </button>
+                                <button onclick="goToSlide(8)" class="p-3.5 rounded-2xl bg-amber-50/70 hover:bg-amber-100/80 border border-amber-200/80 flex flex-col gap-1.5 transition group">
+                                    <div class="flex items-center justify-between">
+                                        <i class="fa-solid fa-diagram-project text-amber-600 text-lg"></i>
+                                        <span class="text-[11px] font-mono text-amber-700">Diap. 9-15</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">Lógica Formal</span>
+                                    <span class="text-[11px] text-slate-500">Tablas V/F, condicionales y De Morgan</span>
+                                </button>
+                            </div>
 
-  <!-- 8. Igualdad y asignación (traza de ejecución) -->
-  <section class="slide" aria-label="Igualdad y asignación">
-    <div class="cuerpo">
-      <h2>Igualdad y asignación</h2>
-      <p class="sub">El mismo signo "=" significa cosas distintas. En C++, comparar se escribe ==.</p>
-      <div class="rejilla">
-        <div class="tarjeta t-azul"><h3>En álgebra</h3><p>$x = 5$ es una afirmación: $x$ vale $5$.</p></div>
-        <div class="tarjeta t-arena"><h3>En C++</h3><p>$x = x + 1;$ es una orden: toma $x$, súmale $1$ y guárdalo en $x$.</p></div>
-      </div>
-      <div class="mini-titulo" style="margin-top:1.4rem">Ejecuta el código línea por línea</div>
-      <div class="codigo" id="codigoC">int a = 3;   // a vale 3
-a = a * 2;   // ahora a vale 6
-a = a + 1;   // ahora a vale 7</div>
-      <div class="ctrl">
-        <button class="boton" id="btnCodigo" type="button">Ejecutar siguiente línea</button>
-        <span class="valor" id="valA">a = ?</span>
-      </div>
-    </div>
-  </section>
+                            ${renderDeepExplanation(
+                                'Propósito del Bloque 1',
+                                'El álgebra nos enseña a manipular cantidades desconocidas mediante reglas exactas, mientras que la lógica nos permite decidir con certeza cuándo una afirmación es verdadera o falsa.',
+                                'Todo algoritmo en programación competitiva se construye sobre estos dos pilares: las variables guardan el estado del problema y las expresiones lógicas controlan el flujo mediante condicionales (if, while).'
+                            )}
+                        </div>
+                    `;
 
-  <!-- 9. Proposiciones (clasificar) -->
-  <section class="slide" aria-label="Proposiciones">
-    <div class="cuerpo">
-      <h2>Proposiciones: verdadero o falso</h2>
-      <p class="sub">Una proposición tiene un valor de verdad. Toca cada frase para revelar qué es.</p>
-      <div class="rejilla">
-        <button class="tarjeta" type="button" data-prop="si" style="text-align:left;cursor:pointer;font:inherit;color:inherit"><p><strong>"Mazatlán está en Sinaloa."</strong></p><p class="ejemplo oculto">Sí es proposición: es verdadera.</p></button>
-        <button class="tarjeta" type="button" data-prop="si" style="text-align:left;cursor:pointer;font:inherit;color:inherit"><p><strong>"$2 + 2 = 5$"</strong></p><p class="ejemplo oculto">Sí es proposición: es falsa.</p></button>
-        <button class="tarjeta" type="button" data-prop="no" style="text-align:left;cursor:pointer;font:inherit;color:inherit"><p><strong>"¡Qué día tan bonito!"</strong></p><p class="ejemplo oculto">No es proposición: es una opinión.</p></button>
-        <button class="tarjeta" type="button" data-prop="no" style="text-align:left;cursor:pointer;font:inherit;color:inherit"><p><strong>"¿Cuántos años tienes?"</strong></p><p class="ejemplo oculto">No es proposición: es una pregunta.</p></button>
-      </div>
-    </div>
-  </section>
+                // DIAPOSITIVA 2: Variables: cajas con nombre
+                case 1: {
+                    const x = state.slide2X;
+                    const res = 2 * x + 3;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold">Diapositiva 2 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Concepto de Variable y Evaluación</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Variables: cajas con nombre</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Una letra guarda un número que puede cambiar</p>
+                            </div>
 
-  <!-- 10. Y, O, NO (tabla de verdad interactiva) -->
-  <section class="slide" aria-label="Y, O y NO">
-    <div class="cuerpo">
-      <h2>Y, O y NO</h2>
-      <p class="sub">Elige los valores de $p$ y $q$ para ver la fila de la tabla.</p>
-      <div class="ctrl">
-        <button class="boton sec" id="btnP" type="button">$p$ = V</button>
-        <button class="boton sec" id="btnQ" type="button">$q$ = V</button>
-      </div>
-      <table class="verdad" aria-label="Tabla de verdad de Y, O y NO">
-        <thead><tr><th>$p$</th><th>$q$</th><th>$p \land q$</th><th>$p \lor q$</th><th>$\neg p$</th></tr></thead>
-        <tbody>
-          <tr data-fila="VV"><td>V</td><td>V</td><td class="v">V</td><td class="v">V</td><td class="f">F</td></tr>
-          <tr data-fila="VF"><td>V</td><td>F</td><td class="f">F</td><td class="v">V</td><td class="f">F</td></tr>
-          <tr data-fila="FV"><td>F</td><td>V</td><td class="f">F</td><td class="v">V</td><td class="v">V</td></tr>
-          <tr data-fila="FF"><td>F</td><td>F</td><td class="f">F</td><td class="f">F</td><td class="v">V</td></tr>
-        </tbody>
-      </table>
-      <p class="nota">En lógica, $O$ es incluyente: basta con que una parte sea verdadera.</p>
-    </div>
-  </section>
+                            <!-- Tarjetas principales del PPTX con colores pastel suaves -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-5">
+                                <div class="p-6 rounded-2xl bg-sky-50/90 border-2 border-sky-200 flex flex-col items-center justify-center text-center shadow-sm">
+                                    <span class="text-xs uppercase tracking-wider text-sky-700 font-bold mb-2">1. Nombre y Valor</span>
+                                    <div class="text-4xl sm:text-5xl font-mono font-bold text-slate-800">x = ${x}</div>
+                                    <span class="text-xs text-slate-500 mt-2">La caja llamada <strong>x</strong> contiene el número ${x}</span>
+                                </div>
+                                <div class="p-6 rounded-2xl bg-purple-50/80 border-2 border-purple-200 flex flex-col items-center justify-center text-center shadow-sm">
+                                    <span class="text-xs uppercase tracking-wider text-purple-700 font-bold mb-2">2. Expresión Algebraica</span>
+                                    <div class="text-4xl sm:text-5xl font-mono font-bold text-slate-800">2x + 3</div>
+                                    <span class="text-xs font-mono text-purple-800 mt-2 bg-white px-2.5 py-0.5 rounded border border-purple-200">Sustitución: 2 · (${x}) + 3</span>
+                                </div>
+                                <div class="p-6 rounded-2xl bg-emerald-50/90 border-2 border-emerald-200 flex flex-col items-center justify-center text-center shadow-sm">
+                                    <span class="text-xs uppercase tracking-wider text-emerald-700 font-bold mb-2">3. Valor Resultante</span>
+                                    <div class="text-4xl sm:text-5xl font-mono font-bold text-emerald-700">${res}</div>
+                                    <span class="text-xs text-emerald-800 mt-2">Porque ${2 * x} + 3 = ${res}</span>
+                                </div>
+                            </div>
 
-  <!-- 11. Si p, entonces q (interactiva) -->
-  <section class="slide" aria-label="Si p entonces q">
-    <div class="cuerpo">
-      <h2>Si $p$, entonces $q$</h2>
-      <p class="sub">Solo es falso cuando $p$ es verdadero y $q$ es falso.</p>
-      <div class="ctrl">
-        <button class="boton sec" id="btnP2" type="button">$p$ = V</button>
-        <button class="boton sec" id="btnQ2" type="button">$q$ = V</button>
-      </div>
-      <div class="tarjeta" style="margin-top:1.2rem">
-        <p class="formula" id="condResultado">$p \rightarrow q$ es V</p>
-        <p class="nota" id="condExplica"></p>
-      </div>
-      <p class="nota">Ejemplo: "Si estudio, entonces apruebo". La promesa solo se rompe si estudié y no aprobé.</p>
-    </div>
-  </section>
+                            <!-- Simulador interactivo -->
+                            <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col gap-3">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                    <p class="text-sm sm:text-base font-medium text-slate-700">
+                                        <i class="fa-solid fa-Sliders text-sky-600 mr-2"></i>
+                                        Con <span class="font-mono text-sky-700 font-bold">x = ${x}</span>: 
+                                        <span class="font-mono bg-white px-2.5 py-1 rounded border border-slate-200 text-slate-800">2 · ${x} + 3 = ${res}</span>. 
+                                        Si cambia <span class="font-mono font-bold">x</span>, cambia el resultado.
+                                    </p>
+                                    <button onclick="state.slide2X = 4; updateView();" class="self-start sm:self-auto text-xs px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-sky-700 font-mono border border-slate-300 transition shadow-sm">
+                                        Restaurar x = 4
+                                    </button>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <span class="text-xs font-mono text-slate-500">Desliza para cambiar x:</span>
+                                    <input type="range" min="-5" max="15" value="${x}" oninput="state.slide2X = parseInt(this.value); updateView();" class="w-full accent-sky-600 cursor-pointer h-2 bg-slate-200 rounded-lg">
+                                    <span class="font-mono text-sm font-bold text-sky-700 w-14 text-right">x = ${x}</span>
+                                </div>
+                            </div>
 
-  <!-- 12. Negación -->
-  <section class="slide" aria-label="Negación de un condicional">
-    <div class="cuerpo">
-      <h2>Negación de un condicional</h2>
-      <p class="sub">Se niega con "Y", no con "si no".</p>
-      <div class="rejilla">
-        <div class="tarjeta t-azul"><h3>Condicional</h3><p class="formula">$\neg(p \rightarrow q) \equiv p \land \neg q$</p><p>Ejemplo: "llueve y no me mojo".</p></div>
-        <div class="tarjeta t-mar"><h3>De Morgan</h3><p class="formula">$\neg(p \land q) \equiv \neg p \lor \neg q$</p><p>Ejemplo: "no llueve o no hace frío".</p></div>
-      </div>
-      <div class="tarjeta t-arena" style="margin-top:1rem"><p>Error común: la negación no es "si no $p$, entonces no $q$".</p></div>
-    </div>
-  </section>
+                            ${renderDeepExplanation(
+                                'Notación Implícita y Evaluación',
+                                'En álgebra, cuando escribimos "2x" sin ningún símbolo en medio, existe una multiplicación implícita: significa "2 multiplicado por el contenido de x". Evaluar o sustituir consiste en reemplazar la letra por su valor numérico actual antes de calcular.',
+                                'En C++ cada caja tiene además un tipo de dato (por ejemplo, int x = 4;) y la multiplicación nunca es implícita: siempre debes escribir el asterisco explícitamente como 2 * x + 3.'
+                            )}
+                        </div>
+                    `;
+                }
 
-  <!-- 13. Errores frecuentes (se revelan) -->
-  <section class="slide" aria-label="Errores frecuentes">
-    <div class="cuerpo">
-      <h2>Errores frecuentes</h2>
-      <p class="sub">Revísalos antes del examen. Toca cada uno para ver la corrección.</p>
-      <div class="pasos">
-        <div class="error-item" style="cursor:pointer" tabindex="0">Escribir $2 + 3 \cdot 4 = 20$ (las multiplicaciones van primero) <span class="oculto">Correcto: $14$.</span></div>
-        <div class="error-item" style="cursor:pointer" tabindex="0">Escribir $2(x + 3) = 2x + 3$ (la distributiva multiplica todo) <span class="oculto">Correcto: $2x + 6$.</span></div>
-        <div class="error-item" style="cursor:pointer" tabindex="0">Cambiar solo un lado de la ecuación <span class="oculto">Siempre se hace lo mismo en ambos lados.</span></div>
-        <div class="error-item" style="cursor:pointer" tabindex="0">Confundir la negación de "si… entonces" <span class="oculto">Es $p \land \neg q$.</span></div>
-      </div>
-    </div>
-  </section>
+                // DIAPOSITIVA 3: Orden de operaciones
+                case 2: {
+                    const isWrong = state.slide3WrongMode;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold">Diapositiva 3 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Jerarquía de Operadores</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Orden de operaciones</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Primero se multiplica, después se suma</p>
+                            </div>
 
-  <!-- 14. Resumen -->
-  <section class="slide" aria-label="Resumen">
-    <div class="cuerpo">
-      <h2>Resumen de la clase</h2>
-      <div class="rejilla" style="margin-top:1.4rem">
-        <div class="tarjeta t-azul"><h3>Variables</h3><p>Evaluar y sustituir.</p></div>
-        <div class="tarjeta t-mar"><h3>Propiedades</h3><p>Conmutativa, asociativa y distributiva.</p></div>
-        <div class="tarjeta t-arena"><h3>Ecuaciones</h3><p>Comprueba siempre.</p></div>
-        <div class="tarjeta" style="background:#EFEAFA;border-color:#D8CFF0"><h3>Lógica</h3><p>Y, O, NO y si… entonces.</p></div>
-      </div>
-    </div>
-  </section>
+                            <!-- Jerarquía de operaciones destacada -->
+                            <div class="my-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm font-semibold">
+                                <span class="px-3.5 py-1.5 rounded-xl bg-purple-100 text-purple-800 border border-purple-200">1. Paréntesis</span>
+                                <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                                <span class="px-3.5 py-1.5 rounded-xl bg-indigo-100 text-indigo-800 border border-indigo-200">2. Potencias</span>
+                                <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                                <span class="px-3.5 py-1.5 rounded-xl bg-sky-100 text-sky-800 border-2 border-sky-300 shadow-sm">3. Multiplicación y división</span>
+                                <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                                <span class="px-3.5 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-200">4. Suma y resta</span>
+                            </div>
 
-  <!-- 15. Reflexión -->
-  <section class="slide portada" aria-label="Reflexión">
-    <div class="cuerpo">
-      <h2>¿Qué diferencia hay?</h2>
-      <p>$x = 5$ en matemáticas · $x = x + 1$ en programación</p>
-      <div class="ctrl" style="margin-top:1.6rem"><button class="boton tide" id="btnReflex" type="button">Ver la respuesta</button></div>
-      <p class="oculto" id="respReflex" style="color:#ffffff;margin-top:1rem">En matemáticas, $x = 5$ describe. En programación, $x = x + 1$ es una orden que cambia el valor guardado.</p>
-    </div>
-  </section>
+                            <!-- Árbol de evaluación paso a paso -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-2">
+                                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col items-center justify-center">
+                                    <span class="text-xs text-slate-500 font-medium mb-1">Expresión original</span>
+                                    <div class="text-3xl sm:text-4xl font-mono font-bold text-slate-800">
+                                        ${isWrong ? '<span class="text-rose-600 underline decoration-2">2 + 3</span> · 4' : '2 + <span class="text-sky-600 underline decoration-2">3 · 4</span>'}
+                                    </div>
+                                    <span class="text-[11px] text-slate-500 mt-2">${isWrong ? '¡Error! Sumar de izquierda a derecha' : 'Identificamos primero el producto 3 · 4'}</span>
+                                </div>
+                                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col items-center justify-center">
+                                    <span class="text-xs text-slate-500 font-medium mb-1">${isWrong ? 'Paso intermedio erróneo' : 'Paso intermedio correcto'}</span>
+                                    <div class="text-3xl sm:text-4xl font-mono font-bold ${isWrong ? 'text-rose-700' : 'text-sky-700'}">
+                                        ${isWrong ? '5 · 4' : '2 + 12'}
+                                    </div>
+                                    <span class="text-[11px] text-slate-500 mt-2">${isWrong ? 'Se multiplicó el 5 por 4' : 'Sustituimos 3 · 4 por 12'}</span>
+                                </div>
+                                <div class="p-5 rounded-2xl ${isWrong ? 'bg-rose-50 border-2 border-rose-200' : 'bg-emerald-50 border-2 border-emerald-200'} flex flex-col items-center justify-center">
+                                    <span class="text-xs ${isWrong ? 'text-rose-700' : 'text-emerald-700'} font-bold mb-1">
+                                        ${isWrong ? 'Resultado Incorrecto' : 'Resultado Correcto'}
+                                    </span>
+                                    <div class="text-4xl sm:text-5xl font-mono font-extrabold ${isWrong ? 'text-rose-700' : 'text-emerald-700'}">
+                                        ${isWrong ? '20' : '14'}
+                                    </div>
+                                </div>
+                            </div>
 
-</div>
+                            <!-- Botón comparador del error mencionado en el PPTX -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 mt-2">
+                                <div class="flex items-center gap-3">
+                                    <i class="fa-solid ${isWrong ? 'fa-triangle-exclamation text-rose-600' : 'fa-circle-check text-emerald-600'} text-xl"></i>
+                                    <p class="text-sm text-slate-700">
+                                        Sin este orden, <span class="font-mono font-bold text-slate-900">2 + 3 · 4</span> daría <span class="font-mono font-bold text-rose-700">20</span> por error.
+                                    </p>
+                                </div>
+                                <button onclick="state.slide3WrongMode = !state.slide3WrongMode; updateView();" class="px-4 py-2 rounded-xl font-semibold text-xs sm:text-sm transition border shadow-sm ${isWrong ? 'bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700' : 'bg-rose-50 border-rose-200 text-rose-800 hover:bg-rose-100'}">
+                                    ${isWrong ? 'Restaurar Orden Correcto (14)' : 'Ver qué pasa si olvidas el orden (20)'}
+                                </button>
+                            </div>
 
-<div class="barra" id="barra"></div>
-<div class="pie" role="navigation" aria-label="Controles de la presentación">
-  <div class="pie-izq">
-    <button class="boton sec" id="btnAnt" type="button" aria-label="Diapositiva anterior">Anterior</button>
-    <button class="boton" id="btnSig" type="button" aria-label="Diapositiva siguiente">Siguiente</button>
-  </div>
-  <span class="contador" id="contador" aria-live="polite">1 / 15</span>
-  <div class="pie-der">
-    <span class="ayuda-teclado">Flechas para avanzar</span>
-    <button class="boton sec" id="btnNotas" type="button" aria-expanded="false">Ver notas</button>
-  </div>
-</div>
-<div class="aviso-nota oculto" id="avisoNota" role="note"></div>
+                            ${renderDeepExplanation(
+                                '¿Por qué se multiplica antes de sumar?',
+                                'La multiplicación es una suma abreviada repetida: "3 · 4" significa sumar tres veces el 4 (4 + 4 + 4). Por lo tanto, "2 + 3 · 4" equivale realmente a "2 + (4 + 4 + 4) = 14". Si sumaras 2 + 3 primero, estarías cambiando el sentido original de la operación.',
+                                'C++ respeta exactamente esta misma precedencia de operadores: 2 + 3 * 4 evalúa primero 3 * 4. Si en un problema necesitas forzar que la suma ocurra antes, debes usar paréntesis: (2 + 3) * 4.'
+                            )}
+                        </div>
+                    `;
+                }
 
-<script>
-(function () {
-  const diapos = Array.from(document.querySelectorAll("#deck > .slide"));
-  const total = diapos.length;
-  let actual = 0;
-  const NOTAS = [
-    "Presenta la clase. Pregunta de apertura: ¿qué expresión describe pagar 4 paletas a x pesos y un refresco de 15 pesos? Respuesta: 4x + 15.",
-    "Idea central: una variable es una caja con nombre que puede cambiar. Mueve el control: si x = 6, y = 3x − 1 da 17.",
-    "Cada operación tiene prioridad. Ejemplo: 10 − 2 · 3 + 8 ÷ 4 = 6.",
-    "Las propiedades permiten calcular mentalmente. Ejemplo: 25 · 37 · 4 = 3700.",
-    "El número de afuera multiplica a todos los términos. Error típico: −2(x − 4) = −2x + 8, no −2x − 4.",
-    "Una ecuación se conserva si se hace lo mismo en ambos lados. Pregunta: ¿qué pasa si sumas 4 solo de un lado?",
-    "Muestra el procedimiento completo y la comprobación. Ejemplo: 5x − 8 = 27 da x = 7.",
-    "Esta es la diferencia más importante para quien empieza a programar. En C++, a = a · 2 es una instrucción, no una igualdad.",
-    "Una proposición tiene valor de verdad. Pide al grupo que busque un contraejemplo para la afirmación falsa.",
-    "Y necesita las dos partes, O basta con una, NO invierte. Pide calcular NO p para 9 y para 12.",
-    "El condicional solo es falso cuando la premisa se cumple y la conclusión falla.",
-    "La negación de un condicional es p Y NO q. Pregunta: ¿cuál es la negación de 'llueve o hace frío'? Respuesta: no llueve y no hace frío.",
-    "Presenta los errores como señales de aprendizaje. Ejemplo: 8 − 3 + 2 = 7, de izquierda a derecha.",
-    "Repasa las cuatro ideas. Pregunta: ¿cuál es la negación de 'si estudio, entonces no juego'? Respuesta: estudio y juego.",
-    "Cierra con la pregunta y deja que la discutan en parejas. Anticipa el Bloque 2: contadores y ciclos."
-  ];
-  let pasosVisibles = { orden: 0, despues: 0 };
+                // DIAPOSITIVA 4: Propiedades para simplificar
+                case 3: {
+                    const active = state.slide4Tab;
+                    const propDetails = {
+                        conmutativa: {
+                            badge: 'Propiedad Conmutativa seleccionada',
+                            summary: 'El orden de los sumandos (o factores) no altera el resultado: <span class="font-mono font-bold text-sky-800">a + b = b + a</span> y <span class="font-mono font-bold text-sky-800">a · b = b · a</span>.',
+                            title: 'Propiedad Conmutativa a Fondo',
+                            math: 'Conmutar significa "intercambiar de lugar". En la suma (<span class="font-mono">3 + x = x + 3</span>) y en la multiplicación (<span class="font-mono">4 · x = x · 4</span>) puedes cambiar el orden libremente para juntar términos semejantes. <strong>¡Ojo!</strong> No aplica en la resta (<span class="font-mono">10 − 3 ≠ 3 − 10</span>) ni en la división (<span class="font-mono">8 ÷ 2 ≠ 2 ÷ 8</span>); si mueves un término negativo como en <span class="font-mono">5 − x</span>, debe viajar con su signo: <span class="font-mono">−x + 5</span>.',
+                            cpp: 'En C++ nos permite reordenar expresiones para evitar desbordamientos o usar funciones como <span class="font-mono">std::min(a, b)</span> y <span class="font-mono">std::gcd(a, b)</span> sabiendo que el orden no cambia la respuesta. Además, al ordenar condiciones o datos, siempre es útil intercambiar variables con <span class="font-mono">std::swap(a, b)</span>.'
+                        },
+                        asociativa: {
+                            badge: 'Propiedad Asociativa seleccionada',
+                            summary: 'Al sumar o multiplicar tres o más números, cómo los agrupes con paréntesis no cambia el total: <span class="font-mono font-bold text-purple-800">(a + b) + c = a + (b + c)</span>.',
+                            title: 'Propiedad Asociativa a Fondo',
+                            math: 'Asociar significa "agrupar". Cuando tienes puras sumas o puras multiplicaciones, puedes resolver primero el par que te resulte más sencillo. Por ejemplo, en <span class="font-mono">(17 + 25) + 75</span> es mucho más fácil agrupar primero <span class="font-mono">17 + (25 + 75) = 17 + 100 = 117</span>. Al igual que la conmutativa, tampoco es válida en la resta: <span class="font-mono">(10 − 5) − 2 = 3</span>, mientras que <span class="font-mono">10 − (5 − 2) = 7</span>.',
+                            cpp: 'En programación competitiva es clave: toda operación asociativa (como la suma, el producto, el máximo o el mínimo) nos permite usar algoritmos avanzados como <strong>Sumas de Prefijos</strong> o <strong>Árboles de Segmentos</strong> para responder miles de consultas por rangos en tiempo instantáneo.'
+                        },
+                        distributiva: {
+                            badge: 'Propiedad Distributiva seleccionada',
+                            summary: 'Un factor externo multiplica a cada uno de los términos dentro del paréntesis: <span class="font-mono font-bold text-emerald-800">a(b + c) = ab + ac</span>.',
+                            title: 'Propiedad Distributiva a Fondo',
+                            math: 'Es el puente entre la multiplicación y la suma/resta. Cuando dentro del paréntesis hay una variable como en <span class="font-mono">3(x + 4)</span>, no podemos sumar <span class="font-mono">x + 4</span> directamente; la propiedad distributiva nos permite "romper" el paréntesis repartiendo el 3: <span class="font-mono">3·x + 3·4 = 3x + 12</span>. También funciona a la inversa (<strong>factorizar</strong>): pasar de <span class="font-mono">3x + 12</span> a <span class="font-mono">3(x + 4)</span>.',
+                            cpp: 'En código funciona en ambos sentidos: expandir paréntesis ayuda a despejar variables en ecuaciones lineales, mientras que factorizar <span class="font-mono">a * b + a * c</span> como <span class="font-mono">a * (b + c)</span> ahorra multiplicaciones y reduce el riesgo de overflow con números grandes (<span class="font-mono">long long</span>).'
+                        }
+                    };
+                    const currentProp = propDetails[active];
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold">Diapositiva 4 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Equivalencia de Expresiones · Haz clic en cada tarjeta</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Propiedades para simplificar</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Cambian la forma de escribir, no el valor</p>
+                            </div>
 
-  function mostrar(i) {
-    actual = Math.max(0, Math.min(total - 1, i));
-    diapos.forEach(function (d, k) { d.classList.toggle("activa", k === actual); });
-    document.getElementById("contador").textContent = (actual + 1) + " / " + total;
-    document.getElementById("barra").style.width = ((actual + 1) / total * 100) + "%";
-    document.getElementById("btnAnt").disabled = actual === 0;
-    document.getElementById("btnSig").disabled = actual === total - 1;
-    const aviso = document.getElementById("avisoNota");
-    if (!aviso.classList.contains("oculto")) aviso.innerHTML = "<p>" + NOTAS[actual] + "</p>";
-    diapos[actual].scrollTop = 0;
-    typeset(diapos[actual]);
-  }
+                            <!-- 3 tarjetas del PPTX con tonos pastel -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                                <!-- Conmutativa -->
+                                <div onclick="state.slide4Tab = 'conmutativa'; updateView();" class="cursor-pointer p-5 rounded-2xl transition border-2 ${active === 'conmutativa' ? 'bg-sky-50 border-sky-400 shadow-md ring-2 ring-sky-200' : 'bg-slate-50/80 border-slate-200 hover:bg-slate-100/70'}">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="w-11 h-11 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-xl border border-sky-200">
+                                            <i class="fa-solid fa-right-left"></i>
+                                        </div>
+                                        <span class="text-[11px] font-mono px-2 py-0.5 rounded-full ${active === 'conmutativa' ? 'bg-sky-200/80 text-sky-900 font-bold' : 'bg-white text-slate-500 border border-slate-200'}">
+                                            ${active === 'conmutativa' ? 'Activa' : 'Ver detalle'}
+                                        </span>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-slate-800 mb-1">Conmutativa</h3>
+                                    <p class="font-mono text-lg text-sky-800 font-bold mb-2">a + b = b + a</p>
+                                    <p class="font-mono text-sm text-slate-700 bg-white px-3 py-1.5 rounded-lg border border-slate-200 inline-block">3 + x = x + 3</p>
+                                </div>
 
-  function typeset(el) {
-    if (window.MathJax && MathJax.typesetPromise) {
-      MathJax.typesetPromise([el]).catch(function () {});
-    }
-  }
+                                <!-- Asociativa -->
+                                <div onclick="state.slide4Tab = 'asociativa'; updateView();" class="cursor-pointer p-5 rounded-2xl transition border-2 ${active === 'asociativa' ? 'bg-purple-50 border-purple-400 shadow-md ring-2 ring-purple-200' : 'bg-slate-50/80 border-slate-200 hover:bg-slate-100/70'}">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="w-11 h-11 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl border border-purple-200">
+                                            <i class="fa-solid fa-layer-group"></i>
+                                        </div>
+                                        <span class="text-[11px] font-mono px-2 py-0.5 rounded-full ${active === 'asociativa' ? 'bg-purple-200/80 text-purple-900 font-bold' : 'bg-white text-slate-500 border border-slate-200'}">
+                                            ${active === 'asociativa' ? 'Activa' : 'Ver detalle'}
+                                        </span>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-slate-800 mb-1">Asociativa</h3>
+                                    <p class="font-mono text-base sm:text-lg text-purple-800 font-bold mb-2">(a + b) + c = a + (b + c)</p>
+                                    <p class="text-sm text-slate-700 bg-white px-3 py-1.5 rounded-lg border border-slate-200 inline-block">Agrupar no cambia el total</p>
+                                </div>
 
-  document.getElementById("btnAnt").addEventListener("click", function () { mostrar(actual - 1); });
-  document.getElementById("btnSig").addEventListener("click", function () { mostrar(actual + 1); });
+                                <!-- Distributiva -->
+                                <div onclick="state.slide4Tab = 'distributiva'; updateView();" class="cursor-pointer p-5 rounded-2xl transition border-2 ${active === 'distributiva' ? 'bg-emerald-50 border-emerald-400 shadow-md ring-2 ring-emerald-200' : 'bg-slate-50/80 border-slate-200 hover:bg-slate-100/70'}">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl border border-emerald-200">
+                                            <i class="fa-solid fa-border-all"></i>
+                                        </div>
+                                        <span class="text-[11px] font-mono px-2 py-0.5 rounded-full ${active === 'distributiva' ? 'bg-emerald-200/80 text-emerald-900 font-bold' : 'bg-white text-slate-500 border border-slate-200'}">
+                                            ${active === 'distributiva' ? 'Activa' : 'Ver detalle'}
+                                        </span>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-slate-800 mb-1">Distributiva</h3>
+                                    <p class="font-mono text-lg text-emerald-800 font-bold mb-2">a(b + c) = ab + ac</p>
+                                    <p class="font-mono text-sm text-slate-700 bg-white px-3 py-1.5 rounded-lg border border-slate-200 inline-block">3(x + 4) = 3x + 12</p>
+                                </div>
+                            </div>
 
-  document.getElementById("btnNotas").addEventListener("click", function (e) {
-    const aviso = document.getElementById("avisoNota");
-    const abrir = aviso.classList.contains("oculto");
-    aviso.classList.toggle("oculto", !abrir);
-    e.currentTarget.setAttribute("aria-expanded", String(abrir));
-    e.currentTarget.textContent = abrir ? "Ocultar notas" : "Ver notas";
-    if (abrir) aviso.innerHTML = "<p>" + NOTAS[actual] + "</p>";
-  });
+                            <!-- Barra de estado de la tarjeta seleccionada -->
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                                <div class="text-xs sm:text-sm text-slate-700">
+                                    <span class="font-bold text-slate-900">${currentProp.badge}:</span> ${currentProp.summary}
+                                </div>
+                                <span class="text-xs font-mono text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200 shrink-0">
+                                    <i class="fa-solid fa-hand-pointer mr-1"></i>Explicación actualizada abajo
+                                </span>
+                            </div>
 
-  document.addEventListener("keydown", function (e) {
-    if (e.target.tagName === "INPUT" && e.target.type === "range") return;
-    if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); mostrar(actual + 1); }
-    if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); mostrar(actual - 1); }
-    if (e.key === "Home") mostrar(0);
-    if (e.key === "End") mostrar(total - 1);
-  });
+                            ${renderDeepExplanation(
+                                currentProp.title,
+                                currentProp.math,
+                                currentProp.cpp
+                            )}
+                        </div>
+                    `;
+                }
 
-  /* Diapositiva 2: variable con deslizador */
-  const sx = document.getElementById("sx");
-  function actualizarX() {
-    const x = Number(sx.value);
-    document.getElementById("vx").textContent = x;
-    document.getElementById("vx2").textContent = x;
-    document.getElementById("res").textContent = 2 * x + 3;
-    document.getElementById("valorX").textContent = "x = " + x;
-  }
-  sx.addEventListener("input", actualizarX);
+                // DIAPOSITIVA 5: La distributiva en acción
+                case 4: {
+                    const x = state.slide5X;
+                    const leftVal = 3 * (x + 4);
+                    const rightVal = 3 * x + 12;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold">Diapositiva 5 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Expansión y Comprobación</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">La distributiva en acción</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">El número de afuera multiplica a cada término de adentro</p>
+                            </div>
 
-  /* Diapositiva 3: pasos del orden de operaciones */
-  const pasosOrden = document.querySelectorAll("#pasosOrden [data-paso]");
-  document.getElementById("btnOrden").addEventListener("click", function () {
-    const n = pasosOrden.length;
-    if (pasosVisibles.orden === n) {
-      /* Al terminar, el botón reinicia la secuencia */
-      pasosOrden.forEach(function (p) { p.classList.add("oculto"); });
-      pasosVisibles.orden = 0;
-    } else {
-      pasosOrden[pasosVisibles.orden].classList.remove("oculto");
-      pasosVisibles.orden++;
-      typeset(document.getElementById("pasosOrden"));
-    }
-    this.textContent = pasosVisibles.orden === n ? "Reiniciar" : "Mostrar siguiente paso";
-  });
+                            <!-- Comparación visual -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 my-4">
+                                <div class="p-6 rounded-2xl bg-sky-50/80 border-2 border-sky-200 flex flex-col items-center justify-center text-center">
+                                    <span class="text-xs uppercase font-mono text-sky-700 font-bold mb-2">Expresión con Paréntesis</span>
+                                    <div class="text-4xl sm:text-5xl font-mono font-extrabold text-slate-800 mb-3">
+                                        <span class="text-sky-700">3</span>(x + 4)
+                                    </div>
+                                    <p class="text-xs sm:text-sm text-slate-600 font-mono bg-white px-3 py-1.5 rounded-xl border border-sky-200">
+                                        3 · (${x} + 4) = 3 · ${x + 4} = <span class="text-emerald-700 font-bold">${leftVal}</span>
+                                    </p>
+                                </div>
 
-  /* Diapositiva 4: tarjetas de propiedades */
-  document.querySelectorAll("[data-ejemplo]").forEach(function (b) {
-    b.addEventListener("click", function () {
-      const ej = document.getElementById("ej-" + b.dataset.ejemplo);
-      ej.classList.toggle("oculto");
-      typeset(b);
-    });
-  });
+                                <div class="p-6 rounded-2xl bg-emerald-50/80 border-2 border-emerald-200 flex flex-col items-center justify-center text-center">
+                                    <span class="text-xs uppercase font-mono text-emerald-700 font-bold mb-2">Expresión Expandida (3·x + 3·4)</span>
+                                    <div class="text-4xl sm:text-5xl font-mono font-extrabold text-slate-800 mb-3">
+                                        <span class="text-sky-700">3</span>x + <span class="text-emerald-700">12</span>
+                                    </div>
+                                    <p class="text-xs sm:text-sm text-slate-600 font-mono bg-white px-3 py-1.5 rounded-xl border border-emerald-200">
+                                        3 · ${x} + 12 = ${3 * x} + 12 = <span class="text-emerald-700 font-bold">${rightVal}</span>
+                                    </p>
+                                </div>
+                            </div>
 
-  /* Diapositiva 5: distributiva */
-  const sd = document.getElementById("sd");
-  function actualizarD() {
-    const x = Number(sd.value);
-    const izq = 3 * (x + 4), der = 3 * x + 12;
-    document.getElementById("valD").textContent = "x = " + x;
-    document.getElementById("resD").textContent =
-      "3(" + x + " + 4) = " + izq + "   ·   3·" + x + " + 12 = " + der + "   ·   " + (izq === der ? "Son iguales." : "No coinciden.");
-  }
-  sd.addEventListener("input", actualizarD);
+                            <!-- Bloque de comprobación del PPTX con control deslizante -->
+                            <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col gap-3">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                    <div>
+                                        <span class="text-xs font-bold uppercase tracking-wider text-teal-700 block">Comprobación con x = ${x}</span>
+                                        <p class="font-mono text-sm sm:text-base text-slate-800 mt-1">
+                                            3(${x} + 4) = <span class="text-emerald-700 font-bold">${leftVal}</span>
+                                            &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                                            3 · ${x} + 12 = <span class="text-emerald-700 font-bold">${rightVal}</span>
+                                            &nbsp;&nbsp;&rarr;&nbsp;&nbsp;
+                                            <span class="text-sky-700 font-sans font-bold">Son iguales.</span>
+                                        </p>
+                                    </div>
+                                    <button onclick="state.slide5X = 2; updateView();" class="text-xs px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 font-mono border border-slate-300 self-start sm:self-auto shadow-sm">
+                                        Volver a x = 2
+                                    </button>
+                                </div>
+                                <div class="flex items-center gap-3 pt-1">
+                                    <span class="text-xs font-mono text-slate-500">Prueba cualquier valor de x:</span>
+                                    <input type="range" min="-5" max="10" value="${x}" oninput="state.slide5X = parseInt(this.value); updateView();" class="w-full accent-emerald-600 cursor-pointer h-2 bg-slate-200 rounded-lg">
+                                    <span class="font-mono text-sm font-bold text-emerald-700 w-14 text-right">x = ${x}</span>
+                                </div>
+                            </div>
 
-  /* Diapositiva 6: balanza */
-  const sb = document.getElementById("sb");
-  function actualizarB() {
-    const x = Number(sb.value);
-    const izq = x + 5, der = 12;
-    const dif = izq - der;
-    const giro = Math.max(-12, Math.min(12, dif * 3));
-    document.getElementById("viga").style.transform = "rotate(" + (-giro) + "deg)";
-    document.getElementById("platIzq").style.transform = "translateY(" + (giro * 1.6) + "px)";
-    document.getElementById("platDer").style.transform = "translateY(" + (-giro * 1.6) + "px)";
-    document.getElementById("platIzq").textContent = "x + 5 = " + izq;
-    document.getElementById("valB").textContent = "x = " + x;
-    document.getElementById("estadoB").textContent = dif === 0
-      ? "Equilibrio: x + 5 = 12, entonces x = 7."
-      : (dif > 0 ? "El lado izquierdo pesa más." : "El lado derecho pesa más.");
-  }
-  sb.addEventListener("input", actualizarB);
+                            ${renderDeepExplanation(
+                                'Interpretación Geométrica y Error Frecuente',
+                                'Imagina un rectángulo de altura 3 cuya base está dividida en dos tramos: uno mide "x" y el otro mide "4". El área total es base por altura: 3(x + 4), que es exactamente igual a sumar el área del primer rectángulo (3x) más el segundo (3 · 4 = 12). Nunca olvides multiplicar también el segundo término.',
+                                'Cuando optimizas fórmulas en código, a veces conviene expandir: 3*x + 12, y otras veces factorizar: 3*(x + 4) para hacer una sola multiplicación en lugar de dos.'
+                            )}
+                        </div>
+                    `;
+                }
 
-  /* Diapositiva 7: pasos de la ecuación */
-  const pasos2 = document.querySelectorAll("[data-paso2]");
-  let paso2 = 0;
-  document.getElementById("btnPasos").addEventListener("click", function () {
-    const n = pasos2.length;
-    if (paso2 === n) {
-      /* Al terminar, el botón reinicia la secuencia */
-      pasos2.forEach(function (p) { p.classList.add("oculto"); });
-      document.getElementById("comprob").classList.add("oculto");
-      paso2 = 0;
-    } else {
-      pasos2[paso2].classList.remove("oculto");
-      paso2++;
-      if (paso2 === n) document.getElementById("comprob").classList.remove("oculto");
-      typeset(document.getElementById("deck"));
-    }
-    this.textContent = paso2 === n ? "Reiniciar" : "Siguiente paso";
-  });
+                // DIAPOSITIVA 6: Una ecuación es una balanza
+                case 5: {
+                    const subtracted = state.slide6Subtracted;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold">Diapositiva 6 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Principio de Conservación de la Igualdad</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Una ecuación es una balanza</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Lo que haces de un lado, lo haces del otro</p>
+                            </div>
 
-  /* Diapositiva 8: ejecución línea por línea */
-  const lineasC = [
-    { txt: "a = 3", fn: function (v) { return 3; } },
-    { txt: "a = a * 2", fn: function (v) { return v * 2; } },
-    { txt: "a = a + 1", fn: function (v) { return v + 1; } }
-  ];
-  let valA = null, linea = 0;
-  document.getElementById("btnCodigo").addEventListener("click", function () {
-    if (linea === lineasC.length) {
-      /* Al terminar, el botón reinicia la traza */
-      valA = null; linea = 0;
-      document.getElementById("valA").textContent = "a = ?";
-    } else {
-      valA = lineasC[linea].fn(valA);
-      document.getElementById("valA").textContent = "a = " + valA + "   (línea " + (linea + 1) + ": " + lineasC[linea].txt + ")";
-      linea++;
-    }
-    this.textContent = linea === lineasC.length ? "Reiniciar" : "Ejecutar siguiente línea";
-  });
+                            <!-- Visualización de Balanza Interactiva Suave -->
+                            <div class="my-4 flex flex-col items-center justify-center">
+                                <div class="w-full max-w-2xl grid grid-cols-2 gap-6 items-end">
+                                    <!-- Platillo Izquierdo -->
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-full p-5 rounded-2xl ${subtracted ? 'bg-emerald-50 border-emerald-300' : 'bg-sky-50 border-sky-300'} border-2 text-center shadow-sm transition-all">
+                                            <span class="text-xs text-slate-500 uppercase font-semibold block mb-1">Platillo Izquierdo</span>
+                                            <span class="text-3xl sm:text-4xl font-mono font-extrabold text-slate-800">
+                                                ${subtracted ? 'x' : 'x + 5'}
+                                            </span>
+                                            ${subtracted ? '<span class="block text-xs font-mono text-emerald-700 mt-1">Quitamos 5: (x + 5 − 5)</span>' : '<span class="block text-xs text-slate-500 mt-1">1 caja x + 5 unidades</span>'}
+                                        </div>
+                                        <div class="w-24 h-2 bg-slate-300 rounded-b-lg"></div>
+                                    </div>
 
-  /* Diapositiva 9: clasificar proposiciones */
-  document.querySelectorAll("[data-prop]").forEach(function (b) {
-    b.addEventListener("click", function () {
-      b.querySelector(".ejemplo").classList.remove("oculto");
-      typeset(b);
-    });
-  });
+                                    <!-- Platillo Derecho -->
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-full p-5 rounded-2xl ${subtracted ? 'bg-emerald-50 border-emerald-300' : 'bg-sky-50 border-sky-300'} border-2 text-center shadow-sm transition-all">
+                                            <span class="text-xs text-slate-500 uppercase font-semibold block mb-1">Platillo Derecho</span>
+                                            <span class="text-3xl sm:text-4xl font-mono font-extrabold text-slate-800">
+                                                ${subtracted ? '7' : '12'}
+                                            </span>
+                                            ${subtracted ? '<span class="block text-xs font-mono text-emerald-700 mt-1">Quitamos 5: (12 − 5)</span>' : '<span class="block text-xs text-slate-500 mt-1">12 unidades en total</span>'}
+                                        </div>
+                                        <div class="w-24 h-2 bg-slate-300 rounded-b-lg"></div>
+                                    </div>
+                                </div>
 
-  /* Diapositiva 10: tabla de verdad */
-  let P = true, Q = true;
-  const btnP = document.getElementById("btnP"), btnQ = document.getElementById("btnQ");
-  function actualizarTabla() {
-    btnP.textContent = "p = " + (P ? "V" : "F");
-    btnQ.textContent = "q = " + (Q ? "V" : "F");
-    const clave = (P ? "V" : "F") + (Q ? "V" : "F");
-    document.querySelectorAll(".verdad tbody tr").forEach(function (tr) {
-      tr.classList.toggle("resaltada", tr.dataset.fila === clave);
-    });
-  }
-  btnP.addEventListener("click", function () { P = !P; actualizarTabla(); });
-  btnQ.addEventListener("click", function () { Q = !Q; actualizarTabla(); });
-  actualizarTabla();
+                                <!-- Barra y Fulcro de la balanza -->
+                                <div class="w-full max-w-xl h-3 bg-gradient-to-r from-sky-300 via-teal-300 to-emerald-300 rounded-full mt-1 border border-slate-300"></div>
+                                <div class="w-0 h-0 border-l-[22px] border-l-transparent border-r-[22px] border-r-transparent border-b-[32px] border-b-slate-400 -mt-0.5"></div>
+                                <span class="text-xs font-mono text-teal-700 mt-2 font-semibold flex items-center gap-1.5">
+                                    <i class="fa-solid fa-scale-balanced"></i> Equilibrio mantenido en ambos lados del signo "="
+                                </span>
+                            </div>
 
-  /* Diapositiva 11: condicional */
-  let P2 = true, Q2 = true;
-  const btnP2 = document.getElementById("btnP2"), btnQ2 = document.getElementById("btnQ2");
-  function actualizarCond() {
-    btnP2.textContent = "p = " + (P2 ? "V" : "F");
-    btnQ2.textContent = "q = " + (Q2 ? "V" : "F");
-    const roto = P2 && !Q2;
-    document.getElementById("condResultado").textContent = "p → q es " + (roto ? "F" : "V");
-    document.getElementById("condExplica").textContent = roto
-      ? "La promesa se rompe: la premisa se cumplió y la conclusión falló."
-      : "La promesa se cumple: no se rompió en esta combinación.";
-  }
-  btnP2.addEventListener("click", function () { P2 = !P2; actualizarCond(); });
-  btnQ2.addEventListener("click", function () { Q2 = !Q2; actualizarCond(); });
-  actualizarCond();
+                            <!-- Acción interactiva del PPTX -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <p class="text-sm sm:text-base font-medium text-slate-700">
+                                    <i class="fa-solid fa-equals text-sky-600 mr-2"></i>
+                                    Restar 5 a los dos lados: <span class="font-mono font-bold text-emerald-700">x = 7</span>
+                                </p>
+                                <button onclick="state.slide6Subtracted = !state.slide6Subtracted; updateView();" class="px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition shadow-sm ${subtracted ? 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-300' : 'bg-emerald-600 hover:bg-emerald-700 text-white'}">
+                                    ${subtracted ? 'Ver estado inicial (x + 5 = 12)' : 'Restar 5 en ambos lados'}
+                                </button>
+                            </div>
 
-  /* Diapositiva 13: errores que se revelan */
-  document.querySelectorAll(".error-item").forEach(function (el) {
-    function alternar() { el.querySelector("span").classList.toggle("oculto"); typeset(el); }
-    el.addEventListener("click", alternar);
-    el.addEventListener("keydown", function (e) { if (e.key === "Enter") alternar(); });
-  });
+                            ${renderDeepExplanation(
+                                'La verdad detrás de "pasar restando"',
+                                'En la escuela suele decirse que "el +5 pasa al otro lado como −5". En realidad, los números no saltan mágicamente: lo que hacemos es aplicar la operación inversa (−5) en AMBOS platillos de la balanza para cancelar el +5 izquierdo (5 − 5 = 0) y dejar la incógnita x completamente sola.',
+                                'Despejar ecuaciones en papel antes de codificar te permite transformar un problema que parecería requerir búsqueda exhaustiva en una simple fórmula directa de tiempo constante O(1).'
+                            )}
+                        </div>
+                    `;
+                }
 
-  /* Diapositiva 15: reflexión */
-  document.getElementById("btnReflex").addEventListener("click", function () {
-    document.getElementById("respReflex").classList.remove("oculto");
-    typeset(document.getElementById("respReflex"));
-    this.classList.add("oculto");
-  });
+                // DIAPOSITIVA 7: Resolver paso a paso
+                case 6: {
+                    const step = state.slide7Step;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold">Diapositiva 7 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Metodología de Resolución y Verificación</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Resolver paso a paso</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1 font-mono">Ejemplo: x + 5 = 12</p>
+                            </div>
 
-  actualizarX(); actualizarD(); actualizarB();
-  mostrar(0);
-})();
-</script>
+                            <!-- 3 Pasos Interactivos -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                                <div onclick="state.slide7Step = 1; updateView();" class="cursor-pointer p-5 rounded-2xl border-2 transition ${step >= 1 ? 'bg-sky-50/80 border-sky-300 shadow-sm' : 'bg-slate-50 border-slate-200 opacity-60'}">
+                                    <span class="text-xs font-mono uppercase px-2.5 py-1 rounded bg-sky-100 text-sky-800 font-bold border border-sky-200">Paso 1</span>
+                                    <div class="text-3xl font-mono font-bold text-slate-800 mt-4">x + 5 = 12</div>
+                                    <p class="text-xs text-slate-600 mt-2">Planteamos la ecuación original e identificamos qué acompaña a <strong>x</strong> (+5).</p>
+                                </div>
+
+                                <div onclick="state.slide7Step = 2; updateView();" class="cursor-pointer p-5 rounded-2xl border-2 transition ${step >= 2 ? 'bg-purple-50/80 border-purple-300 shadow-sm' : 'bg-slate-50 border-slate-200 opacity-60'}">
+                                    <span class="text-xs font-mono uppercase px-2.5 py-1 rounded bg-purple-100 text-purple-800 font-bold border border-purple-200">Paso 2</span>
+                                    <div class="text-3xl font-mono font-bold text-slate-800 mt-4">x = 12 − 5</div>
+                                    <p class="text-xs text-slate-600 mt-2">Aplicamos la operación inversa: restamos 5 para despejar a <strong>x</strong>.</p>
+                                </div>
+
+                                <div onclick="state.slide7Step = 3; updateView();" class="cursor-pointer p-5 rounded-2xl border-2 transition ${step >= 3 ? 'bg-emerald-50/90 border-emerald-300 shadow-sm' : 'bg-slate-50 border-slate-200 opacity-60'}">
+                                    <span class="text-xs font-mono uppercase px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold border border-emerald-200">Paso 3</span>
+                                    <div class="text-3xl font-mono font-bold text-emerald-700 mt-4">x = 7</div>
+                                    <p class="text-xs text-slate-600 mt-2">Calculamos la resta final y obtenemos el valor de la incógnita.</p>
+                                </div>
+                            </div>
+
+                            <!-- Comprobación obligatoria -->
+                            <div class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <i class="fa-solid fa-shield-halved text-emerald-600 text-xl"></i>
+                                    <p class="text-sm sm:text-base text-slate-700">
+                                        <span class="font-bold text-slate-900">Comprobación:</span> 
+                                        <span class="font-mono text-emerald-800 font-bold bg-white px-2 py-0.5 rounded border border-emerald-200">7 + 5 = 12</span>. Siempre comprueba la respuesta.
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="state.slide7Step = 1; updateView();" class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-xs font-mono text-slate-700 border border-slate-200">Paso 1</button>
+                                    <button onclick="state.slide7Step = 2; updateView();" class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-xs font-mono text-slate-700 border border-slate-200">Paso 2</button>
+                                    <button onclick="state.slide7Step = 3; updateView();" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-xs font-mono text-white">Paso 3</button>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                '¿Por qué es indispensable comprobar?',
+                                'Comprobar significa tomar el resultado obtenido (x = 7) y sustituirlo en la ecuación original del Paso 1. Como 7 + 5 efectivamente da 12, tenemos 100% de certeza de que no cometimos errores de signo ni de aritmética.',
+                                'En concursos de programación como la OMI o ICPC, comprobar tu solución con los casos de ejemplo y casos pequeños hechos a mano antes de enviar tu código evita penalizaciones por envíos erróneos (Wrong Answer).'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 8: Igualdad y asignación
+                case 7: {
+                    const cppX = state.slide8CppX;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold">Diapositiva 8 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Contraste entre Matemáticas y C++</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Igualdad y asignación</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">
+                                    El mismo signo <span class="font-mono text-sky-700 font-bold">"="</span> significa cosas distintas. En C++, comparar se escribe <span class="font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">==</span>.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 my-4">
+                                <!-- En Álgebra -->
+                                <div class="p-6 rounded-2xl bg-sky-50/70 border-2 border-sky-200 flex flex-col justify-between">
+                                    <div>
+                                        <div class="w-11 h-11 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-xl mb-3 border border-sky-200">
+                                            <i class="fa-solid fa-equals"></i>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-slate-800 mb-2">En álgebra</h3>
+                                        <div class="p-3 rounded-xl bg-white font-mono text-lg text-sky-800 font-bold mb-3 border border-sky-200 shadow-sm">
+                                            x = 5
+                                        </div>
+                                        <p class="text-slate-700 text-sm sm:text-base">
+                                            <span class="font-mono font-bold text-slate-900">x = 5</span> es una <span class="text-sky-700 font-bold">afirmación</span>: declara que ambos lados tienen el mismo valor (x vale 5).
+                                        </p>
+                                    </div>
+                                    <div class="mt-4 pt-3 border-t border-sky-200/80 text-xs text-slate-600 font-mono">
+                                        Para hacer una pregunta de igualdad en C++ usamos doble igual: <span class="text-emerald-700 font-bold">if (x == 5)</span>
+                                    </div>
+                                </div>
+
+                                <!-- En C++ -->
+                                <div class="p-6 rounded-2xl bg-purple-50/70 border-2 border-purple-200 flex flex-col justify-between">
+                                    <div>
+                                        <div class="w-11 h-11 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl mb-3 border border-purple-200">
+                                            <i class="fa-solid fa-code"></i>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-slate-800 mb-2">En C++</h3>
+                                        <div class="p-3 rounded-xl bg-white font-mono text-lg text-purple-800 font-bold mb-3 border border-purple-200 shadow-sm flex items-center justify-between">
+                                            <span>x = x + 1;</span>
+                                            <span class="text-xs px-2.5 py-1 rounded-lg bg-purple-100 text-purple-800 border border-purple-200">Memoria x: ${cppX}</span>
+                                        </div>
+                                        <p class="text-slate-700 text-sm sm:text-base">
+                                            <span class="font-mono font-bold text-slate-900">x = x + 1;</span> es una <span class="text-purple-700 font-bold">orden (asignación)</span>: toma el valor actual de x, súmale 1 y guárdalo de nuevo en x.
+                                        </p>
+                                    </div>
+                                    <div class="mt-4 pt-3 border-t border-purple-200/80 flex items-center justify-between">
+                                        <button onclick="state.slide8CppX++; updateView();" class="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-mono font-bold text-xs transition shadow-sm">
+                                            Ejecutar orden: x = x + 1;
+                                        </button>
+                                        <button onclick="state.slide8CppX = 5; updateView();" class="text-xs font-mono text-slate-500 hover:text-slate-800">
+                                            Reiniciar (x = 5)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Uno de los errores más famosos en C++',
+                                'En matemáticas la ecuación "x = x + 1" no tiene solución porque ningún número es igual a sí mismo más uno (si restas x en ambos lados queda 0 = 1, lo cual es imposible). En cambio, en programación el signo "=" no es simétrico: primero calcula todo lo que está a la derecha y luego lo guarda en la variable de la izquierda.',
+                                '¡Cuidado en tus condicionales! Si escribes if (x = 5) con un solo igual en C++, no estás comparando: estás sobrescribiendo x con el número 5. Para comparar sin modificar la variable, usa siempre dos signos de igual: if (x == 5).'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 9: Proposiciones: verdadero o falso
+                case 8: {
+                    const quizItems = [
+                        { text: '"Mazatlán está en Sinaloa."', isProp: true, detail: '¡Correcto! Es proposición: afirma un hecho geográfico verificable y es Verdadera (V).' },
+                        { text: '"¡Qué día tan bonito!"', isProp: false, detail: '¡Exacto! No es proposición: es una exclamación subjetiva u opinión; depende de a quién le preguntes.' },
+                        { text: '"El número 15 es par."', isProp: true, detail: '¡Muy bien! Aunque sea Falsa (F), SÍ es una proposición porque tiene un valor de verdad definido sin ambigüedad.' },
+                        { text: '"¿A qué hora inicia el concurso?"', isProp: false, detail: '¡Correcto! Las preguntas u órdenes no son proposiciones porque no se pueden calificar como verdaderas o falsas.' }
+                    ];
+                    const item = quizItems[state.slide9QuizIndex];
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold">Diapositiva 9 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Introducción a la Lógica Proposicional</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Proposiciones: verdadero o falso</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Una proposición tiene un valor de verdad</p>
+                            </div>
+
+                            <!-- 2 tarjetas principales del PPTX -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 my-4">
+                                <div class="p-6 rounded-2xl bg-emerald-50/80 border-2 border-emerald-200 flex flex-col justify-center">
+                                    <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl mb-3 border border-emerald-200">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                    </div>
+                                    <h3 class="text-xl sm:text-2xl font-bold text-slate-800 mb-1">"Mazatlán está en Sinaloa."</h3>
+                                    <p class="text-emerald-800 font-semibold">Es proposición: es verdadera.</p>
+                                    <p class="text-xs text-slate-600 mt-2">Es un enunciado declarativo cuyo valor de verdad se puede verificar objetivamente.</p>
+                                </div>
+
+                                <div class="p-6 rounded-2xl bg-amber-50/80 border-2 border-amber-200 flex flex-col justify-center">
+                                    <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl mb-3 border border-amber-200">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                    </div>
+                                    <h3 class="text-xl sm:text-2xl font-bold text-slate-800 mb-1">"¡Qué día tan bonito!"</h3>
+                                    <p class="text-amber-800 font-semibold">No es proposición: es una opinión.</p>
+                                    <p class="text-xs text-slate-600 mt-2">Las opiniones, deseos, preguntas o exclamaciones no tienen un valor único V o F.</p>
+                                </div>
+                            </div>
+
+                            <!-- Mini clasificador interactivo -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                                <div>
+                                    <span class="text-xs font-mono text-sky-700 font-bold uppercase">Practica clasificando (${state.slide9QuizIndex + 1}/${quizItems.length}):</span>
+                                    <p class="text-base font-bold text-slate-800 mt-0.5">${item.text}</p>
+                                    ${state.slide9Feedback ? `<p class="text-xs mt-1 font-medium ${state.slide9Feedback.ok ? 'text-emerald-700' : 'text-rose-700'}">${state.slide9Feedback.msg}</p>` : ''}
+                                </div>
+                                <div class="flex items-center gap-2 shrink-0">
+                                    <button onclick="checkProp(true)" class="px-3.5 py-2 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-800 border border-emerald-300 text-xs font-bold transition">Sí es Proposición</button>
+                                    <button onclick="checkProp(false)" class="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-800 border border-amber-300 text-xs font-bold transition">No es Proposición</button>
+                                    <button onclick="state.slide9QuizIndex = (state.slide9QuizIndex + 1) % 4; state.slide9Feedback = null; updateView();" class="px-3 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs" title="Siguiente enunciado">
+                                        <i class="fa-solid fa-rotate-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Principio de Bivalencia en Lógica',
+                                'En lógica clásica, una proposición (generalmente representada con letras como p, q, r) debe ser Verdadera (V) o Falsa (F), pero nunca ambas al mismo tiempo ni quedar en duda. Nota importante: una afirmación falsa como "2 + 2 = 9" SÍ es una proposición válida, con valor de verdad Falso.',
+                                'En C++ las proposiciones se representan con el tipo de dato bool (booleano), que únicamente almacena dos estados posibles: true (1 / Verdadero) o false (0 / Falso).'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 10: Y, O y NO (Tablas de verdad)
+                case 9: {
+                    const p = state.slide10P;
+                    const q = state.slide10Q;
+                    const rows = [
+                        { p: true, q: true, and: 'V', or: 'V', notP: 'F' },
+                        { p: true, q: false, and: 'F', or: 'V', notP: 'F' },
+                        { p: false, q: true, and: 'F', or: 'V', notP: 'V' },
+                        { p: false, q: false, and: 'F', or: 'F', notP: 'V' }
+                    ];
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold">Diapositiva 10 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Conectivos Lógicos Fundamentales</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Y, O y NO</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Tablas de verdad (V = verdadero, F = falso)</p>
+                            </div>
+
+                            <!-- Interruptores de prueba en vivo -->
+                            <div class="my-3 flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs font-mono text-slate-600 font-semibold">Cambia los valores:</span>
+                                    <button onclick="state.slide10P = !state.slide10P; updateView();" class="px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold border transition shadow-sm ${p ? 'bg-emerald-100 border-emerald-300 text-emerald-800' : 'bg-rose-100 border-rose-300 text-rose-800'}">
+                                        p = ${p ? 'V (Verdadero)' : 'F (Falso)'}
+                                    </button>
+                                    <button onclick="state.slide10Q = !state.slide10Q; updateView();" class="px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold border transition shadow-sm ${q ? 'bg-emerald-100 border-emerald-300 text-emerald-800' : 'bg-rose-100 border-rose-300 text-rose-800'}">
+                                        q = ${q ? 'V (Verdadero)' : 'F (Falso)'}
+                                    </button>
+                                </div>
+                                <span class="text-xs text-slate-500">Haz clic también sobre cualquier fila de la tabla</span>
+                            </div>
+
+                            <!-- Tabla de verdad exacta del PPTX en tonos suaves -->
+                            <div class="overflow-x-auto my-1 rounded-2xl border border-slate-200 shadow-sm">
+                                <table class="w-full text-center font-mono text-sm sm:text-base">
+                                    <thead class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                        <tr>
+                                            <th class="py-2.5 px-4">p</th>
+                                            <th class="py-2.5 px-4">q</th>
+                                            <th class="py-2.5 px-4 text-sky-700">p Y q <span class="text-[11px] font-normal block text-slate-500">(Conjunción)</span></th>
+                                            <th class="py-2.5 px-4 text-purple-700">p O q <span class="text-[11px] font-normal block text-slate-500">(Disyunción)</span></th>
+                                            <th class="py-2.5 px-4 text-amber-700">NO p <span class="text-[11px] font-normal block text-slate-500">(Negación)</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200">
+                                        ${rows.map(r => {
+                                            const activeRow = (r.p === p && r.q === q);
+                                            return `
+                                                <tr onclick="state.slide10P = ${r.p}; state.slide10Q = ${r.q}; updateView();" class="cursor-pointer transition ${activeRow ? 'bg-sky-50 font-bold ring-2 ring-inset ring-sky-300' : 'bg-white hover:bg-slate-50'}">
+                                                    <td class="py-2.5 px-4 ${r.p ? 'text-emerald-700' : 'text-rose-700'}">${r.p ? 'V' : 'F'}</td>
+                                                    <td class="py-2.5 px-4 ${r.q ? 'text-emerald-700' : 'text-rose-700'}">${r.q ? 'V' : 'F'}</td>
+                                                    <td class="py-2.5 px-4 ${r.and === 'V' ? 'text-emerald-700' : 'text-rose-700'}">${r.and}</td>
+                                                    <td class="py-2.5 px-4 ${r.or === 'V' ? 'text-emerald-700' : 'text-rose-700'}">${r.or}</td>
+                                                    <td class="py-2.5 px-4 ${r.notP === 'V' ? 'text-emerald-700' : 'text-rose-700'}">${r.notP}</td>
+                                                </tr>
+                                            `;
+                                        }).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="p-3 rounded-2xl bg-purple-50/70 border border-purple-200 text-xs sm:text-sm text-slate-700 flex items-center gap-2.5 mt-2">
+                                <i class="fa-solid fa-circle-info text-purple-600"></i>
+                                <span>En lógica, <strong>O es incluyente</strong>: basta con que al menos una parte sea verdadera (incluso si ambas lo son).</span>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Regla Mnemotécnica para Y, O y NO',
+                                '• "p Y q" es exigente: exige que AMBAS sean Verdaderas para dar V. • "p O q" es flexible: da V siempre que haya al menos una V (solo es Falso cuando ambas son Falsas). • "NO p" simplemente invierte el valor de p (de V pasa a F, y de F pasa a V).',
+                                'En C++ estos tres operadores se escriben así: Y lógico es && (ej. p && q), O lógico es || (ej. p || q), y la negación NO es el signo de exclamación ! (ej. !p).'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 11: Si p, entonces q
+                case 10: {
+                    const p = state.slide11P;
+                    const q = state.slide11Q;
+                    const condRows = [
+                        { p: true, q: true, res: 'V', note: 'Cumplí la condición (estudié) y se cumplió el resultado (aprobé): la promesa es Verdadera.' },
+                        { p: true, q: false, res: 'F', note: '¡Único caso Falso! Sí estudié (p=V), pero NO aprobé (q=F). Aquí la promesa se rompió.' },
+                        { p: false, q: true, res: 'V', note: 'No estudié (p=F) y aun así aprobé (q=V). Como la promesa solo hablaba de qué pasaría si estudiaba, no se ha mentido: es Verdadera.' },
+                        { p: false, q: false, res: 'V', note: 'No estudié (p=F) y no aprobé (q=F). La promesa sigue intacta y es Verdadera.' }
+                    ];
+                    const activeObj = condRows.find(r => r.p === p && r.q === q);
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold">Diapositiva 11 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">El Condicional o Implicación (p → q)</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Si p, entonces q</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Solo es falso cuando p es verdadero y q es falso</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 items-center">
+                                <!-- Tabla p -> q -->
+                                <div class="overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
+                                    <table class="w-full text-center font-mono text-sm sm:text-base">
+                                        <thead class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                            <tr>
+                                                <th class="py-3 px-4">p <span class="text-[10px] block font-normal text-slate-500">(Hipótesis)</span></th>
+                                                <th class="py-3 px-4">q <span class="text-[10px] block font-normal text-slate-500">(Conclusión)</span></th>
+                                                <th class="py-3 px-4 text-sky-700">p → q</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-slate-200">
+                                            ${condRows.map(r => {
+                                                const isSel = (r.p === p && r.q === q);
+                                                return `
+                                                    <tr onclick="state.slide11P = ${r.p}; state.slide11Q = ${r.q}; updateView();" class="cursor-pointer transition ${isSel ? 'bg-sky-50 font-bold ring-2 ring-inset ring-sky-300' : 'bg-white hover:bg-slate-50'}">
+                                                        <td class="py-3 px-4 ${r.p ? 'text-emerald-700' : 'text-rose-700'}">${r.p ? 'V' : 'F'}</td>
+                                                        <td class="py-3 px-4 ${r.q ? 'text-emerald-700' : 'text-rose-700'}">${r.q ? 'V' : 'F'}</td>
+                                                        <td class="py-3 px-4 ${r.res === 'V' ? 'text-emerald-700' : 'text-rose-700 font-extrabold underline'}">${r.res}</td>
+                                                    </tr>
+                                                `;
+                                            }).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Analogía de la promesa del PPTX -->
+                                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between h-full">
+                                    <div>
+                                        <div class="w-11 h-11 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-xl mb-3 border border-sky-200">
+                                            <i class="fa-solid fa-circle-question"></i>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-slate-800 mb-2">"Si estudio, entonces apruebo"</h3>
+                                        <p class="text-slate-600 text-sm sm:text-base mb-4">
+                                            La promesa solo se rompe si estudié y no aprobé.
+                                        </p>
+                                    </div>
+                                    <div class="p-4 rounded-xl bg-white border-2 ${activeObj.res === 'F' ? 'border-rose-300 bg-rose-50/40' : 'border-emerald-300 bg-emerald-50/40'}">
+                                        <span class="text-xs font-mono font-bold uppercase ${activeObj.res === 'F' ? 'text-rose-700' : 'text-emerald-700'} block mb-1">
+                                            Fila activa: p = ${p ? 'V' : 'F'}, q = ${q ? 'V' : 'F'} &rarr; Valor: ${activeObj.res}
+                                        </span>
+                                        <p class="text-xs sm:text-sm text-slate-700">${activeObj.note}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                '¿Por qué cuando p es Falso el condicional siempre es Verdadero?',
+                                'En lógica matemática esto se llama "verdad por vacuidad". Si la condición inicial p ("estudio") NO ocurrió, el contrato o promesa nunca se activó, por lo que es imposible acusar a la promesa de ser falsa sin importar qué ocurra con q.',
+                                'En lógica booleana, "p → q" es exactamente equivalente a escribir "(!p || q)" (no p, o q). Así puedes evaluar una implicación lógica directamente dentro de un programa en C++.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 12: Negación de un condicional
+                case 11:
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-mono text-xs font-bold">Diapositiva 12 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Cómo negar implicaciones y conjunciones</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Negación de un condicional</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Se niega con "Y", no con "si no"</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 my-4">
+                                <!-- Negación de p -> q -->
+                                <div class="p-6 rounded-2xl bg-sky-50/80 border-2 border-sky-200 flex flex-col justify-between">
+                                    <div>
+                                        <span class="text-xs font-mono uppercase text-sky-700 font-bold">1. Negación de "Si p, entonces q"</span>
+                                        <div class="text-2xl sm:text-3xl font-mono font-extrabold text-slate-800 my-3">
+                                            NO (p → q) = p Y NO q
+                                        </div>
+                                        <div class="p-3.5 rounded-xl bg-white border border-sky-200 text-slate-700 text-sm">
+                                            <span class="text-sky-700 font-semibold block mb-1">Condicional: "Si llueve (p), entonces me mojo (q)"</span>
+                                            Negación: <strong class="text-slate-900">"llueve y no me mojo"</strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Ley de De Morgan -->
+                                <div class="p-6 rounded-2xl bg-purple-50/80 border-2 border-purple-200 flex flex-col justify-between">
+                                    <div>
+                                        <span class="text-xs font-mono uppercase text-purple-700 font-bold">2. Ley de De Morgan</span>
+                                        <div class="text-2xl sm:text-3xl font-mono font-extrabold text-slate-800 my-3">
+                                            NO (p Y q) = NO p O NO q
+                                        </div>
+                                        <div class="p-3.5 rounded-xl bg-white border border-purple-200 text-slate-700 text-sm">
+                                            <span class="text-purple-700 font-semibold block mb-1">Original: "llueve (p) y hace frío (q)"</span>
+                                            Negación: <strong class="text-slate-900">"no llueve o no hace frío"</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Advertencia de error común del PPTX -->
+                            <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 flex items-center gap-3 text-rose-800 text-sm sm:text-base">
+                                <i class="fa-solid fa-triangle-exclamation text-rose-600 text-xl shrink-0"></i>
+                                <span><strong>Error común:</strong> la negación de un condicional NO es "si no p, entonces no q".</span>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                '¿Por qué NO(p → q) se convierte en "p Y NO q"?',
+                                'Recuerda la Diapositiva 11: la única fila donde "p → q" es Falsa es cuando p es Verdadero y q es Falso. Por lo tanto, afirmar que "p → q" no se cumple equivale exactamente a decir que ocurrió p (llovió) Y al mismo tiempo NO ocurrió q (no me mojé).',
+                                'Las Leyes de De Morgan son vitales al invertir condiciones de un if o while en C++: !(p && q) es idéntico a (!p || !q), y !(p || q) es idéntico a (!p && !q).'
+                            )}
+                        </div>
+                    `;
+
+                // DIAPOSITIVA 13: Errores frecuentes
+                case 12: {
+                    const errorsList = [
+                        {
+                            wrong: 'Escribir 2 + 3 · 4 = 20 (las multiplicaciones van primero)',
+                            right: 'Corrección explicada: La multiplicación tiene mayor prioridad que la suma. Primero calculamos 3 · 4 = 12 y luego sumamos 2 + 12 = 14.'
+                        },
+                        {
+                            wrong: 'Escribir 2(x + 3) = 2x + 3 (la distributiva multiplica todo)',
+                            right: 'Corrección explicada: El factor 2 de afuera debe multiplicar a CADA término dentro del paréntesis: 2·x + 2·3 = 2x + 6.'
+                        },
+                        {
+                            wrong: 'Cambiar solo un lado de la ecuación',
+                            right: 'Corrección explicada: Una ecuación es una balanza en equilibrio. Si sumas, restas, multiplicas o divides de un lado, debes hacer exactamente lo mismo del otro.'
+                        },
+                        {
+                            wrong: 'Confundir la negación de "si… entonces"',
+                            right: 'Corrección explicada: La negación de "Si p, entonces q" nunca lleva otro "si". Se niega afirmando la hipótesis y negando la conclusión: "p Y NO q".'
+                        }
+                    ];
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 font-mono text-xs font-bold">Diapositiva 13 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Prevención de Errores en Examen y Concurso</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Errores frecuentes</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Revísalos antes del examen <span class="text-xs text-sky-700 font-mono font-semibold">(Haz clic en cada tarjeta para revelar la solución)</span></p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                                ${errorsList.map((item, idx) => {
+                                    const isFixed = state.slide13Fixed[idx];
+                                    return `
+                                        <div onclick="state.slide13Fixed[${idx}] = !state.slide13Fixed[${idx}]; updateView();" class="cursor-pointer p-5 rounded-2xl border-2 transition flex items-start gap-4 ${isFixed ? 'bg-emerald-50/80 border-emerald-300 shadow-sm' : 'bg-amber-50/60 border-amber-200 hover:border-amber-300'}">
+                                            <div class="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-lg border ${isFixed ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-amber-100 text-amber-700 border-amber-200'}">
+                                                <i class="fa-solid ${isFixed ? 'fa-check' : 'fa-triangle-exclamation'}"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-bold text-slate-800 text-sm sm:text-base">${item.wrong}</p>
+                                                <p class="text-xs sm:text-sm mt-2 leading-relaxed ${isFixed ? 'text-emerald-800 font-medium' : 'text-slate-500'}">
+                                                    ${isFixed ? item.right : 'Haz clic aquí para ver cómo corregirlo paso a paso →'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Cómo detectar tus propios bugs matemáticos',
+                                'La mayoría de los errores en álgebra y lógica ocurren por prisa al operar mentalmente. Sustituir un número pequeño de prueba (como x = 1 o x = 2) te permite detectar de inmediato si una simplificación como 2(x + 3) fue mal escrita.',
+                                'En BugSquad llamamos a esto "hacer un caso de prueba mental": antes de dar por buena una fórmula o condición lógica, pruébala con valores sencillos donde ya conozcas la respuesta.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 14: Resumen de la clase (Independiente como en el PPTX)
+                case 13: {
+                    const activePillar = state.slide14Pillar;
+                    const pillarDetails = {
+                        variables: {
+                            title: 'Variables: Evaluar y sustituir',
+                            desc: 'Una variable es un contenedor con nombre (como x o n). Evaluar una expresión algebraica consiste en reemplazar cada aparición de la letra por su valor numérico actual y calcular respetando el orden de operaciones (paréntesis → potencias → multiplicación/división → suma/resta).'
+                        },
+                        propiedades: {
+                            title: 'Propiedades: Conmutativa, asociativa y distributiva',
+                            desc: 'Son las reglas que nos permiten transformar una expresión en otra equivalente sin alterar su valor: cambiar el orden (a + b = b + a), reagrupar términos ((a + b) + c = a + (b + c)) o expandir paréntesis multiplicando cada término interior (a(b + c) = ab + ac).'
+                        },
+                        ecuaciones: {
+                            title: 'Ecuaciones: Balanza en equilibrio y comprobación',
+                            desc: 'Resolver una ecuación es encontrar qué valor de la incógnita hace verdadera la igualdad. Aplicamos operaciones inversas en ambos lados por igual y siempre sustituimos el resultado al final para comprobar que la igualdad se cumple.'
+                        },
+                        logica: {
+                            title: 'Lógica: Proposiciones, Y, O, NO y condicionales',
+                            desc: 'Trabajamos con enunciados que son Verdaderos (V) o Falsos (F). Conocimos las tablas de verdad de la conjunción (Y), disyunción incluyente (O), negación (NO), el condicional (Si p, entonces q, que solo es falso cuando p=V y q=F) y su negación (p Y NO q).'
+                        }
+                    };
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 font-mono text-xs font-bold">Diapositiva 14 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Síntesis General del Bloque 1</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Resumen de la clase</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Selecciona cada pilar para repasar las ideas clave aprendidas hoy</p>
+                            </div>
+
+                            <!-- 4 Pilares del Resumen del PPTX -->
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-4">
+                                <div onclick="state.slide14Pillar = 'variables'; updateView();" class="cursor-pointer p-5 rounded-2xl border-2 transition flex flex-col items-center text-center ${activePillar === 'variables' ? 'bg-sky-50 border-sky-400 shadow-md' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
+                                    <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-2xl mb-3 border border-sky-200">
+                                        <i class="fa-solid fa-cubes"></i>
+                                    </div>
+                                    <h3 class="font-bold text-slate-800 text-base sm:text-lg">Variables</h3>
+                                    <p class="text-xs text-slate-600 mt-1">Evaluar y sustituir</p>
+                                </div>
+
+                                <div onclick="state.slide14Pillar = 'propiedades'; updateView();" class="cursor-pointer p-5 rounded-2xl border-2 transition flex flex-col items-center text-center ${activePillar === 'propiedades' ? 'bg-purple-50 border-purple-400 shadow-md' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
+                                    <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-2xl mb-3 border border-purple-200">
+                                        <i class="fa-solid fa-layer-group"></i>
+                                    </div>
+                                    <h3 class="font-bold text-slate-800 text-base sm:text-lg">Propiedades</h3>
+                                    <p class="text-xs text-slate-600 mt-1">Conmutativa, asociativa, distributiva</p>
+                                </div>
+
+                                <div onclick="state.slide14Pillar = 'ecuaciones'; updateView();" class="cursor-pointer p-5 rounded-2xl border-2 transition flex flex-col items-center text-center ${activePillar === 'ecuaciones' ? 'bg-emerald-50 border-emerald-400 shadow-md' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
+                                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl mb-3 border border-emerald-200">
+                                        <i class="fa-solid fa-scale-balanced"></i>
+                                    </div>
+                                    <h3 class="font-bold text-slate-800 text-base sm:text-lg">Ecuaciones</h3>
+                                    <p class="text-xs text-slate-600 mt-1">Comprueba siempre</p>
+                                </div>
+
+                                <div onclick="state.slide14Pillar = 'logica'; updateView();" class="cursor-pointer p-5 rounded-2xl border-2 transition flex flex-col items-center text-center ${activePillar === 'logica' ? 'bg-amber-50 border-amber-400 shadow-md' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
+                                    <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl mb-3 border border-amber-200">
+                                        <i class="fa-solid fa-diagram-project"></i>
+                                    </div>
+                                    <h3 class="font-bold text-slate-800 text-base sm:text-lg">Lógica</h3>
+                                    <p class="text-xs text-slate-600 mt-1">Y, O, NO, si… entonces</p>
+                                </div>
+                            </div>
+
+                            <!-- Panel de síntesis detallada del pilar seleccionado -->
+                            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                                <h4 class="font-bold text-slate-800 text-sm sm:text-base mb-1 flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-sky-600"></i>
+                                    <span>${pillarDetails[activePillar].title}</span>
+                                </h4>
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${pillarDetails[activePillar].desc}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 15: ¿Qué diferencia hay? (Diapositiva 15 dedicada de cierre)
+                case 14: {
+                    const shown = state.slide15AnswerShown;
+                    const simX = state.slide15SimX;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 font-mono text-xs font-bold">Diapositiva 15 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Reflexión Final de la Clase</span>
+                                </div>
+                                <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-800">¿Qué diferencia hay?</h2>
+                                <p class="text-slate-600 text-base sm:text-xl mt-2 font-mono font-semibold">
+                                    x = 5 en matemáticas &nbsp;·&nbsp; x = x + 1 en programación
+                                </p>
+                            </div>
+
+                            <!-- Comparativa central interactiva -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 my-4">
+                                <div class="p-6 rounded-2xl bg-sky-50/80 border-2 border-sky-200 flex flex-col justify-between">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center text-2xl border border-sky-200">
+                                            <i class="fa-solid fa-scale-balanced"></i>
+                                        </div>
+                                        <div>
+                                            <span class="text-xs uppercase font-mono text-sky-700 font-bold">En Matemáticas</span>
+                                            <h3 class="text-2xl font-mono font-extrabold text-slate-800">x = 5</h3>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-slate-700 leading-relaxed">
+                                        Es una <strong>relación de igualdad estática</strong>. Nos dice que el valor desconocido <code class="font-mono font-bold">x</code> pesa exactamente lo mismo que el número <code class="font-mono font-bold">5</code> en una balanza.
+                                    </p>
+                                </div>
+
+                                <div class="p-6 rounded-2xl bg-amber-50/80 border-2 border-amber-200 flex flex-col justify-between">
+                                    <div class="flex items-center justify-between gap-3 mb-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl border border-amber-200">
+                                                <i class="fa-solid fa-lightbulb"></i>
+                                            </div>
+                                            <div>
+                                                <span class="text-xs uppercase font-mono text-amber-800 font-bold">En Programación</span>
+                                                <h3 class="text-2xl font-mono font-extrabold text-slate-800">x = x + 1</h3>
+                                            </div>
+                                        </div>
+                                        <span class="px-3 py-1 rounded-xl bg-white border border-amber-300 font-mono text-sm font-bold text-amber-800">x actual: ${simX}</span>
+                                    </div>
+                                    <p class="text-sm text-slate-700 leading-relaxed mb-3">
+                                        Es una <strong>acción dinámica de actualización en el tiempo</strong>: lee el valor que tenía la caja <code class="font-mono font-bold">x</code> (${simX}), súmale 1 (da ${simX + 1}) y guarda ese nuevo resultado dentro de la misma caja <code class="font-mono font-bold">x</code>.
+                                    </p>
+                                    <div class="flex items-center gap-2">
+                                        <button onclick="state.slide15SimX++; updateView();" class="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-mono text-xs font-bold transition shadow-sm">
+                                            Simular paso: x = x + 1
+                                        </button>
+                                        <button onclick="state.slide15SimX = 5; updateView();" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-600 border border-slate-300 font-mono text-xs">
+                                            Reiniciar a 5
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Conclusión para llevarte a casa',
+                                'En matemáticas el signo "=" describe una verdad permanente (ambos lados valen lo mismo). Por eso en álgebra "x = x + 1" sería una contradicción imposible (0 = 1).',
+                                'En programación el signo "=" mueve un dato hacia una caja de memoria (de derecha a izquierda), mientras que para hacer la pregunta matemática "¿x es igual a 5?" utilizamos el operador de comparación "==".'
+                            )}
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function checkProp(userSaysProp) {
+            const quizItems = [
+                { isProp: true, detail: '¡Correcto! "Mazatlán está en Sinaloa" afirma un hecho geográfico verificable y es Verdadero (V).' },
+                { isProp: false, detail: '¡Exacto! "¡Qué día tan bonito!" es una opinión subjetiva, por lo que no es una proposición lógica.' },
+                { isProp: true, detail: '¡Muy bien! Aunque 15 no es par (es Falso), sí es una proposición porque tiene un valor de verdad definido.' },
+                { isProp: false, detail: '¡Correcto! Las preguntas no pueden calificarse como verdaderas ni falsas.' }
+            ];
+            const current = quizItems[state.slide9QuizIndex];
+            if (userSaysProp === current.isProp) {
+                state.slide9Feedback = { ok: true, msg: current.detail };
+            } else {
+                state.slide9Feedback = { ok: false, msg: 'Intenta de nuevo: pregúntate si la frase afirma un hecho que pueda calificarse objetivamente como Verdadero o Falso.' };
+            }
+            updateView();
+        }
+
+        function toggleDeepNotes() {
+            showDeepNotes = !showDeepNotes;
+            const label = document.getElementById('deep-toggle-label');
+            if (label) {
+                label.textContent = showDeepNotes ? 'Para saber más...: Visible' : 'Para saber más...: Oculto';
+            }
+            updateView();
+        }
+
+        function updateView() {
+            const stage = document.getElementById('slide-stage');
+            stage.innerHTML = renderSlideContent(currentSlide);
+
+            // Actualizar contador y barra de progreso
+            document.getElementById('slide-counter-badge').textContent = `${currentSlide + 1} / ${totalSlides}`;
+            const progressPercent = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // Estado de botones anterior / siguiente
+            document.getElementById('btn-prev').disabled = (currentSlide === 0);
+            document.getElementById('btn-next').disabled = (currentSlide === totalSlides - 1);
+
+            renderDots();
+            renderIndexCards();
+        }
+
+        function renderDots() {
+            const container = document.getElementById('dots-container');
+            container.innerHTML = slidesMeta.map((s, idx) => `
+                <button onclick="goToSlide(${idx})" title="${s.num}. ${s.title}" class="h-2.5 rounded-full transition-all ${idx === currentSlide ? 'w-7 bg-sky-600' : 'w-2.5 bg-slate-300 hover:bg-slate-400'}"></button>
+            `).join('');
+        }
+
+        function renderIndexCards() {
+            const grid = document.getElementById('index-grid');
+            grid.innerHTML = slidesMeta.map((s, idx) => `
+                <button onclick="goToSlide(${idx}); toggleIndexModal();" class="text-left p-4 rounded-2xl border transition flex items-start gap-3 ${idx === currentSlide ? 'bg-sky-50 border-sky-400 shadow-sm' : 'bg-slate-50/70 border-slate-200 hover:bg-slate-100'}">
+                    <div class="w-9 h-9 rounded-xl bg-white text-sky-700 flex items-center justify-center shrink-0 font-mono text-xs font-bold border border-slate-200 shadow-sm">
+                        ${s.num}
+                    </div>
+                    <div class="overflow-hidden">
+                        <h4 class="font-bold text-slate-800 text-sm truncate">${s.title}</h4>
+                        <p class="text-xs text-slate-500 line-clamp-2 mt-0.5">${s.subtitle}</p>
+                    </div>
+                </button>
+            `).join('');
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateView();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateView();
+            }
+        }
+
+        function goToSlide(index) {
+            if (index >= 0 && index < totalSlides) {
+                currentSlide = index;
+                updateView();
+            }
+        }
+
+        function toggleIndexModal() {
+            const modal = document.getElementById('index-modal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+
+        function toggleFullScreen() {
+            const icon = document.getElementById('fullscreen-icon');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+                icon.classList.replace('fa-expand', 'fa-compress');
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    icon.classList.replace('fa-compress', 'fa-expand');
+                }
+            }
+        }
+
+        // Navegación con teclado (flechas izquierda/derecha)
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('index-modal');
+                if (!modal.classList.contains('hidden')) toggleIndexModal();
+            }
+        });
+
+        // Soporte para gestos táctiles (swipe en móviles/tablets)
+        let touchStartX = 0;
+        let touchEndX = 0;
+        window.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        window.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 60) {
+                if (diff > 0) nextSlide();
+                else prevSlide();
+            }
+        }, { passive: true });
+
+        window.onload = function () {
+            updateView();
+        };
+    </script>
 </body>
 </html>
