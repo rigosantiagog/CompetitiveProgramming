@@ -1,25 +1,17 @@
 /* ==========================================================
-   Motor de ejercicios interactivos con retroalimentación
-   Lee EJERCICIOS_BLOQUE1 (ejercicios-bloque1.js), dibuja
-   una pestaña por tema, califica cada respuesta y actualiza el progreso.
+   Motor de ejercicios con retroalimentación
+   Lee EJERCICIOS_BLOQUE1 (ejercicios-bloque1.js), dibuja los
+   ejercicios dentro de cada tema y actualiza el avance de la
+   barra lateral.
    ========================================================== */
 
 (function () {
 
-  const pestanas = document.getElementById("pestanas-temas");
-  const contenedor = document.getElementById("lista-ejercicios");
-  const barra = document.getElementById("barra-progreso");
-  const textoProgreso = document.getElementById("texto-progreso");
-  const textoAciertos = document.getElementById("texto-aciertos");
-  const btnReiniciar = document.getElementById("btn-reiniciar");
+  const barra = document.getElementById("avance-ejercicios-barra");
+  const textoAvance = document.getElementById("avance-ejercicios-texto");
 
   const total = EJERCICIOS_BLOQUE1.length;
   const resultados = {};   // id -> true (correcto) / false (incorrecto)
-  const NOMBRES_TEMA = {
-    1: "Tema 1 · Álgebra y lógica",
-    2: "Tema 2 · Aritmética, conteo y casos",
-    3: "Tema 3 · Geometría, trigonometría y patrones"
-  };
   const NOMBRES_PARTE = {
     A: "Parte A · Ejercicios guiados (en parejas)",
     B: "Parte B · Ejercicios independientes"
@@ -37,7 +29,7 @@
     return "ej-" + ej.clase + "-" + ej.parte + "-" + ej.n;
   }
 
-  /* Construye los controles de respuesta según el tipo de ejercicio. */
+  /* Controles de respuesta según el tipo de ejercicio. */
   function controlesDe(ej, id) {
     if (ej.tipo === "num") {
       return '<input type="text" inputmode="decimal" class="form-control mb-2 campo" id="' + id + '-in" placeholder="Escribe tu respuesta">';
@@ -48,7 +40,6 @@
                '<input type="text" inputmode="decimal" class="form-control mb-2 campo" id="' + id + '-' + i + '" placeholder="Escribe tu respuesta">';
       }).join("");
     }
-    /* tipo "opc": opciones de selección única */
     return ej.opciones.map(function (op, i) {
       return '<div class="form-check">' +
                '<input class="form-check-input" type="radio" name="' + id + '" id="' + id + '-op' + i + '" value="' + i + '">' +
@@ -57,7 +48,7 @@
     }).join("");
   }
 
-  /* Texto de la respuesta correcta para mostrarla al alumno si se equivoca. */
+  /* Texto de la respuesta correcta para mostrarla si el alumno se equivoca. */
   function respuestaCorrectaTexto(ej) {
     if (ej.tipo === "num") return String(ej.valor);
     if (ej.tipo === "multi") {
@@ -66,7 +57,7 @@
     return ej.opciones[ej.correcta];
   }
 
-  /* Revisa la respuesta del alumno. Devuelve true, false o null (sin respuesta). */
+  /* Revisa la respuesta. Devuelve true, false o null (sin respuesta). */
   function calificar(ej, id) {
     if (ej.tipo === "num") {
       const v = aNumero(document.getElementById(id + "-in").value);
@@ -85,88 +76,69 @@
     return Number(sel.value) === ej.correcta;
   }
 
-  /* Muestra el mensaje de retroalimentación debajo de la tarjeta. */
+  /* Mensaje de retroalimentación debajo de la tarjeta. */
   function mostrarRetroalimentacion(ej, id, ok) {
     const caja = document.getElementById(id + "-fb");
     if (ok === null) {
-      caja.className = "retroalimentacion p-3 rounded mt-3 bg-warning-subtle border border-warning";
-      caja.innerHTML = "<strong>Escribe o elige una respuesta</strong> antes de comprobar.";
+      caja.className = "retroalimentacion p-3 rounded bg-warning-subtle border border-warning";
+      caja.innerHTML = "Escribe o elige una respuesta antes de comprobar.";
       return;
     }
     if (ok) {
-      caja.className = "retroalimentacion p-3 rounded mt-3 bg-success-subtle border border-success";
-      caja.innerHTML = "<strong><i class='fa-solid fa-circle-check'></i> ¡Correcto!</strong> " + ej.explicacion;
+      caja.className = "retroalimentacion p-3 rounded bg-success-subtle border border-success";
+      caja.innerHTML = "<strong><i class='fa-solid fa-circle-check'></i> Correcto.</strong> " + ej.explicacion;
     } else {
-      caja.className = "retroalimentacion p-3 rounded mt-3 bg-danger-subtle border border-danger";
+      caja.className = "retroalimentacion p-3 rounded bg-danger-subtle border border-danger";
       caja.innerHTML = "<strong><i class='fa-solid fa-circle-xmark'></i> Revisa de nuevo.</strong> " +
                        "La respuesta correcta es: <strong>" + respuestaCorrectaTexto(ej) + "</strong>. " +
                        ej.explicacion;
     }
+    tipografiar(caja);
   }
 
-  /* Actualiza la barra de progreso y el marcador de aciertos. */
-  function actualizarMarcador() {
+  /* Pide a MathJax que convierta las fórmulas LaTeX dentro del elemento. */
+  function tipografiar(elemento) {
+    if (window.MathJax && MathJax.startup && MathJax.typesetPromise) {
+      MathJax.startup.promise
+        .then(function () { return MathJax.typesetPromise([elemento]); })
+        .catch(function () {});
+    }
+  }
+
+  /* Actualiza la barra lateral de avance. */
+  function actualizarAvance() {
     const respondidos = Object.keys(resultados).length;
-    const aciertos = Object.values(resultados).filter(Boolean).length;
     const porcentaje = Math.round((respondidos / total) * 100);
     barra.style.width = porcentaje + "%";
-    barra.setAttribute("aria-valuenow", porcentaje);
-    textoProgreso.textContent = respondidos + " de " + total + " respondidos";
-    textoAciertos.textContent = "Aciertos: " + aciertos + " / " + total;
+    barra.parentElement.setAttribute("aria-valuenow", porcentaje);
+    textoAvance.textContent = respondidos + " de " + total;
   }
 
-  /* Dibuja las pestañas (una por tema) y, dentro de cada una, sus tarjetas. */
-  function dibujar() {
-    const temas = [1, 2, 3];
-    let htmlPestanas = "";
-    let htmlPaneles = "";
-
-    temas.forEach(function (tema, indice) {
-      const activo = indice === 0;
-      const idPanel = "tema-" + tema;
-
-      htmlPestanas += '' +
-        '<li class="nav-item" role="presentation">' +
-          '<button class="nav-link fw-semibold' + (activo ? ' active' : '') + '" id="tab-' + tema + '" ' +
-            'data-bs-toggle="pill" data-bs-target="#' + idPanel + '" type="button" role="tab" ' +
-            'aria-controls="' + idPanel + '" aria-selected="' + activo + '">' + NOMBRES_TEMA[tema] + '</button>' +
-        '</li>';
-
-      let htmlTema = "";
-      let parteActual = null;
-      EJERCICIOS_BLOQUE1.filter(function (e) { return e.clase === tema; }).forEach(function (ej) {
-        if (ej.parte !== parteActual) {
-          parteActual = ej.parte;
-          htmlTema += '<p class="subtitulo-parte">' + NOMBRES_PARTE[ej.parte] + '</p>';
-        }
-        const id = idDe(ej);
-        htmlTema += '' +
-          '<div class="card ejercicio shadow-sm mb-4" id="' + id + '">' +
-            '<div class="card-body p-4">' +
-              '<p class="mb-3"><span class="numero">' + ej.n + '</span>' + ej.enunciado + '</p>' +
-              controlesDe(ej, id) +
-              '<div class="d-flex flex-wrap gap-2 mt-3">' +
-                '<button type="button" class="btn btn-acento btn-comprobar" data-id="' + id + '">' +
-                  '<i class="fa-solid fa-check"></i> Comprobar</button>' +
-              '</div>' +
-              '<div id="' + id + '-fb"></div>' +
-            '</div>' +
-          '</div>';
-      });
-
-      htmlPaneles += '' +
-        '<div class="tab-pane fade' + (activo ? ' show active' : '') + '" id="' + idPanel + '" role="tabpanel" ' +
-          'aria-labelledby="tab-' + tema + '" tabindex="0">' +
-          htmlTema +
+  /* Dibuja los ejercicios de un tema dentro de su contenedor. */
+  function dibujarTema(tema, contenedor) {
+    let html = "";
+    let parteActual = null;
+    EJERCICIOS_BLOQUE1.filter(function (e) { return e.clase === tema; }).forEach(function (ej) {
+      if (ej.parte !== parteActual) {
+        parteActual = ej.parte;
+        html += '<p class="subtitulo-parte">' + NOMBRES_PARTE[ej.parte] + '</p>';
+      }
+      const id = idDe(ej);
+      html += '' +
+        '<div class="tarjeta-pregunta" id="' + id + '">' +
+          '<p class="mb-3"><span class="numero">' + ej.n + '</span>' + ej.enunciado + '</p>' +
+          controlesDe(ej, id) +
+          '<button type="button" class="btn btn-sm btn-tide mt-3 btn-comprobar" data-id="' + id + '">' +
+            '<i class="fa-solid fa-check"></i> Comprobar</button>' +
+          '<div id="' + id + '-fb"></div>' +
         '</div>';
     });
-
-    pestanas.innerHTML = htmlPestanas;
-    contenedor.innerHTML = htmlPaneles;
+    contenedor.innerHTML = html;
+    tipografiar(contenedor);
   }
 
-  /* Al pulsar "Comprobar" se califica esa tarjeta. */
-  contenedor.addEventListener("click", function (evento) {
+  /* Al pulsar "Comprobar" se califica ese ejercicio. */
+  document.addEventListener("click", function (evento) {
     const boton = evento.target.closest(".btn-comprobar");
     if (!boton) return;
 
@@ -178,27 +150,12 @@
       resultados[id] = ok;
     }
     mostrarRetroalimentacion(ej, id, ok);
-    actualizarMarcador();
+    actualizarAvance();
   });
 
-  /* Reinicia todo: limpia respuestas y retroalimentación. */
-  btnReiniciar.addEventListener("click", function () {
-    EJERCICIOS_BLOQUE1.forEach(function (ej) {
-      const id = idDe(ej);
-      delete resultados[id];
-      const caja = document.getElementById(id + "-fb");
-      caja.innerHTML = "";
-      caja.className = "";
-      document.getElementById(id).querySelectorAll("input").forEach(function (campo) {
-        if (campo.type === "radio") campo.checked = false;
-        else campo.value = "";
-      });
-    });
-    actualizarMarcador();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  document.querySelectorAll("[data-ejercicios]").forEach(function (contenedor) {
+    dibujarTema(Number(contenedor.dataset.ejercicios), contenedor);
   });
-
-  dibujar();
-  actualizarMarcador();
+  actualizarAvance();
 
 })();

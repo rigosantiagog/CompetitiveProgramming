@@ -1,35 +1,36 @@
-# Curso de Programación Competitiva en C++
+# Programación Competitiva en C++ · Bug Squad
 
-Sitio estático (HTML5, CSS3, Bootstrap 5 y Font Awesome) del curso.
+Sitio estático (HTML5, CSS3, Bootstrap 5, Font Awesome y Google Fonts) del curso.
 No requiere compilación: Vercel lo publica tal cual.
+
+Diseñado y organizado por Prof. Rigoberto Santiago Garzón.
 
 ## Estructura
 
 ```
 curso-cpp-web/
-├── index.html                  Inicio y temario
+├── index.html                  Portada, temario y acceso al Bloque 1
 ├── bloque1/
-│   ├── index.html              Bloque 1: resumen de clases y recursos
-│   └── ejercicios.html         30 ejercicios interactivos con retroalimentación
+│   └── index.html              Bloque 1: Aprender, quiz conceptual y ejercicios por tema
 ├── css/
-│   └── estilos.css             Paleta y estilos del sitio
+│   └── estilos.css             Paleta, tipografía y diseño del sitio
 ├── js/
-│   ├── ejercicios-bloque1.js   Banco de ejercicios (respuestas y explicaciones)
-│   └── quiz.js                 Motor que califica y muestra la retroalimentación
+│   ├── ejercicios-bloque1.js   Banco de 30 ejercicios (respuestas y explicaciones)
+│   ├── quiz-conceptual.js      Quiz conceptual por tema (8 preguntas, aprueba con 6)
+│   └── quiz.js                 Motor de ejercicios con retroalimentación
 └── assets/
-    └── docs/                   PDF y PPTX del bloque (ver lista abajo)
+    └── docs/                   Presentaciones (PPTX) y PDF de ejercicios para alumnos
 ```
 
-## Archivos que debes colocar en `assets/docs/`
+## Archivos en `assets/docs/`
 
-Los enlaces del Bloque 1 apuntan a estos nombres. Ya están incluidos en el zip:
-
-| Nombre en el sitio | Archivo de origen |
+| Archivo | Uso |
 |---|---|
-| `Clase1_Algebra_y_logica.pptx` | Presentación del tema 1 |
-| `Clase2_Aritmetica_conteo_y_casos.pptx` | Presentación del tema 2 |
-| `Clase3_Geometria_trigonometria_y_patrones.pptx` | Presentación del tema 3 |
-| `Ejercicios_y_tareas_Bloque1.pdf` | PDF de ejercicios de práctica, tareas por tema y clave docente |
+| `Tema2_Aritmetica_conteo_y_casos.pptx` | Presentación del tema 2 (descarga) |
+| `Tema3_Geometria_trigonometria_y_patrones.pptx` | Presentación del tema 3 (descarga) |
+| `Ejercicios_y_tareas_Bloque1.pdf` | Ejercicios y tareas para alumnos (sin clave) |
+
+La presentación del tema 1 no es un archivo: se abre desde un enlace externo en una ventana dentro de la página (`bloque1/index.html`, atributo `data-src`).
 
 ## Subir a GitHub y publicar en Vercel
 
@@ -45,11 +46,11 @@ Los enlaces del Bloque 1 apuntan a estos nombres. Ya están incluidos en el zip:
    git push -u origin main
    ```
 3. En [vercel.com](https://vercel.com), elige **Add New → Project**, importa el repositorio y pulsa **Deploy**.
-   No hay que configurar nada: es un sitio estático. Vercel publicará `index.html` como página de inicio.
-4. Cada cambio que subas a GitHub se publicará solo.
+   No hay que configurar nada.
 
 ## Notas
 
-- La paleta está en `css/estilos.css`, en las variables de `:root`. Cambia los colores ahí y se aplican a todo el sitio.
-- Las respuestas de los ejercicios están en `js/ejercicios-bloque1.js`. Como es un sitio público, cualquiera puede verlas en el código fuente de la página. Si prefieres que no se vean, dime y lo ajustamos.
-- Pendiente en el Bloque 1: ejemplos resueltos en C++ y problemas tipo OMI, ICPC e IOI.
+- Colores y tipografía están en `css/estilos.css`, en las variables de `:root`.
+- Las respuestas de los ejercicios y del quiz están en los archivos de `js/`. Como el sitio es público, se pueden ver en el código fuente de la página.
+- Si la presentación del tema 1 no se muestra dentro de la ventana, el botón **Abrir en otra pestaña** del mismo modal la abre en una pestaña nueva.
+- En preparación: ejemplos resueltos en C++ y problemas tipo OMI, ICPC e IOI.

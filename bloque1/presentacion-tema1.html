@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 1 · Álgebra y lógica · Presentación interactiva</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --ocean: #0F3D5E; --ocean-2: #0B2E47; --tide: #1FA6A0; --tide-2: #178A85;
+      --sand: #F4B942; --paper: #F5F7FA; --ink: #1F2933; --slate: #5B6B7A; --line: #DDE6EE;
+      --mist: #EEF4F8; --tint-blue: #E3EEF8; --tint-sea: #E2F3F1; --tint-sand: #FDF3DC; --fail: #C2413B;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      background: var(--ocean-2); color: var(--ink);
+      font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+      overflow: hidden;
+    }
+    h1, h2, h3 { font-family: "Fraunces", Georgia, serif; color: var(--ocean); margin: 0 0 .5rem; letter-spacing: -0.01em; }
+
+    /* ---------- Marco de la presentación ---------- */
+    .deck { position: relative; width: 100%; height: 100%; }
+    .slide {
+      position: absolute; inset: 0; display: none;
+      background: #ffffff; padding: clamp(1.4rem, 4vw, 3.4rem) clamp(1.4rem, 6vw, 5rem);
+      overflow-y: auto;
+    }
+    .slide.activa { display: flex; flex-direction: column; justify-content: center; }
+    .slide.portada { background: var(--ocean); color: #ffffff; }
+    .slide.portada h2 { color: #ffffff; font-size: clamp(2.4rem, 6vw, 4.2rem); line-height: 1.05; max-width: 18ch; }
+    .slide.portada p { color: #D5E6EF; font-size: 1.2rem; max-width: 50ch; }
+    .slide.portada .marca { color: var(--sand); font-weight: 600; margin-top: 2rem; }
+
+    .slide h2 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); }
+    .slide .sub { color: var(--slate); font-size: 1.1rem; margin-bottom: 1.6rem; }
+    .cuerpo { max-width: 960px; width: 100%; margin: 0 auto; }
+    .tarjeta {
+      border-radius: 14px; padding: 1.3rem 1.5rem; background: var(--mist);
+      border: 1px solid var(--line);
+    }
+    .tarjeta h3 { font-size: 1.2rem; }
+    .tarjeta p { margin: .3rem 0 0; color: var(--ink); }
+    .rejilla { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .t-azul { background: var(--tint-blue); border-color: #C9DCEE; }
+    .t-mar { background: var(--tint-sea); border-color: #BFE3DF; }
+    .t-arena { background: var(--tint-sand); border-color: #F2DDA6; }
+    .formula { font-size: 1.5rem; color: var(--ocean); margin: .6rem 0; }
+    .nota { color: var(--slate); font-size: .98rem; margin-top: .8rem; }
+    .codigo {
+      font-family: "IBM Plex Mono", Consolas, monospace; background: #17283A; color: #E6EDF5;
+      border-radius: 12px; padding: 1rem 1.2rem; font-size: 1rem; line-height: 1.7; white-space: pre;
+    }
+
+    /* ---------- Controles interactivos ---------- */
+    .ctrl { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; margin-top: 1rem; }
+    .ctrl label { font-weight: 500; }
+    input[type=range] { accent-color: var(--tide); width: min(360px, 70vw); }
+    .boton {
+      border: 0; border-radius: 999px; padding: .55rem 1.1rem; background: var(--ocean); color: #fff;
+      font: 600 .95rem "IBM Plex Sans", sans-serif; cursor: pointer;
+    }
+    .boton:hover { background: var(--ocean-2); }
+    .boton.sec { background: #ffffff; color: var(--ocean); border: 1px solid var(--line); }
+    .boton.tide { background: var(--tide); }
+    .valor { font-family: "IBM Plex Mono", monospace; font-size: 1.1rem; color: var(--ocean); }
+    .oculto { display: none !important; }
+    .pasos > div { margin: .45rem 0; padding: .7rem 1rem; border-left: 4px solid var(--tide); background: var(--mist); border-radius: 0 10px 10px 0; }
+    .verdad { width: 100%; border-collapse: collapse; margin-top: .8rem; }
+    .verdad th, .verdad td { border: 1px solid var(--line); padding: .55rem .6rem; text-align: center; font-size: 1.02rem; }
+    .verdad th { background: var(--tint-blue); color: var(--ocean); }
+    .verdad td.v { color: #17805A; font-weight: 600; }
+    .verdad td.f { color: var(--fail); font-weight: 600; }
+    .verdad tr.resaltada td { background: var(--tint-sand); }
+    .marco-balanza {
+      position: relative; height: 150px; margin: 1.2rem 0 .6rem;
+    }
+    .viga {
+      position: absolute; left: 8%; right: 8%; top: 40px; height: 8px; background: var(--ocean); border-radius: 4px;
+      transform-origin: 50% 50%; transition: transform .35s ease;
+    }
+    .pivote {
+      position: absolute; left: 50%; top: 40px; width: 10px; height: 100px; background: var(--ocean); transform: translateX(-50%);
+    }
+    .platillo {
+      position: absolute; top: 48px; width: 150px; text-align: center; font-family: "IBM Plex Mono", monospace; font-size: 1.1rem;
+      background: #ffffff; border: 2px solid var(--tide); border-radius: 12px; padding: .4rem .6rem; transition: transform .35s ease;
+    }
+    .platillo.izq { left: 3%; }
+    .platillo.der { right: 3%; }
+    .estado-balanza { font-weight: 600; color: var(--ocean); }
+
+    /* ---------- Notas y barra de progreso ---------- */
+    .barra { position: absolute; left: 0; bottom: 0; height: 4px; background: var(--tide); transition: width .3s ease; }
+    .pie {
+      position: absolute; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 1.2rem; background: rgba(15,61,94,.96); color: #D5E6EF; gap: .6rem; font-size: .95rem;
+    }
+    .pie .boton { padding: .4rem .9rem; font-size: .9rem; }
+    .pie .contador { font-family: "IBM Plex Mono", monospace; }
+    .pie-izq, .pie-der { display: flex; gap: .5rem; align-items: center; }
+    .ayuda-teclado { color: #A9BDCD; font-size: .85rem; }
+    .aviso-nota {
+      position: absolute; right: 1.2rem; bottom: 66px; max-width: 420px; background: #ffffff; border-radius: 12px;
+      padding: 1rem 1.2rem; box-shadow: 0 10px 30px rgba(0,0,0,.25); font-size: .95rem; border-top: 4px solid var(--sand);
+    }
+    .aviso-nota p { margin: 0; white-space: pre-line; }
+    .mini-titulo { font-family: "IBM Plex Sans", sans-serif; font-weight: 600; font-size: .95rem; color: var(--slate); margin-bottom: .3rem; }
+
+    @media (max-width: 640px) {
+      .slide { padding: 1.2rem 1.1rem 4.2rem; }
+      .formula { font-size: 1.2rem; }
+      .ayuda-teclado { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="deck" id="deck" role="region" aria-label="Presentación del tema 1">
+
+  <!-- 1. Portada -->
+  <section class="slide portada activa" aria-label="Portada">
+    <div class="cuerpo">
+      <h2>Álgebra y lógica</h2>
+      <p>Tema 1 · Bloque 1. Variables, propiedades, ecuaciones y condicionales.</p>
+      <p class="marca">Programación Competitiva en C++ · Bug Squad</p>
+    </div>
+  </section>
+
+  <!-- 2. Variables (interactiva) -->
+  <section class="slide" aria-label="Variables">
+    <div class="cuerpo">
+      <h2>Variables: cajas con nombre</h2>
+      <p class="sub">Una letra guarda un número que puede cambiar.</p>
+      <div class="rejilla">
+        <div class="tarjeta t-azul"><h3>Variable</h3><p class="formula">x = <span id="vx">4</span></p></div>
+        <div class="tarjeta t-mar"><h3>Expresión</h3><p class="formula">$2x + 3$</p></div>
+        <div class="tarjeta t-arena"><h3>Resultado</h3><p class="formula">2 · <span id="vx2">4</span> + 3 = <span id="res">11</span></p></div>
+      </div>
+      <div class="ctrl">
+        <label for="sx">Cambia el valor de $x$:</label>
+        <input type="range" id="sx" min="0" max="10" value="4" aria-describedby="vx">
+        <span class="valor" id="valorX">x = 4</span>
+      </div>
+      <p class="nota">Si cambia $x$, cambia el resultado. Mueve el control para verlo.</p>
+    </div>
+  </section>
+
+  <!-- 3. Orden de operaciones (pasos que se revelan) -->
+  <section class="slide" aria-label="Orden de operaciones">
+    <div class="cuerpo">
+      <h2>Orden de operaciones</h2>
+      <p class="sub">Primero se multiplica, después se suma.</p>
+      <div class="pasos" id="pasosOrden">
+        <div class="oculto" data-paso>$2 + 3 \cdot 4$ · Empezamos aquí.</div>
+        <div class="oculto" data-paso>$2 + 12$ · Primero multiplicamos: $3 \cdot 4 = 12$.</div>
+        <div class="oculto" data-paso>$14$ · Después sumamos.</div>
+      </div>
+      <div class="ctrl"><button class="boton" id="btnOrden" type="button">Mostrar siguiente paso</button></div>
+      <p class="nota">Sin este orden, $2 + 3 \cdot 4$ daría $20$ por error.</p>
+    </div>
+  </section>
+
+  <!-- 4. Propiedades -->
+  <section class="slide" aria-label="Propiedades">
+    <div class="cuerpo">
+      <h2>Propiedades para simplificar</h2>
+      <p class="sub">Cambian la forma de escribir, no el valor. Toca cada tarjeta para ver un ejemplo.</p>
+      <div class="rejilla">
+        <button class="tarjeta t-azul" type="button" data-ejemplo="conmutativa" style="text-align:left;cursor:pointer;font:inherit;color:inherit">
+          <h3>Conmutativa</h3><p class="formula">$a + b = b + a$</p>
+          <p class="ejemplo oculto" id="ej-conmutativa">Ejemplo: $3 + x = x + 3$</p>
+        </button>
+        <button class="tarjeta t-mar" type="button" data-ejemplo="asociativa" style="text-align:left;cursor:pointer;font:inherit;color:inherit">
+          <h3>Asociativa</h3><p class="formula">$(a + b) + c = a + (b + c)$</p>
+          <p class="ejemplo oculto" id="ej-asociativa">Ejemplo: agrupar no cambia el total. $25 \cdot 37 \cdot 4 = 100 \cdot 37 = 3700$</p>
+        </button>
+        <button class="tarjeta t-arena" type="button" data-ejemplo="distributiva" style="text-align:left;cursor:pointer;font:inherit;color:inherit">
+          <h3>Distributiva</h3><p class="formula">$a(b + c) = ab + ac$</p>
+          <p class="ejemplo oculto" id="ej-distributiva">Ejemplo: $3(x + 4) = 3x + 12$</p>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. La distributiva en acción (interactiva) -->
+  <section class="slide" aria-label="La distributiva en acción">
+    <div class="cuerpo">
+      <h2>La distributiva en acción</h2>
+      <p class="sub">El número de afuera multiplica a cada término de adentro.</p>
+      <div class="rejilla">
+        <div class="tarjeta t-azul"><h3>Izquierda</h3><p class="formula">$3(x + 4)$</p></div>
+        <div class="tarjeta t-mar"><h3>Derecha</h3><p class="formula">$3x + 12$</p></div>
+      </div>
+      <div class="ctrl">
+        <label for="sd">Prueba con $x$:</label>
+        <input type="range" id="sd" min="-5" max="10" value="2">
+        <span class="valor" id="valD"></span>
+      </div>
+      <p class="nota" id="resD"></p>
+    </div>
+  </section>
+
+  <!-- 6. Ecuación como balanza (interactiva) -->
+  <section class="slide" aria-label="Una ecuación es una balanza">
+    <div class="cuerpo">
+      <h2>Una ecuación es una balanza</h2>
+      <p class="sub">Lo que haces de un lado, lo haces del otro. Mueve $x$ para equilibrarla.</p>
+      <div class="marco-balanza" aria-hidden="true">
+        <div class="pivote"></div>
+        <div class="viga" id="viga"></div>
+        <div class="platillo izq" id="platIzq">$x + 5$</div>
+        <div class="platillo der" id="platDer">$12$</div>
+      </div>
+      <div class="ctrl">
+        <label for="sb">Valor de $x$:</label>
+        <input type="range" id="sb" min="0" max="12" value="3">
+        <span class="valor" id="valB"></span>
+      </div>
+      <p class="estado-balanza" id="estadoB"></p>
+      <p class="nota">Restar $5$ a los dos lados da $x = 7$.</p>
+    </div>
+  </section>
+
+  <!-- 7. Resolver paso a paso -->
+  <section class="slide" aria-label="Resolver paso a paso">
+    <div class="cuerpo">
+      <h2>Resolver paso a paso</h2>
+      <p class="sub">Ejemplo: $x + 5 = 12$</p>
+      <div class="rejilla">
+        <div class="tarjeta t-azul"><h3>Paso 1</h3><p class="formula">$x + 5 = 12$</p></div>
+        <div class="tarjeta t-arena oculto" data-paso2><h3>Paso 2</h3><p class="formula">$x = 12 - 5$</p></div>
+        <div class="tarjeta t-mar oculto" data-paso2><h3>Paso 3</h3><p class="formula">$x = 7$</p></div>
+      </div>
+      <div class="ctrl"><button class="boton" id="btnPasos" type="button">Siguiente paso</button></div>
+      <div class="tarjeta oculto" id="comprob" style="margin-top:1rem"><p>Comprobación: $7 + 5 = 12$. Siempre comprueba la respuesta.</p></div>
+    </div>
+  </section>
+
+  <!-- 8. Igualdad y asignación (traza de ejecución) -->
+  <section class="slide" aria-label="Igualdad y asignación">
+    <div class="cuerpo">
+      <h2>Igualdad y asignación</h2>
+      <p class="sub">El mismo signo "=" significa cosas distintas. En C++, comparar se escribe ==.</p>
+      <div class="rejilla">
+        <div class="tarjeta t-azul"><h3>En álgebra</h3><p>$x = 5$ es una afirmación: $x$ vale $5$.</p></div>
+        <div class="tarjeta t-arena"><h3>En C++</h3><p>$x = x + 1;$ es una orden: toma $x$, súmale $1$ y guárdalo en $x$.</p></div>
+      </div>
+      <div class="mini-titulo" style="margin-top:1.4rem">Ejecuta el código línea por línea</div>
+      <div class="codigo" id="codigoC">int a = 3;   // a vale 3
+a = a * 2;   // ahora a vale 6
+a = a + 1;   // ahora a vale 7</div>
+      <div class="ctrl">
+        <button class="boton" id="btnCodigo" type="button">Ejecutar siguiente línea</button>
+        <span class="valor" id="valA">a = ?</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Proposiciones (clasificar) -->
+  <section class="slide" aria-label="Proposiciones">
+    <div class="cuerpo">
+      <h2>Proposiciones: verdadero o falso</h2>
+      <p class="sub">Una proposición tiene un valor de verdad. Toca cada frase para revelar qué es.</p>
+      <div class="rejilla">
+        <button class="tarjeta" type="button" data-prop="si" style="text-align:left;cursor:pointer;font:inherit;color:inherit"><p><strong>"Mazatlán está en Sinaloa."</strong></p><p class="ejemplo oculto">Sí es proposición: es verdadera.</p></button>
+        <button class="tarjeta" type="button" data-prop="si" style="text-align:left;cursor:pointer;font:inherit;color:inherit"><p><strong>"$2 + 2 = 5$"</strong></p><p class="ejemplo oculto">Sí es proposición: es falsa.</p></button>
+        <button class="tarjeta" type="button" data-prop="no" style="text-align:left;cursor:pointer;font:inherit;color:inherit"><p><strong>"¡Qué día tan bonito!"</strong></p><p class="ejemplo oculto">No es proposición: es una opinión.</p></button>
+        <button class="tarjeta" type="button" data-prop="no" style="text-align:left;cursor:pointer;font:inherit;color:inherit"><p><strong>"¿Cuántos años tienes?"</strong></p><p class="ejemplo oculto">No es proposición: es una pregunta.</p></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Y, O, NO (tabla de verdad interactiva) -->
+  <section class="slide" aria-label="Y, O y NO">
+    <div class="cuerpo">
+      <h2>Y, O y NO</h2>
+      <p class="sub">Elige los valores de $p$ y $q$ para ver la fila de la tabla.</p>
+      <div class="ctrl">
+        <button class="boton sec" id="btnP" type="button">$p$ = V</button>
+        <button class="boton sec" id="btnQ" type="button">$q$ = V</button>
+      </div>
+      <table class="verdad" aria-label="Tabla de verdad de Y, O y NO">
+        <thead><tr><th>$p$</th><th>$q$</th><th>$p \land q$</th><th>$p \lor q$</th><th>$\neg p$</th></tr></thead>
+        <tbody>
+          <tr data-fila="VV"><td>V</td><td>V</td><td class="v">V</td><td class="v">V</td><td class="f">F</td></tr>
+          <tr data-fila="VF"><td>V</td><td>F</td><td class="f">F</td><td class="v">V</td><td class="f">F</td></tr>
+          <tr data-fila="FV"><td>F</td><td>V</td><td class="f">F</td><td class="v">V</td><td class="v">V</td></tr>
+          <tr data-fila="FF"><td>F</td><td>F</td><td class="f">F</td><td class="f">F</td><td class="v">V</td></tr>
+        </tbody>
+      </table>
+      <p class="nota">En lógica, $O$ es incluyente: basta con que una parte sea verdadera.</p>
+    </div>
+  </section>
+
+  <!-- 11. Si p, entonces q (interactiva) -->
+  <section class="slide" aria-label="Si p entonces q">
+    <div class="cuerpo">
+      <h2>Si $p$, entonces $q$</h2>
+      <p class="sub">Solo es falso cuando $p$ es verdadero y $q$ es falso.</p>
+      <div class="ctrl">
+        <button class="boton sec" id="btnP2" type="button">$p$ = V</button>
+        <button class="boton sec" id="btnQ2" type="button">$q$ = V</button>
+      </div>
+      <div class="tarjeta" style="margin-top:1.2rem">
+        <p class="formula" id="condResultado">$p \rightarrow q$ es V</p>
+        <p class="nota" id="condExplica"></p>
+      </div>
+      <p class="nota">Ejemplo: "Si estudio, entonces apruebo". La promesa solo se rompe si estudié y no aprobé.</p>
+    </div>
+  </section>
+
+  <!-- 12. Negación -->
+  <section class="slide" aria-label="Negación de un condicional">
+    <div class="cuerpo">
+      <h2>Negación de un condicional</h2>
+      <p class="sub">Se niega con "Y", no con "si no".</p>
+      <div class="rejilla">
+        <div class="tarjeta t-azul"><h3>Condicional</h3><p class="formula">$\neg(p \rightarrow q) \equiv p \land \neg q$</p><p>Ejemplo: "llueve y no me mojo".</p></div>
+        <div class="tarjeta t-mar"><h3>De Morgan</h3><p class="formula">$\neg(p \land q) \equiv \neg p \lor \neg q$</p><p>Ejemplo: "no llueve o no hace frío".</p></div>
+      </div>
+      <div class="tarjeta t-arena" style="margin-top:1rem"><p>Error común: la negación no es "si no $p$, entonces no $q$".</p></div>
+    </div>
+  </section>
+
+  <!-- 13. Errores frecuentes (se revelan) -->
+  <section class="slide" aria-label="Errores frecuentes">
+    <div class="cuerpo">
+      <h2>Errores frecuentes</h2>
+      <p class="sub">Revísalos antes del examen. Toca cada uno para ver la corrección.</p>
+      <div class="pasos">
+        <div class="error-item" style="cursor:pointer" tabindex="0">Escribir $2 + 3 \cdot 4 = 20$ (las multiplicaciones van primero) <span class="oculto">Correcto: $14$.</span></div>
+        <div class="error-item" style="cursor:pointer" tabindex="0">Escribir $2(x + 3) = 2x + 3$ (la distributiva multiplica todo) <span class="oculto">Correcto: $2x + 6$.</span></div>
+        <div class="error-item" style="cursor:pointer" tabindex="0">Cambiar solo un lado de la ecuación <span class="oculto">Siempre se hace lo mismo en ambos lados.</span></div>
+        <div class="error-item" style="cursor:pointer" tabindex="0">Confundir la negación de "si… entonces" <span class="oculto">Es $p \land \neg q$.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. Resumen -->
+  <section class="slide" aria-label="Resumen">
+    <div class="cuerpo">
+      <h2>Resumen de la clase</h2>
+      <div class="rejilla" style="margin-top:1.4rem">
+        <div class="tarjeta t-azul"><h3>Variables</h3><p>Evaluar y sustituir.</p></div>
+        <div class="tarjeta t-mar"><h3>Propiedades</h3><p>Conmutativa, asociativa y distributiva.</p></div>
+        <div class="tarjeta t-arena"><h3>Ecuaciones</h3><p>Comprueba siempre.</p></div>
+        <div class="tarjeta" style="background:#EFEAFA;border-color:#D8CFF0"><h3>Lógica</h3><p>Y, O, NO y si… entonces.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. Reflexión -->
+  <section class="slide portada" aria-label="Reflexión">
+    <div class="cuerpo">
+      <h2>¿Qué diferencia hay?</h2>
+      <p>$x = 5$ en matemáticas · $x = x + 1$ en programación</p>
+      <div class="ctrl" style="margin-top:1.6rem"><button class="boton tide" id="btnReflex" type="button">Ver la respuesta</button></div>
+      <p class="oculto" id="respReflex" style="color:#ffffff;margin-top:1rem">En matemáticas, $x = 5$ describe. En programación, $x = x + 1$ es una orden que cambia el valor guardado.</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="barra" id="barra"></div>
+<div class="pie" role="navigation" aria-label="Controles de la presentación">
+  <div class="pie-izq">
+    <button class="boton sec" id="btnAnt" type="button" aria-label="Diapositiva anterior">Anterior</button>
+    <button class="boton" id="btnSig" type="button" aria-label="Diapositiva siguiente">Siguiente</button>
+  </div>
+  <span class="contador" id="contador" aria-live="polite">1 / 15</span>
+  <div class="pie-der">
+    <span class="ayuda-teclado">Flechas para avanzar</span>
+    <button class="boton sec" id="btnNotas" type="button" aria-expanded="false">Ver notas</button>
+  </div>
+</div>
+<div class="aviso-nota oculto" id="avisoNota" role="note"></div>
+
+<script>
+(function () {
+  const diapos = Array.from(document.querySelectorAll("#deck > .slide"));
+  const total = diapos.length;
+  let actual = 0;
+  const NOTAS = [
+    "Presenta la clase. Pregunta de apertura: ¿qué expresión describe pagar 4 paletas a x pesos y un refresco de 15 pesos? Respuesta: 4x + 15.",
+    "Idea central: una variable es una caja con nombre que puede cambiar. Mueve el control: si x = 6, y = 3x − 1 da 17.",
+    "Cada operación tiene prioridad. Ejemplo: 10 − 2 · 3 + 8 ÷ 4 = 6.",
+    "Las propiedades permiten calcular mentalmente. Ejemplo: 25 · 37 · 4 = 3700.",
+    "El número de afuera multiplica a todos los términos. Error típico: −2(x − 4) = −2x + 8, no −2x − 4.",
+    "Una ecuación se conserva si se hace lo mismo en ambos lados. Pregunta: ¿qué pasa si sumas 4 solo de un lado?",
+    "Muestra el procedimiento completo y la comprobación. Ejemplo: 5x − 8 = 27 da x = 7.",
+    "Esta es la diferencia más importante para quien empieza a programar. En C++, a = a · 2 es una instrucción, no una igualdad.",
+    "Una proposición tiene valor de verdad. Pide al grupo que busque un contraejemplo para la afirmación falsa.",
+    "Y necesita las dos partes, O basta con una, NO invierte. Pide calcular NO p para 9 y para 12.",
+    "El condicional solo es falso cuando la premisa se cumple y la conclusión falla.",
+    "La negación de un condicional es p Y NO q. Pregunta: ¿cuál es la negación de 'llueve o hace frío'? Respuesta: no llueve y no hace frío.",
+    "Presenta los errores como señales de aprendizaje. Ejemplo: 8 − 3 + 2 = 7, de izquierda a derecha.",
+    "Repasa las cuatro ideas. Pregunta: ¿cuál es la negación de 'si estudio, entonces no juego'? Respuesta: estudio y juego.",
+    "Cierra con la pregunta y deja que la discutan en parejas. Anticipa el Bloque 2: contadores y ciclos."
+  ];
+  let pasosVisibles = { orden: 0, despues: 0 };
+
+  function mostrar(i) {
+    actual = Math.max(0, Math.min(total - 1, i));
+    diapos.forEach(function (d, k) { d.classList.toggle("activa", k === actual); });
+    document.getElementById("contador").textContent = (actual + 1) + " / " + total;
+    document.getElementById("barra").style.width = ((actual + 1) / total * 100) + "%";
+    document.getElementById("btnAnt").disabled = actual === 0;
+    document.getElementById("btnSig").disabled = actual === total - 1;
+    const aviso = document.getElementById("avisoNota");
+    if (!aviso.classList.contains("oculto")) aviso.innerHTML = "<p>" + NOTAS[actual] + "</p>";
+    diapos[actual].scrollTop = 0;
+    typeset(diapos[actual]);
+  }
+
+  function typeset(el) {
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise([el]).catch(function () {});
+    }
+  }
+
+  document.getElementById("btnAnt").addEventListener("click", function () { mostrar(actual - 1); });
+  document.getElementById("btnSig").addEventListener("click", function () { mostrar(actual + 1); });
+
+  document.getElementById("btnNotas").addEventListener("click", function (e) {
+    const aviso = document.getElementById("avisoNota");
+    const abrir = aviso.classList.contains("oculto");
+    aviso.classList.toggle("oculto", !abrir);
+    e.currentTarget.setAttribute("aria-expanded", String(abrir));
+    e.currentTarget.textContent = abrir ? "Ocultar notas" : "Ver notas";
+    if (abrir) aviso.innerHTML = "<p>" + NOTAS[actual] + "</p>";
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.target.tagName === "INPUT" && e.target.type === "range") return;
+    if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); mostrar(actual + 1); }
+    if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); mostrar(actual - 1); }
+    if (e.key === "Home") mostrar(0);
+    if (e.key === "End") mostrar(total - 1);
+  });
+
+  /* Diapositiva 2: variable con deslizador */
+  const sx = document.getElementById("sx");
+  function actualizarX() {
+    const x = Number(sx.value);
+    document.getElementById("vx").textContent = x;
+    document.getElementById("vx2").textContent = x;
+    document.getElementById("res").textContent = 2 * x + 3;
+    document.getElementById("valorX").textContent = "x = " + x;
+  }
+  sx.addEventListener("input", actualizarX);
+
+  /* Diapositiva 3: pasos del orden de operaciones */
+  const pasosOrden = document.querySelectorAll("#pasosOrden [data-paso]");
+  document.getElementById("btnOrden").addEventListener("click", function () {
+    const n = pasosOrden.length;
+    if (pasosVisibles.orden === n) {
+      /* Al terminar, el botón reinicia la secuencia */
+      pasosOrden.forEach(function (p) { p.classList.add("oculto"); });
+      pasosVisibles.orden = 0;
+    } else {
+      pasosOrden[pasosVisibles.orden].classList.remove("oculto");
+      pasosVisibles.orden++;
+      typeset(document.getElementById("pasosOrden"));
+    }
+    this.textContent = pasosVisibles.orden === n ? "Reiniciar" : "Mostrar siguiente paso";
+  });
+
+  /* Diapositiva 4: tarjetas de propiedades */
+  document.querySelectorAll("[data-ejemplo]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      const ej = document.getElementById("ej-" + b.dataset.ejemplo);
+      ej.classList.toggle("oculto");
+      typeset(b);
+    });
+  });
+
+  /* Diapositiva 5: distributiva */
+  const sd = document.getElementById("sd");
+  function actualizarD() {
+    const x = Number(sd.value);
+    const izq = 3 * (x + 4), der = 3 * x + 12;
+    document.getElementById("valD").textContent = "x = " + x;
+    document.getElementById("resD").textContent =
+      "3(" + x + " + 4) = " + izq + "   ·   3·" + x + " + 12 = " + der + "   ·   " + (izq === der ? "Son iguales." : "No coinciden.");
+  }
+  sd.addEventListener("input", actualizarD);
+
+  /* Diapositiva 6: balanza */
+  const sb = document.getElementById("sb");
+  function actualizarB() {
+    const x = Number(sb.value);
+    const izq = x + 5, der = 12;
+    const dif = izq - der;
+    const giro = Math.max(-12, Math.min(12, dif * 3));
+    document.getElementById("viga").style.transform = "rotate(" + (-giro) + "deg)";
+    document.getElementById("platIzq").style.transform = "translateY(" + (giro * 1.6) + "px)";
+    document.getElementById("platDer").style.transform = "translateY(" + (-giro * 1.6) + "px)";
+    document.getElementById("platIzq").textContent = "x + 5 = " + izq;
+    document.getElementById("valB").textContent = "x = " + x;
+    document.getElementById("estadoB").textContent = dif === 0
+      ? "Equilibrio: x + 5 = 12, entonces x = 7."
+      : (dif > 0 ? "El lado izquierdo pesa más." : "El lado derecho pesa más.");
+  }
+  sb.addEventListener("input", actualizarB);
+
+  /* Diapositiva 7: pasos de la ecuación */
+  const pasos2 = document.querySelectorAll("[data-paso2]");
+  let paso2 = 0;
+  document.getElementById("btnPasos").addEventListener("click", function () {
+    const n = pasos2.length;
+    if (paso2 === n) {
+      /* Al terminar, el botón reinicia la secuencia */
+      pasos2.forEach(function (p) { p.classList.add("oculto"); });
+      document.getElementById("comprob").classList.add("oculto");
+      paso2 = 0;
+    } else {
+      pasos2[paso2].classList.remove("oculto");
+      paso2++;
+      if (paso2 === n) document.getElementById("comprob").classList.remove("oculto");
+      typeset(document.getElementById("deck"));
+    }
+    this.textContent = paso2 === n ? "Reiniciar" : "Siguiente paso";
+  });
+
+  /* Diapositiva 8: ejecución línea por línea */
+  const lineasC = [
+    { txt: "a = 3", fn: function (v) { return 3; } },
+    { txt: "a = a * 2", fn: function (v) { return v * 2; } },
+    { txt: "a = a + 1", fn: function (v) { return v + 1; } }
+  ];
+  let valA = null, linea = 0;
+  document.getElementById("btnCodigo").addEventListener("click", function () {
+    if (linea === lineasC.length) {
+      /* Al terminar, el botón reinicia la traza */
+      valA = null; linea = 0;
+      document.getElementById("valA").textContent = "a = ?";
+    } else {
+      valA = lineasC[linea].fn(valA);
+      document.getElementById("valA").textContent = "a = " + valA + "   (línea " + (linea + 1) + ": " + lineasC[linea].txt + ")";
+      linea++;
+    }
+    this.textContent = linea === lineasC.length ? "Reiniciar" : "Ejecutar siguiente línea";
+  });
+
+  /* Diapositiva 9: clasificar proposiciones */
+  document.querySelectorAll("[data-prop]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      b.querySelector(".ejemplo").classList.remove("oculto");
+      typeset(b);
+    });
+  });
+
+  /* Diapositiva 10: tabla de verdad */
+  let P = true, Q = true;
+  const btnP = document.getElementById("btnP"), btnQ = document.getElementById("btnQ");
+  function actualizarTabla() {
+    btnP.textContent = "p = " + (P ? "V" : "F");
+    btnQ.textContent = "q = " + (Q ? "V" : "F");
+    const clave = (P ? "V" : "F") + (Q ? "V" : "F");
+    document.querySelectorAll(".verdad tbody tr").forEach(function (tr) {
+      tr.classList.toggle("resaltada", tr.dataset.fila === clave);
+    });
+  }
+  btnP.addEventListener("click", function () { P = !P; actualizarTabla(); });
+  btnQ.addEventListener("click", function () { Q = !Q; actualizarTabla(); });
+  actualizarTabla();
+
+  /* Diapositiva 11: condicional */
+  let P2 = true, Q2 = true;
+  const btnP2 = document.getElementById("btnP2"), btnQ2 = document.getElementById("btnQ2");
+  function actualizarCond() {
+    btnP2.textContent = "p = " + (P2 ? "V" : "F");
+    btnQ2.textContent = "q = " + (Q2 ? "V" : "F");
+    const roto = P2 && !Q2;
+    document.getElementById("condResultado").textContent = "p → q es " + (roto ? "F" : "V");
+    document.getElementById("condExplica").textContent = roto
+      ? "La promesa se rompe: la premisa se cumplió y la conclusión falló."
+      : "La promesa se cumple: no se rompió en esta combinación.";
+  }
+  btnP2.addEventListener("click", function () { P2 = !P2; actualizarCond(); });
+  btnQ2.addEventListener("click", function () { Q2 = !Q2; actualizarCond(); });
+  actualizarCond();
+
+  /* Diapositiva 13: errores que se revelan */
+  document.querySelectorAll(".error-item").forEach(function (el) {
+    function alternar() { el.querySelector("span").classList.toggle("oculto"); typeset(el); }
+    el.addEventListener("click", alternar);
+    el.addEventListener("keydown", function (e) { if (e.key === "Enter") alternar(); });
+  });
+
+  /* Diapositiva 15: reflexión */
+  document.getElementById("btnReflex").addEventListener("click", function () {
+    document.getElementById("respReflex").classList.remove("oculto");
+    typeset(document.getElementById("respReflex"));
+    this.classList.add("oculto");
+  });
+
+  actualizarX(); actualizarD(); actualizarB();
+  mostrar(0);
+})();
+</script>
+</body>
+</html>
