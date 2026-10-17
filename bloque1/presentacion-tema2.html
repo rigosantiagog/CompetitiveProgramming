@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aritmética, Conteo y Casos · BugSquad 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        soft: {
+                            bg: '#F8FAFC',
+                            surface: '#FFFFFF',
+                            panel: '#F1F5F9',
+                            border: '#E2E8F0',
+                            text: '#334155',
+                            heading: '#1E293B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F4F6F9;
+            color: #334155;
+            overflow-x: hidden;
+        }
+        .slide-enter {
+            animation: slideFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.995);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between select-none">
+
+    <!-- Barra de navegación superior -->
+    <header class="w-full border-b border-slate-200/90 bg-white/85 backdrop-blur-md sticky top-0 z-30">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-teal-100 border border-teal-200 flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-calculator text-teal-700 text-lg"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold tracking-tight text-slate-800 text-sm sm:text-base">BugSquad 2026</span>
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200 font-mono font-medium">Clase 2 · Bloque 1</span>
+                    </div>
+                    <p class="text-xs text-slate-500 hidden sm:block">Club de Programación Competitiva · Aritmética, conteo y casos</p>
+                </div>
+            </div>
+
+            <!-- Controles de índice, "Para saber más..." y pantalla completa -->
+            <div class="flex items-center gap-2 sm:gap-2.5">
+                <button onclick="toggleDeepNotes()" id="btn-deep-toggle" class="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs sm:text-sm font-medium flex items-center gap-2 border border-amber-200 transition">
+                    <i class="fa-solid fa-book-open-reader text-amber-600"></i>
+                    <span class="hidden lg:inline" id="deep-toggle-label">Para saber más...: Visible</span>
+                </button>
+                <button onclick="toggleIndexModal()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-700 text-xs sm:text-sm font-medium flex items-center gap-2 border border-slate-200 transition">
+                    <i class="fa-solid fa-table-cells-large text-teal-600"></i>
+                    <span class="hidden md:inline">Índice</span>
+                    <span id="slide-counter-badge" class="font-mono text-xs bg-white px-2 py-0.5 rounded-md text-teal-700 border border-slate-200">1 / 15</span>
+                </button>
+                <button onclick="toggleFullScreen()" title="Pantalla Completa" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-700 text-sm border border-slate-200 transition">
+                    <i class="fa-solid fa-expand" id="fullscreen-icon"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Barra de progreso suave -->
+        <div class="w-full h-1.5 bg-slate-100">
+            <div id="progress-bar" class="h-full bg-gradient-to-r from-teal-400 via-sky-400 to-indigo-400 transition-all duration-300" style="width: 6.66%"></div>
+        </div>
+    </header>
+
+    <!-- Escenario principal de la diapositiva -->
+    <main class="flex-1 flex items-center justify-center p-3 sm:p-6 md:p-8 relative overflow-y-auto">
+        <div class="w-full max-w-5xl bg-white border border-slate-200/90 rounded-3xl shadow-xl shadow-slate-200/60 p-5 sm:p-8 md:p-10 min-h-[600px] flex flex-col justify-between relative overflow-hidden">
+            
+            <!-- Luces pastel decorativas de fondo -->
+            <div class="-top-24 -right-24 w-80 h-80 bg-teal-100/50 rounded-full blur-3xl pointer-events-none absolute"></div>
+            <div class="-bottom-24 -left-24 w-80 h-80 bg-sky-100/50 rounded-full blur-3xl pointer-events-none absolute"></div>
+
+            <!-- Contenedor dinámico de la diapositiva activa -->
+            <div id="slide-stage" class="flex-1 flex flex-col justify-between z-10">
+                <!-- Se inyecta por JS -->
+            </div>
+
+            <!-- Pie de diapositiva oficial -->
+            <div class="mt-8 pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2 z-10">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-code text-teal-600"></i>
+                    <span class="font-medium">Club de programación Competitiva - BugSquad 2026</span>
+                </div>
+                <div class="flex items-center gap-2 font-mono text-[11px] text-slate-500">
+                    <span>Usa <kbd class="px-1.5 py-0.5 bg-slate-100 rounded border border-slate-300 text-slate-700">←</kbd> <kbd class="px-1.5 py-0.5 bg-slate-100 rounded border border-slate-300 text-slate-700">→</kbd> o desliza para cambiar de diapositiva</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Controles inferiores -->
+    <footer class="w-full py-3 px-4 bg-white/90 border-t border-slate-200/80 backdrop-blur-md z-20">
+        <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+            <button id="btn-prev" onclick="prevSlide()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-medium text-sm flex items-center gap-2 border border-slate-200 transition">
+                <i class="fa-solid fa-arrow-left text-slate-500"></i>
+                <span>Anterior</span>
+            </button>
+
+            <!-- Indicadores rápidos de puntos -->
+            <div id="dots-container" class="hidden sm:flex items-center gap-1.5 flex-wrap justify-center">
+                <!-- Puntos generados dinámicamente -->
+            </div>
+
+            <button id="btn-next" onclick="nextSlide()" class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 disabled:opacity-40 disabled:pointer-events-none text-white font-semibold text-sm flex items-center gap-2 shadow-sm shadow-teal-600/20 transition">
+                <span>Siguiente</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Modal de Índice de las 15 Diapositivas -->
+    <div id="index-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-layer-group text-teal-600 text-lg"></i>
+                    <h3 class="font-bold text-lg text-slate-800">Índice Completo de la Clase 2 (15 Diapositivas)</h3>
+                </div>
+                <button onclick="toggleIndexModal()" class="w-8 h-8 rounded-lg bg-slate-200/70 hover:bg-slate-300/70 flex items-center justify-center text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="index-grid" class="p-5 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-white">
+                <!-- Tarjetas de diapositivas -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 15;
+        let showDeepNotes = true;
+
+        // Estado interactivo de cada laboratorio de la Clase 2
+        const state = {
+            slide2Num: 6,
+            slide3Items: 17,
+            slide3BagSize: 5,
+            slide4M: 5,
+            slide4N: 14,
+            slide5Cookies: 23,
+            slide5Bag: 5,
+            slide6Students: 47,
+            slide6TableCap: 6,
+            slide7Buses: 3,
+            slide7Trains: 2,
+            slide7Selected: 'Autobús 1',
+            slide8Starters: 3,
+            slide8Mains: 4,
+            slide8Desserts: 2,
+            slide9Friends: 5,
+            slide9ExampleIdx: 0,
+            slide10Filter: 'union', // 'pares', 'mult3', 'ambos', 'union'
+            slide11Str: 'ABBAB',
+            slide11ActiveStep: 5,
+            slide12Fixed: { 0: false, 1: false, 2: false, 3: false },
+            slide13Pillar: 'paridad',
+            slide14ZeroRevealed: true
+        };
+
+        // Las 15 diapositivas exactas del archivo Clase2_Aritmetica_conteo_y_casos.pptx
+        const slidesMeta = [
+            { num: 1, title: "Aritmética, conteo y casos", subtitle: "Clase 2 · Bloque 1 · Paridad, divisiones, conteo y simulación", icon: "fa-calculator" },
+            { num: 2, title: "Par o impar: ¿hay parejas?", subtitle: "Si todo se agrupa de dos en dos, el número es par", icon: "fa-user-group" },
+            { num: 3, title: "Residuo: lo que sobra", subtitle: "17 % 5 = 2", icon: "fa-percent" },
+            { num: 4, title: "Múltiplos en la recta numérica", subtitle: "Los verdes son múltiplos de 5", icon: "fa-ruler-horizontal" },
+            { num: 5, title: "División entera: repartir", subtitle: "23 galletas en bolsas de 5", icon: "fa-cookie-bite" },
+            { num: 6, title: "Redondeo hacia arriba", subtitle: "47 alumnos en mesas de 6: ¿cuántas mesas?", icon: "fa-arrow-up-9-1" },
+            { num: 7, title: "Principio de la suma: \"o\"", subtitle: "Las opciones no se mezclan, así que se suman", icon: "fa-plus" },
+            { num: 8, title: "Principio del producto: \"y\"", subtitle: "Cada decisión se combina con cada opción de las otras", icon: "fa-xmark" },
+            { num: 9, title: "Cuidado con el orden", subtitle: "Presidente y secretario de 5 amigos", icon: "fa-people-arrows" },
+            { num: 10, title: "Razonamiento por casos", subtitle: "Números del 1 al 30 que son pares o múltiplos de 3", icon: "fa-filter" },
+            { num: 11, title: "Simular con tabla de seguimiento", subtitle: "Contador en 0. Cada A suma 2 y cada B resta 1", icon: "fa-table-list" },
+            { num: 12, title: "Resultado final para ABBAB: 1", subtitle: "Ejecución paso a paso y prueba de cadenas", icon: "fa-play" },
+            { num: 13, title: "Errores frecuentes", subtitle: "Revísalos antes del examen", icon: "fa-triangle-exclamation" },
+            { num: 14, title: "Resumen de la clase", subtitle: "Paridad, Aritmética, Conteo y Casos", icon: "fa-shuffle" },
+            { num: 15, title: "¿Por qué 0 es par?", subtitle: "Pista: al dividir 0 entre 2, ¿qué residuo queda?", icon: "fa-lightbulb" }
+        ];
+
+        // Componente reutilizable para el apartado "Para saber más..."
+        function renderDeepExplanation(title, mathExplanation, cppConnection) {
+            if (!showDeepNotes) return '';
+            return `
+                <div class="mt-4 p-4 sm:p-5 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-slate-700 shadow-sm transition-all">
+                    <div class="flex items-center gap-2 text-amber-800 font-bold text-xs sm:text-sm tracking-wide mb-2">
+                        <i class="fa-solid fa-graduation-cap text-amber-600 text-base"></i>
+                        <span>Para saber más... · ${title}</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm leading-relaxed">
+                        <div class="bg-white/80 p-3.5 rounded-xl border border-amber-100">
+                            <span class="font-bold text-slate-800 block mb-1"><i class="fa-solid fa-square-root-variable text-teal-600 mr-1.5"></i>¿Por qué funciona así en Matemáticas?</span>
+                            <p class="text-slate-600">${mathExplanation}</p>
+                        </div>
+                        <div class="bg-white/80 p-3.5 rounded-xl border border-amber-100">
+                            <span class="font-bold text-slate-800 block mb-1"><i class="fa-solid fa-terminal text-sky-600 mr-1.5"></i>Conexión con Programación Competitiva (C++)</span>
+                            <p class="text-slate-600">${cppConnection}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSlideContent(index) {
+            switch (index) {
+                // DIAPOSITIVA 1: Portada
+                case 0:
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col items-center justify-center text-center py-4">
+                            <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-teal-100 via-sky-50 to-indigo-100 border border-teal-200 flex items-center justify-center mb-5 shadow-md shadow-teal-100">
+                                <i class="fa-solid fa-calculator text-4xl sm:text-5xl text-teal-700"></i>
+                            </div>
+                            <span class="px-3.5 py-1 rounded-full text-xs font-mono uppercase tracking-widest bg-teal-50 text-teal-700 border border-teal-200 mb-3 font-semibold">
+                                Club de programación Competitiva - BugSquad 2026
+                            </span>
+                            <h1 class="text-3xl sm:text-6xl font-extrabold tracking-tight text-slate-800 mb-3">
+                                Aritmética, conteo y casos
+                            </h1>
+                            <p class="text-base sm:text-xl text-slate-600 max-w-2xl font-medium mb-6">
+                                Clase 2 · Bloque 1 · Paridad, divisiones, conteo y simulación
+                            </p>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-3xl mb-6 text-left">
+                                <button onclick="goToSlide(1)" class="p-3.5 rounded-2xl bg-teal-50/70 hover:bg-teal-100/80 border border-teal-200/80 flex flex-col gap-1.5 transition">
+                                    <div class="flex items-center justify-between">
+                                        <i class="fa-solid fa-shuffle text-teal-600 text-lg"></i>
+                                        <span class="text-[11px] font-mono text-teal-700">Diap. 2-4</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">Paridad y Múltiplos</span>
+                                    <span class="text-[11px] text-slate-500">Parejas, residuo (%) y recta numérica</span>
+                                </button>
+                                <button onclick="goToSlide(4)" class="p-3.5 rounded-2xl bg-sky-50/70 hover:bg-sky-100/80 border border-sky-200/80 flex flex-col gap-1.5 transition">
+                                    <div class="flex items-center justify-between">
+                                        <i class="fa-solid fa-divide text-sky-600 text-lg"></i>
+                                        <span class="text-[11px] font-mono text-sky-700">Diap. 5-6</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">División y Techo</span>
+                                    <span class="text-[11px] text-slate-500">Cociente entero y redondeo hacia arriba</span>
+                                </button>
+                                <button onclick="goToSlide(6)" class="p-3.5 rounded-2xl bg-purple-50/70 hover:bg-purple-100/80 border border-purple-200/80 flex flex-col gap-1.5 transition">
+                                    <div class="flex items-center justify-between">
+                                        <i class="fa-solid fa-arrow-up-1-9 text-purple-600 text-lg"></i>
+                                        <span class="text-[11px] font-mono text-purple-700">Diap. 7-9</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">Técnicas de Conteo</span>
+                                    <span class="text-[11px] text-slate-500">Suma ("o"), producto ("y") y orden</span>
+                                </button>
+                                <button onclick="goToSlide(9)" class="p-3.5 rounded-2xl bg-amber-50/70 hover:bg-amber-100/80 border border-amber-200/80 flex flex-col gap-1.5 transition">
+                                    <div class="flex items-center justify-between">
+                                        <i class="fa-solid fa-filter text-amber-600 text-lg"></i>
+                                        <span class="text-[11px] font-mono text-amber-700">Diap. 10-15</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">Casos y Simulación</span>
+                                    <span class="text-[11px] text-slate-500">Inclusión-exclusión y tabla de rastreo</span>
+                                </button>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Objetivos de la Clase 2',
+                                'La aritmética entera y la combinatoria elemental nos permiten responder "¿cuántos grupos se forman?" o "¿de cuántas maneras ocurre un evento?" usando fórmulas exactas en vez de contar de uno en uno.',
+                                'En programación competitiva, dominar el operador módulo (%), la división entera (/), el redondeo hacia arriba y las tablas de seguimiento (trace tables) evita errores de precisión y desbordamiento.'
+                            )}
+                        </div>
+                    `;
+
+                // DIAPOSITIVA 2: Par o impar: ¿hay parejas?
+                case 1: {
+                    const n = state.slide2Num;
+                    const pairs = Math.floor(n / 2);
+                    const rem = n % 2;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-teal-100 text-teal-800 font-mono text-xs font-bold">Diapositiva 2 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Concepto de Paridad</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Par o impar: ¿hay parejas?</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Si todo se agrupa de dos en dos, el número es par</p>
+                            </div>
+
+                            <!-- Las 2 tarjetas principales del PPTX -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 my-4">
+                                <!-- 6 -> PAR -->
+                                <div onclick="state.slide2Num = 6; updateView();" class="cursor-pointer p-5 rounded-2xl bg-emerald-50/90 border-2 ${n === 6 ? 'border-emerald-400 ring-2 ring-emerald-200' : 'border-emerald-200'} flex flex-col justify-between shadow-sm transition">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <span class="text-2xl sm:text-3xl font-mono font-extrabold text-emerald-800">6 → PAR</span>
+                                        <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold border border-emerald-200">Sobran: 0</span>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-4 my-3">
+                                        ${[1, 2, 3].map(p => `
+                                            <div class="px-3.5 py-2.5 rounded-xl bg-white border-2 border-emerald-300 flex items-center gap-2 shadow-sm">
+                                                <span class="w-4 h-4 rounded-full bg-emerald-500 inline-block"></span>
+                                                <span class="w-4 h-4 rounded-full bg-emerald-500 inline-block"></span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                    <p class="text-sm font-semibold text-emerald-900 text-center">Tres parejas completas</p>
+                                </div>
+
+                                <!-- 5 -> IMPAR -->
+                                <div onclick="state.slide2Num = 5; updateView();" class="cursor-pointer p-5 rounded-2xl bg-amber-50/90 border-2 ${n === 5 ? 'border-amber-400 ring-2 ring-amber-200' : 'border-amber-200'} flex flex-col justify-between shadow-sm transition">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <span class="text-2xl sm:text-3xl font-mono font-extrabold text-amber-800">5 → IMPAR</span>
+                                        <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-bold border border-amber-200">Sobra: 1</span>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-4 my-3">
+                                        ${[1, 2].map(p => `
+                                            <div class="px-3.5 py-2.5 rounded-xl bg-white border-2 border-amber-300 flex items-center gap-2 shadow-sm">
+                                                <span class="w-4 h-4 rounded-full bg-amber-500 inline-block"></span>
+                                                <span class="w-4 h-4 rounded-full bg-amber-500 inline-block"></span>
+                                            </div>
+                                        `).join('')}
+                                        <div class="px-3 py-2.5 rounded-xl bg-rose-50 border-2 border-dashed border-rose-300 flex items-center justify-center">
+                                            <span class="w-4 h-4 rounded-full bg-rose-500 inline-block"></span>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm font-semibold text-amber-900 text-center">Dos parejas y una sobra</p>
+                                </div>
+                            </div>
+
+                            <!-- Simulador interactivo de parejas para cualquier número -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col gap-3">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                    <div class="text-sm text-slate-700">
+                                        <span class="font-bold text-slate-900">Probador en vivo con N = ${n}:</span>
+                                        <span class="font-mono font-bold ml-1 px-2 py-0.5 rounded ${rem === 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                                            ${n} → ${rem === 0 ? 'PAR' : 'IMPAR'} (${pairs} pareja${pairs === 1 ? '' : 's'}${rem ? ' y 1 suelta' : ' completas'})
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <input type="range" min="0" max="12" value="${n}" oninput="state.slide2Num = parseInt(this.value); updateView();" class="w-36 accent-teal-600 cursor-pointer">
+                                        <span class="font-mono text-xs font-bold text-teal-700">N = ${n}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Representación Algebraica de Par e Impar',
+                                'Un número entero es <strong>par</strong> si puede escribirse como <span class="font-mono">2k</span> (múltiplo exacto de 2, residuo 0), y es <strong>impar</strong> si se escribe como <span class="font-mono">2k + 1</span> (al agrupar de 2 en 2 siempre sobra 1).',
+                                'En C++ verificamos si un número positivo <span class="font-mono">n</span> es par con la condición <span class="font-mono">if (n % 2 == 0)</span>, y si es impar con <span class="font-mono">if (n % 2 != 0)</span>.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 3: Residuo: lo que sobra
+                case 2: {
+                    const total = state.slide3Items;
+                    const bagSize = state.slide3BagSize;
+                    const fullBags = Math.floor(total / bagSize);
+                    const leftover = total % bagSize;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-teal-100 text-teal-800 font-mono text-xs font-bold">Diapositiva 3 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">El Operador Módulo (%)</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Residuo: lo que sobra</h2>
+                                <p class="text-teal-700 font-mono font-bold text-lg sm:text-2xl mt-1">${total} % ${bagSize} = ${leftover}</p>
+                            </div>
+
+                            <!-- Visualización de las bolsas y lo que sobra del PPTX -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                                <div class="md:col-span-2 p-5 rounded-2xl bg-sky-50/80 border-2 border-sky-200 flex flex-col justify-between">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xs font-mono uppercase text-sky-800 font-bold">Bolsas de capacidad ${bagSize}</span>
+                                        <span class="text-sm font-bold text-sky-900">${fullBags} bolsas llenas = ${fullBags * bagSize}</span>
+                                    </div>
+                                    <div class="flex flex-wrap items-center justify-center gap-3 my-2">
+                                        ${Array.from({ length: fullBags }).map((_, idx) => `
+                                            <div class="p-3 rounded-xl bg-white border-2 border-sky-300 flex flex-col items-center shadow-sm">
+                                                <span class="text-[10px] font-mono text-slate-400 mb-1">Bolsa ${idx + 1}</span>
+                                                <div class="flex gap-1">
+                                                    ${Array.from({ length: bagSize }).map(() => `<span class="w-3 h-3 rounded-full bg-sky-500"></span>`).join('')}
+                                                </div>
+                                                <span class="text-xs font-mono font-bold text-sky-800 mt-1">+${bagSize}</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+
+                                <div class="p-5 rounded-2xl bg-amber-50/90 border-2 border-amber-200 flex flex-col items-center justify-center text-center">
+                                    <span class="text-xs font-mono uppercase text-amber-800 font-bold mb-1">Residuo (lo que no llena otra bolsa)</span>
+                                    <div class="text-3xl sm:text-4xl font-mono font-extrabold text-amber-800 my-2">
+                                        sobran ${leftover}
+                                    </div>
+                                    <div class="flex gap-1.5 my-2 min-h-[16px]">
+                                        ${leftover > 0
+                                            ? Array.from({ length: leftover }).map(() => `<span class="w-4 h-4 rounded-full bg-amber-500"></span>`).join('')
+                                            : `<span class="text-xs text-emerald-700 font-semibold">¡División exacta (0 sueltas)!</span>`
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fórmula destacada del PPTX y control interactivo -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div class="font-mono text-base sm:text-lg font-bold text-slate-800 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+                                    ${total} = ${bagSize} · ${fullBags} + <span class="text-amber-700 underline">${leftover}</span> &nbsp;&rarr;&nbsp; el residuo es <span class="text-amber-700">${leftover}</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs font-mono text-slate-500">Cambiar cantidad (${total}):</span>
+                                    <input type="range" min="5" max="29" value="${total}" oninput="state.slide3Items = parseInt(this.value); updateView();" class="w-28 accent-teal-600 cursor-pointer">
+                                    <button onclick="state.slide3Items = 17; state.slide3BagSize = 5; updateView();" class="text-xs font-mono px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 hover:bg-slate-100">
+                                        17 % 5
+                                    </button>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Algoritmo de la División y Rango del Residuo',
+                                'Toda división entera cumple que <span class="font-mono">Dividendo = Divisor · Cociente + Residuo</span>. Una propiedad fundamental es que al dividir entre <span class="font-mono">m</span>, el residuo siempre es menor que <span class="font-mono">m</span>: solo puede valer <span class="font-mono">0, 1, 2, ..., m − 1</span>.',
+                                'En C++ el símbolo <span class="font-mono">%</span> no calcula porcentajes, sino el <strong>residuo (módulo)</strong> de una división entera: <span class="font-mono">17 % 5</span> evalúa directamente a <span class="font-mono">2</span>.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 4: Múltiplos en la recta numérica
+                case 3: {
+                    const m = state.slide4M;
+                    const N = state.slide4N;
+                    const countMultiples = Math.floor(N / m);
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-teal-100 text-teal-800 font-mono text-xs font-bold">Diapositiva 4 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Periodicidad y Conteo de Múltiplos</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Múltiplos en la recta numérica</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Los verdes son múltiplos de <span class="font-mono font-bold text-emerald-700">${m}</span></p>
+                            </div>
+
+                            <!-- Recta numérica interactiva del 0 al 14 (como en el PPTX) -->
+                            <div class="my-4 p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                                <div class="grid grid-cols-5 sm:grid-cols-15 gap-2">
+                                    ${Array.from({ length: 15 }).map((_, num) => {
+                                        const isMult = (num % m === 0);
+                                        const inRange1ToN = (num >= 1 && num <= N);
+                                        return `
+                                            <div class="flex flex-col items-center">
+                                                <div class="w-full py-2.5 rounded-xl font-mono text-sm sm:text-base font-bold text-center border-2 transition ${
+                                                    isMult
+                                                        ? 'bg-emerald-100 border-emerald-400 text-emerald-900 shadow-sm'
+                                                        : 'bg-white border-slate-200 text-slate-600'
+                                                }">
+                                                    ${num}
+                                                </div>
+                                                <span class="text-[10px] font-mono mt-1 ${isMult ? 'text-emerald-700 font-bold' : 'text-slate-400'}">
+                                                    ${isMult ? (num === 0 ? '0·' + m : (num / m) + '·' + m) : '·'}
+                                                </span>
+                                                ${isMult && inRange1ToN ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-600 text-white font-mono mt-0.5">✓</span>' : ''}
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Fórmula del PPTX: Múltiplos de m entre 1 y N -->
+                            <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div>
+                                    <div class="text-base sm:text-xl font-mono font-extrabold text-slate-800">
+                                        Múltiplos de m entre 1 y N: &nbsp;<span class="text-emerald-800 bg-white px-3 py-1 rounded-xl border border-emerald-300">⌊N ÷ m⌋</span>
+                                    </div>
+                                    <p class="text-xs sm:text-sm text-slate-600 mt-1.5">
+                                        Entre <strong>1 y ${N}</strong> hay <span class="font-mono font-bold text-emerald-800">⌊${N} ÷ ${m}⌋ = ${countMultiples}</span> múltiplos de ${m}
+                                        (además del <span class="font-mono font-bold">0</span> al inicio de la recta).
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-2 shrink-0">
+                                    <span class="text-xs font-mono text-slate-600">Cambiar m:</span>
+                                    ${[2, 3, 4, 5].map(val => `
+                                        <button onclick="state.slide4M = ${val}; updateView();" class="px-3 py-1.5 rounded-xl font-mono text-xs font-bold border transition ${m === val ? 'bg-emerald-600 text-white border-emerald-700' : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'}">
+                                            m = ${val}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                '¿Por qué contar múltiplos entre 1 y N es simplemente ⌊N ÷ m⌋?',
+                                'Los múltiplos positivos de <span class="font-mono">m</span> aparecen cada <span class="font-mono">m</span> pasos: <span class="font-mono">1·m, 2·m, 3·m, ..., k·m</span>. El último múltiplo que no rebasa a <span class="font-mono">N</span> corresponde exactamente a cuántas veces completas cabe <span class="font-mono">m</span> dentro de <span class="font-mono">N</span>, es decir, la función piso <span class="font-mono">⌊N ÷ m⌋</span>.',
+                                'En C++ no necesitas un ciclo <span class="font-mono">for</span> desde 1 hasta <span class="font-mono">N</span> para contar múltiplos: si <span class="font-mono">N = 1000000000</span> y <span class="font-mono">m = 5</span>, basta hacer <span class="font-mono">int cantidad = N / m;</span> en tiempo instantáneo <span class="font-mono">O(1)</span>.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 5: División entera: repartir
+                case 4: {
+                    const cookies = state.slide5Cookies;
+                    const bag = state.slide5Bag;
+                    const quot = Math.floor(cookies / bag);
+                    const rem = cookies % bag;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-teal-100 text-teal-800 font-mono text-xs font-bold">Diapositiva 5 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Cociente y Residuo al Repartir</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">División entera: repartir</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">${cookies} galletas en bolsas de ${bag}</p>
+                            </div>
+
+                            <!-- Tarjeta visual de las bolsas de galletas -->
+                            <div class="my-4 p-5 rounded-2xl bg-amber-50/70 border-2 border-amber-200 flex flex-col items-center justify-center">
+                                <span class="text-lg sm:text-2xl font-bold text-slate-800 mb-3">
+                                    <span class="text-sky-700">${quot} bolsas llenas</span> + <span class="text-amber-700">${rem} sueltas</span>
+                                </span>
+                                <div class="flex flex-wrap items-center justify-center gap-3">
+                                    ${Array.from({ length: quot }).map((_, idx) => `
+                                        <div class="px-3.5 py-2.5 rounded-2xl bg-white border-2 border-sky-300 shadow-sm flex flex-col items-center">
+                                            <span class="text-[10px] font-mono text-sky-700 font-bold mb-1">Bolsa #${idx + 1}</span>
+                                            <div class="flex gap-1 text-amber-600 text-sm">
+                                                ${Array.from({ length: bag }).map(() => `<i class="fa-solid fa-cookie"></i>`).join('')}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                    ${rem > 0 ? `
+                                        <div class="px-3.5 py-2.5 rounded-2xl bg-amber-100/80 border-2 border-dashed border-amber-400 flex flex-col items-center">
+                                            <span class="text-[10px] font-mono text-amber-800 font-bold mb-1">Sueltas (${rem})</span>
+                                            <div class="flex gap-1 text-amber-700 text-sm">
+                                                ${Array.from({ length: rem }).map(() => `<i class="fa-solid fa-cookie-bite"></i>`).join('')}
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+
+                            <!-- Ecuación de comprobación del PPTX y deslizador -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <p class="font-mono text-sm sm:text-base font-bold text-slate-800">
+                                    ${cookies} ÷ ${bag} = <span class="text-sky-700">${quot}</span> con residuo <span class="text-amber-700">${rem}</span>
+                                    &nbsp;&rarr;&nbsp;
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200">${bag} · ${quot} + ${rem} = ${cookies}</span>
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs font-mono text-slate-500">Galletas:</span>
+                                    <input type="range" min="10" max="34" value="${cookies}" oninput="state.slide5Cookies = parseInt(this.value); updateView();" class="w-28 accent-amber-600 cursor-pointer">
+                                    <button onclick="state.slide5Cookies = 23; updateView();" class="text-xs font-mono px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-slate-700">
+                                        23
+                                    </button>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Diferencia entre División Real y División Entera',
+                                'En una calculadora común, <span class="font-mono">23 ÷ 5 = 4.6</span>. Pero cuando repartimos objetos indivisibles (galletas enteras, personas, monedas) nos interesa cuántas bolsas <strong>completas</strong> logramos armar (<span class="font-mono">4</span>) y cuántas piezas quedan sueltas (<span class="font-mono">3</span>).',
+                                'En C++, cuando divides dos variables enteras (<span class="font-mono">int a = 23, b = 5;</span>), la operación <span class="font-mono">a / b</span> trunca automáticamente los decimales y devuelve <span class="font-mono">4</span>, mientras que <span class="font-mono">a % b</span> devuelve <span class="font-mono">3</span>.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 6: Redondeo hacia arriba
+                case 5: {
+                    const students = state.slide6Students;
+                    const cap = state.slide6TableCap;
+                    const fullTables = Math.floor(students / cap);
+                    const extraStudents = students % cap;
+                    const totalTables = Math.ceil(students / cap);
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-teal-100 text-teal-800 font-mono text-xs font-bold">Diapositiva 6 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Función Techo ⌈a ÷ b⌉ en Enteros</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Redondeo hacia arriba</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">${students} alumnos en mesas de ${cap}: ¿cuántas mesas?</p>
+                            </div>
+
+                            <!-- Visualización de las mesas -->
+                            <div class="my-4 p-5 rounded-2xl bg-sky-50/70 border-2 border-sky-200 flex flex-col items-center">
+                                <p class="text-base sm:text-xl font-bold text-slate-800 mb-3 text-center">
+                                    <span class="text-sky-800">${fullTables} mesas llenas</span>
+                                    ${extraStudents > 0
+                                        ? ` + <span class="text-amber-700">1 mesa con ${extraStudents} persona${extraStudents === 1 ? '' : 's'}</span> = <span class="text-emerald-700 underline">${totalTables} mesas</span>`
+                                        : ` + <span class="text-emerald-700">0 personas sueltas</span> = <span class="text-emerald-700 underline">${totalTables} mesas</span>`
+                                    }
+                                </p>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-3xl">
+                                    ${Array.from({ length: fullTables }).map((_, idx) => `
+                                        <div class="p-3 rounded-xl bg-white border border-sky-300 flex flex-col items-center shadow-sm">
+                                            <span class="text-xs font-mono font-bold text-sky-700">Mesa ${idx + 1} (llena)</span>
+                                            <span class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-users text-sky-500 mr-1"></i>${cap} / ${cap} alumnos</span>
+                                        </div>
+                                    `).join('')}
+                                    ${extraStudents > 0 ? `
+                                        <div class="p-3 rounded-xl bg-amber-50 border-2 border-amber-400 flex flex-col items-center shadow-sm">
+                                            <span class="text-xs font-mono font-bold text-amber-800">Mesa ${totalTables} (extra)</span>
+                                            <span class="text-xs text-amber-900 font-semibold mt-1"><i class="fa-solid fa-user-plus text-amber-600 mr-1"></i>${extraStudents} / ${cap} alumnos</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+
+                            <!-- Fórmula exacta del PPTX -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div class="font-mono text-sm sm:text-base font-bold text-slate-800">
+                                    ⌈a ÷ b⌉ = (a + b − 1) ÷ b &nbsp;&rarr;&nbsp;
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-emerald-700">(${students} + ${cap - 1}) ÷ ${cap} = ${totalTables}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-mono text-slate-500">Alumnos:</span>
+                                    <input type="range" min="36" max="54" value="${students}" oninput="state.slide6Students = parseInt(this.value); updateView();" class="w-28 accent-sky-600 cursor-pointer">
+                                    <button onclick="state.slide6Students = 47; updateView();" class="text-xs font-mono px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-slate-700">47</button>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                '¿Por qué funciona la fórmula (a + b − 1) ÷ b?',
+                                'No podemos dejar a los últimos 5 alumnos de pie. Sumar <span class="font-mono">b − 1</span> (en este caso <span class="font-mono">+5</span>) es un "empujoncito" justo: si <span class="font-mono">a</span> ya era múltiplo exacto de <span class="font-mono">b</span>, sumar <span class="font-mono">b − 1</span> no alcanza a completar otra mesa; pero si sobraba aunque sea 1 alumno, ese empujón hace que la división entera suba exactamente 1 unidad.',
+                                'En C++ evita usar <span class="font-mono">ceil((double)a / b)</span> porque los números flotantes pierden precisión con enteros grandes (<span class="font-mono">long long</span>). Usa siempre la fórmula entera: <span class="font-mono">(a + b - 1) / b</span>.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 7: Principio de la suma: "o"
+                case 6: {
+                    const buses = state.slide7Buses;
+                    const trains = state.slide7Trains;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-purple-100 text-purple-800 font-mono text-xs font-bold">Diapositiva 7 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Eventos Mutuamente Excluyentes</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Principio de la suma: "o"</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Las opciones no se mezclan, así que se suman</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-7 gap-4 my-4 items-center">
+                                <!-- 3 autobuses -->
+                                <div class="md:col-span-3 p-5 rounded-2xl bg-sky-50/80 border-2 border-sky-200 flex flex-col items-center">
+                                    <span class="text-lg font-extrabold text-sky-800 mb-3">${buses} autobuses</span>
+                                    <div class="flex flex-wrap justify-center gap-2">
+                                        ${Array.from({ length: buses }).map((_, i) => {
+                                            const name = `Autobús ${i + 1}`;
+                                            const sel = state.slide7Selected === name;
+                                            return `
+                                                <button onclick="state.slide7Selected = '${name}'; updateView();" class="px-3.5 py-2.5 rounded-xl font-mono text-xs font-bold border transition flex items-center gap-1.5 ${sel ? 'bg-sky-600 text-white border-sky-700 shadow-sm' : 'bg-white text-slate-700 border-sky-200 hover:bg-sky-100'}">
+                                                    <i class="fa-solid fa-bus"></i> ${name}
+                                                </button>
+                                            `;
+                                        }).join('')}
+                                    </div>
+                                </div>
+
+                                <!-- Conector "o" -->
+                                <div class="md:col-span-1 flex flex-col items-center justify-center">
+                                    <div class="w-12 h-12 rounded-2xl bg-purple-100 border-2 border-purple-300 flex items-center justify-center text-xl font-extrabold text-purple-800">
+                                        o
+                                    </div>
+                                    <span class="text-xs font-mono text-purple-700 mt-1 font-bold">+ (Suma)</span>
+                                </div>
+
+                                <!-- 2 trenes -->
+                                <div class="md:col-span-3 p-5 rounded-2xl bg-emerald-50/80 border-2 border-emerald-200 flex flex-col items-center">
+                                    <span class="text-lg font-extrabold text-emerald-800 mb-3">${trains} trenes</span>
+                                    <div class="flex flex-wrap justify-center gap-2">
+                                        ${Array.from({ length: trains }).map((_, i) => {
+                                            const name = `Tren ${i + 1}`;
+                                            const sel = state.slide7Selected === name;
+                                            return `
+                                                <button onclick="state.slide7Selected = '${name}'; updateView();" class="px-3.5 py-2.5 rounded-xl font-mono text-xs font-bold border transition flex items-center gap-1.5 ${sel ? 'bg-emerald-600 text-white border-emerald-700 shadow-sm' : 'bg-white text-slate-700 border-emerald-200 hover:bg-emerald-100'}">
+                                                    <i class="fa-solid fa-train"></i> ${name}
+                                                </button>
+                                            `;
+                                        }).join('')}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Total y selector -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                                <div class="text-base sm:text-xl font-mono font-extrabold text-slate-800">
+                                    ${buses} + ${trains} = <span class="text-purple-700">${buses + trains} formas</span>
+                                    <span class="text-xs font-sans font-normal text-slate-600 ml-2">(Opción elegida hoy: <strong>${state.slide7Selected}</strong>)</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs font-mono">
+                                    <button onclick="state.slide7Buses = 3; state.slide7Trains = 2; updateView();" class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700">Ejemplo original (3 + 2)</button>
+                                    <button onclick="state.slide7Buses = 4; state.slide7Trains = 3; updateView();" class="px-3 py-1.5 rounded-lg bg-purple-100 border border-purple-300 text-purple-800">Probar 4 + 3</button>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                '¿Cuándo sabemos que debemos SUMAR?',
+                                'Usamos el Principio de la Suma cuando debemos tomar <strong>una sola decisión</strong> entre conjuntos disjuntos: o viajas por autobús o viajas por tren, pero no puedes viajar en autobús y en tren al mismo tiempo.',
+                                'En programación dinámica y conteo, cuando dividimos un problema en casos separados que no se traslapan ("el último paso fue de tipo A <strong>o</strong> fue de tipo B"), el número total de soluciones es la suma de cada caso.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 8: Principio del producto: "y"
+                case 7: {
+                    const e = state.slide8Starters;
+                    const p = state.slide8Mains;
+                    const d = state.slide8Desserts;
+                    const total = e * p * d;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-purple-100 text-purple-800 font-mono text-xs font-bold">Diapositiva 8 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Decisiones Secuenciales Independientes</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Principio del producto: "y"</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Cada decisión se combina con cada opción de las otras</p>
+                            </div>
+
+                            <!-- 3 etapas del menú del PPTX -->
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-3 my-4 items-center">
+                                <div class="p-5 rounded-2xl bg-sky-50/80 border-2 border-sky-200 text-center">
+                                    <i class="fa-solid fa-bowl-food text-sky-600 text-2xl mb-2"></i>
+                                    <div class="text-2xl font-mono font-extrabold text-slate-800">${e} entradas</div>
+                                    <p class="text-xs text-slate-500 mt-1">Sopa, Ensalada, Crema...</p>
+                                </div>
+
+                                <div class="flex justify-center">
+                                    <span class="w-10 h-10 rounded-xl bg-purple-100 text-purple-800 font-mono font-extrabold text-xl flex items-center justify-center border border-purple-200">×</span>
+                                </div>
+
+                                <div class="p-5 rounded-2xl bg-purple-50/80 border-2 border-purple-200 text-center">
+                                    <i class="fa-solid fa-utensils text-purple-600 text-2xl mb-2"></i>
+                                    <div class="text-2xl font-mono font-extrabold text-slate-800">${p} platos</div>
+                                    <p class="text-xs text-slate-500 mt-1">Por cada entrada hay ${p} platos</p>
+                                </div>
+
+                                <div class="flex justify-center">
+                                    <span class="w-10 h-10 rounded-xl bg-purple-100 text-purple-800 font-mono font-extrabold text-xl flex items-center justify-center border border-purple-200">×</span>
+                                </div>
+
+                                <div class="p-5 rounded-2xl bg-emerald-50/80 border-2 border-emerald-200 text-center">
+                                    <i class="fa-solid fa-ice-cream text-emerald-600 text-2xl mb-2"></i>
+                                    <div class="text-2xl font-mono font-extrabold text-slate-800">${d} postres</div>
+                                    <p class="text-xs text-slate-500 mt-1">Por cada par hay ${d} postres</p>
+                                </div>
+                            </div>
+
+                            <!-- Resultado y controles -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div class="font-mono text-lg sm:text-2xl font-extrabold text-slate-800">
+                                    ${e} · ${p} · ${d} = <span class="text-emerald-700 bg-white px-3 py-1 rounded-xl border border-emerald-200">${total} comidas</span>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+                                    <button onclick="state.slide8Starters = 3; state.slide8Mains = 4; state.slide8Desserts = 2; updateView();" class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700">Restaurar 3 · 4 · 2</button>
+                                    <button onclick="state.slide8Desserts = state.slide8Desserts === 2 ? 3 : 2; updateView();" class="px-3 py-1.5 rounded-lg bg-emerald-100 border border-emerald-300 text-emerald-800">
+                                        Cambiar postres a ${d === 2 ? 3 : 2}
+                                    </button>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'El Árbol de Decisiones detrás de la Multiplicación',
+                                'Imagina un árbol: del inicio salen <strong>3 ramas</strong> (entradas). De la punta de cada entrada salen <strong>4 ramas</strong> (ya van <span class="font-mono">3 × 4 = 12</span> combinaciones de entrada y plato fuerte). Finalmente, de cada una de esas 12 ramas salen <strong>2 ramas</strong> de postre: <span class="font-mono">12 × 2 = 24</span> hojas en total.',
+                                'En C++ esto equivale a tres ciclos anidados o a calcular directamente el producto. ¡Cuidado! Al multiplicar muchas opciones el resultado crece muy rápido, por lo que suele requerirse <span class="font-mono">long long</span>.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 9: Cuidado con el orden
+                case 8: {
+                    const n = state.slide9Friends;
+                    const totalWays = n * (n - 1);
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-purple-100 text-purple-800 font-mono text-xs font-bold">Diapositiva 9 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Permutaciones sin Repetición (El Orden Importa)</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Cuidado con el orden</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Presidente y secretario de ${n} amigos</p>
+                            </div>
+
+                            <!-- Las 2 tarjetas comparativas exactas del PPTX -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 my-4">
+                                <div class="p-5 rounded-2xl bg-sky-50/90 border-2 border-sky-200 flex flex-col justify-between">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xs font-mono uppercase text-sky-700 font-bold">Caso A</span>
+                                        <span class="px-2.5 py-0.5 rounded-full bg-white text-sky-800 text-xs font-mono border border-sky-200">Disposición #1</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3 my-2">
+                                        <div class="p-3 rounded-xl bg-white border border-sky-200 text-center">
+                                            <span class="text-[11px] text-slate-500 block">Presidenta</span>
+                                            <span class="font-bold text-slate-800 text-base">Ana</span>
+                                        </div>
+                                        <div class="p-3 rounded-xl bg-white border border-sky-200 text-center">
+                                            <span class="text-[11px] text-slate-500 block">Secretario</span>
+                                            <span class="font-bold text-slate-800 text-base">Luis</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs sm:text-sm text-slate-700 mt-2 font-medium">
+                                        <i class="fa-solid fa-user-check text-sky-600 mr-1.5"></i>Una persona no puede ocupar dos cargos.
+                                    </p>
+                                </div>
+
+                                <div class="p-5 rounded-2xl bg-purple-50/90 border-2 border-purple-200 flex flex-col justify-between">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xs font-mono uppercase text-purple-700 font-bold">Caso B (Cargos invertidos)</span>
+                                        <span class="px-2.5 py-0.5 rounded-full bg-white text-purple-800 text-xs font-mono border border-purple-200">Disposición #2</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3 my-2">
+                                        <div class="p-3 rounded-xl bg-white border border-purple-200 text-center">
+                                            <span class="text-[11px] text-slate-500 block">Presidente</span>
+                                            <span class="font-bold text-slate-800 text-base">Luis</span>
+                                        </div>
+                                        <div class="p-3 rounded-xl bg-white border border-purple-200 text-center">
+                                            <span class="text-[11px] text-slate-500 block">Secretaria</span>
+                                            <span class="font-bold text-slate-800 text-base">Ana</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs sm:text-sm text-slate-700 mt-2 font-medium">
+                                        <i class="fa-solid fa-arrows-rotate text-purple-600 mr-1.5"></i>Es otra forma distinta de elegir.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Fórmula inferior del PPTX -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div class="font-mono text-sm sm:text-lg font-extrabold text-slate-800">
+                                    <span class="text-sky-700">${n} opciones</span> para presidente &nbsp;×&nbsp; <span class="text-purple-700">${n - 1} para secretario</span> &nbsp;=&nbsp; <span class="text-emerald-700 bg-white px-3 py-1 rounded-xl border border-slate-200">${totalWays}</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs font-mono">
+                                    <span class="text-slate-500">Amigos:</span>
+                                    ${[4, 5, 6].map(k => `
+                                        <button onclick="state.slide9Friends = ${k}; updateView();" class="px-3 py-1.5 rounded-lg border ${n === k ? 'bg-purple-600 text-white border-purple-700 font-bold' : 'bg-white text-slate-700 border-slate-300'}">${k}</button>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                '¿Por qué multiplicamos por 4 y no por 5 en el segundo cargo?',
+                                'Para elegir al presidente tenemos disponibles a los <strong>5 amigos</strong>. Pero una vez que alguien ocupa la presidencia, esa persona ya no puede ser secretario al mismo tiempo, así que quedan exactamente <strong>4 candidatos</strong> para el segundo puesto (<span class="font-mono">5 × 4 = 20</span>). Además, como los cargos tienen responsabilidades distintas, <span class="font-mono">(Ana, Luis)</span> es diferente de <span class="font-mono">(Luis, Ana)</span>.',
+                                'Si en cambio el problema pidiera elegir una "comisión de 2 personas iguales sin jerarquía", el orden NO importaría y dividiríamos entre 2: <span class="font-mono">(5 × 4) / 2 = 10</span>.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 10: Razonamiento por casos (Inclusión-Exclusión)
+                case 9: {
+                    const filter = state.slide10Filter;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 font-mono text-xs font-bold">Diapositiva 10 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Principio de Inclusión-Exclusión</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Razonamiento por casos</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Números del 1 al 30 que son pares o múltiplos de 3</p>
+                            </div>
+
+                            <!-- 3 tarjetas de conjuntos del PPTX + Grilla interactiva del 1 al 30 -->
+                            <div class="grid grid-cols-3 gap-3 my-3">
+                                <button onclick="state.slide10Filter = 'pares'; updateView();" class="p-3.5 rounded-2xl border-2 text-center transition ${filter === 'pares' ? 'bg-sky-100 border-sky-400 shadow-sm' : 'bg-sky-50/70 border-sky-200 hover:bg-sky-100/60'}">
+                                    <span class="text-xs font-mono uppercase text-sky-800 font-bold block">Pares (⌊30÷2⌋)</span>
+                                    <span class="text-2xl sm:text-3xl font-mono font-extrabold text-sky-900">15</span>
+                                </button>
+                                <button onclick="state.slide10Filter = 'ambos'; updateView();" class="p-3.5 rounded-2xl border-2 text-center transition ${filter === 'ambos' ? 'bg-purple-100 border-purple-400 shadow-sm' : 'bg-purple-50/70 border-purple-200 hover:bg-purple-100/60'}">
+                                    <span class="text-xs font-mono uppercase text-purple-800 font-bold block">Ambos (Múlt. de 6)</span>
+                                    <span class="text-2xl sm:text-3xl font-mono font-extrabold text-purple-900">5</span>
+                                </button>
+                                <button onclick="state.slide10Filter = 'mult3'; updateView();" class="p-3.5 rounded-2xl border-2 text-center transition ${filter === 'mult3' ? 'bg-emerald-100 border-emerald-400 shadow-sm' : 'bg-emerald-50/70 border-emerald-200 hover:bg-emerald-100/60'}">
+                                    <span class="text-xs font-mono uppercase text-emerald-800 font-bold block">Múltiplos de 3</span>
+                                    <span class="text-2xl sm:text-3xl font-mono font-extrabold text-emerald-900">10</span>
+                                </button>
+                            </div>
+
+                            <!-- Tablero de los números del 1 al 30 para visualizar la intersección -->
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 my-1">
+                                <div class="grid grid-cols-10 gap-1.5">
+                                    ${Array.from({ length: 30 }).map((_, idx) => {
+                                        const val = idx + 1;
+                                        const isEven = val % 2 === 0;
+                                        const isM3 = val % 3 === 0;
+                                        const isBoth = isEven && isM3;
+                                        let style = 'bg-white border-slate-200 text-slate-400';
+                                        if (filter === 'pares' && isEven) style = 'bg-sky-100 border-sky-400 text-sky-900 font-bold';
+                                        if (filter === 'mult3' && isM3) style = 'bg-emerald-100 border-emerald-400 text-emerald-900 font-bold';
+                                        if (filter === 'ambos' && isBoth) style = 'bg-purple-200 border-purple-500 text-purple-900 font-extrabold ring-1 ring-purple-400';
+                                        if (filter === 'union') {
+                                            if (isBoth) style = 'bg-purple-100 border-purple-400 text-purple-900 font-extrabold';
+                                            else if (isEven) style = 'bg-sky-100 border-sky-300 text-sky-900 font-bold';
+                                            else if (isM3) style = 'bg-emerald-100 border-emerald-300 text-emerald-900 font-bold';
+                                        }
+                                        return `<div class="py-1.5 rounded-lg border text-center font-mono text-xs transition ${style}">${val}</div>`;
+                                    }).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Fórmula de Inclusión-Exclusión del PPTX -->
+                            <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200 flex flex-col sm:flex-row items-center justify-between gap-3 mt-2">
+                                <p class="font-mono text-xs sm:text-base font-bold text-slate-800">
+                                    Total = 15 + 10 − 5 = <span class="text-emerald-700 underline">20</span> &nbsp;<span class="font-sans font-medium text-slate-600">(los de ambos se cuentan una sola vez)</span>
+                                </p>
+                                <button onclick="state.slide10Filter = 'union'; updateView();" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-amber-300 text-xs font-mono font-bold text-amber-900 shrink-0">
+                                    Ver los 20 seleccionados
+                                </button>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                '¿Por qué se resta 5 en 15 + 10 − 5?',
+                                'Los números <span class="font-mono">6, 12, 18, 24 y 30</span> son pares <strong>y también</strong> múltiplos de 3 (son múltiplos de 6). Cuando contamos los 15 pares ya los incluimos una vez, y al sumar los 10 múltiplos de 3 los volvimos a meter. Restar <span class="font-mono">5</span> corrige esa duplicidad para que cada número válido se cuente una única vez.',
+                                'Esta técnica se llama <strong>Principio de Inclusión-Exclusión</strong>: <span class="font-mono">|A ∪ B| = |A| + |B| − |A ∩ B|</span>. Permite responder problemas con <span class="font-mono">N = 10^18</span> haciendo solo tres divisiones enteras.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 11: Simular con tabla de seguimiento
+                case 10: {
+                    const activeStep = state.slide11ActiveStep;
+                    const traceRows = [
+                        { step: 'inicio', letter: '—', op: '—', count: 0 },
+                        { step: '1', letter: 'A', op: '+2', count: 2 },
+                        { step: '2', letter: 'B', op: '−1', count: 1 },
+                        { step: '3', letter: 'B', op: '−1', count: 0 },
+                        { step: '4', letter: 'A', op: '+2', count: 2 },
+                        { step: '5', letter: 'B', op: '−1', count: 1 }
+                    ];
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-teal-100 text-teal-800 font-mono text-xs font-bold">Diapositiva 11 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Prueba de Escritorio (Trace Table)</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Simular con tabla de seguimiento</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Contador en 0. Cada <span class="font-mono font-bold text-emerald-700">A</span> suma 2 y cada <span class="font-mono font-bold text-rose-700">B</span> resta 1</p>
+                            </div>
+
+                            <!-- Tabla de seguimiento exacta del PPTX -->
+                            <div class="my-3 overflow-x-auto rounded-2xl border border-slate-200 shadow-sm">
+                                <table class="w-full text-center font-mono text-xs sm:text-sm">
+                                    <thead class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                        <tr>
+                                            <th class="py-2.5 px-4">Paso</th>
+                                            <th class="py-2.5 px-4">Letra</th>
+                                            <th class="py-2.5 px-4">Operación</th>
+                                            <th class="py-2.5 px-4 text-sky-700">Contador</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200">
+                                        ${traceRows.map((r, idx) => {
+                                            const isCurrent = idx === activeStep;
+                                            const isVisible = idx <= activeStep;
+                                            return `
+                                                <tr onclick="state.slide11ActiveStep = ${idx}; updateView();" class="cursor-pointer transition ${isCurrent ? 'bg-sky-50 font-bold ring-2 ring-inset ring-sky-300' : (isVisible ? 'bg-white hover:bg-slate-50' : 'bg-slate-50/50 opacity-40')}">
+                                                    <td class="py-2 px-4 text-slate-700">${r.step}</td>
+                                                    <td class="py-2 px-4 font-bold ${r.letter === 'A' ? 'text-emerald-700' : (r.letter === 'B' ? 'text-rose-700' : 'text-slate-400')}">${r.letter}</td>
+                                                    <td class="py-2 px-4 ${r.op === '+2' ? 'text-emerald-700' : (r.op === '−1' ? 'text-rose-700' : 'text-slate-400')}">${r.op}</td>
+                                                    <td class="py-2 px-4 text-base font-extrabold text-sky-800">${isVisible ? r.count : '?'}</td>
+                                                </tr>
+                                            `;
+                                        }).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Controles paso a paso -->
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                                <span class="font-mono text-sm sm:text-base font-bold text-slate-800">
+                                    Resultado final para <span class="text-sky-700">ABBAB</span>: <span class="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-lg border border-emerald-300">1</span>
+                                </span>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="state.slide11ActiveStep = Math.max(0, state.slide11ActiveStep - 1); updateView();" class="px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-xs font-mono text-slate-700 hover:bg-slate-100">
+                                        ← Paso anterior
+                                    </button>
+                                    <button onclick="state.slide11ActiveStep = Math.min(5, state.slide11ActiveStep + 1); updateView();" class="px-3 py-1.5 rounded-xl bg-sky-600 text-white text-xs font-mono font-bold hover:bg-sky-700">
+                                        Siguiente paso →
+                                    </button>
+                                    <button onclick="state.slide11ActiveStep = 5; updateView();" class="px-3 py-1.5 rounded-xl bg-slate-200/70 text-slate-700 text-xs font-mono">
+                                        Ver todos
+                                    </button>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                '¿Por qué usar una tabla de seguimiento en lugar de calcular todo en la cabeza?',
+                                'Cuando tratamos de recordar mentalmente cómo cambia una variable a lo largo de varios pasos es muy fácil perder la cuenta. Anotar una fila por paso garantiza que cada transición dependa únicamente de la fila inmediata anterior.',
+                                'En C++ este proceso equivale exactamente a recorrer un <span class="font-mono">string s = "ABBAB";</span> con un ciclo <span class="font-mono">for (char c : s)</span> actualizando <span class="font-mono">if (c == \'A\') cont += 2; else cont -= 1;</span>.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 12: Laboratorio interactivo de simulación para ABBAB y cadenas personalizadas
+                case 11: {
+                    const str = state.slide11Str;
+                    let running = 0;
+                    const customSteps = [{ step: 'inicio', ch: '—', op: '—', val: 0 }];
+                    for (let i = 0; i < str.length; i++) {
+                        const ch = str[i];
+                        const delta = ch === 'A' ? 2 : -1;
+                        running += delta;
+                        customSteps.push({
+                            step: String(i + 1),
+                            ch,
+                            op: ch === 'A' ? '+2' : '−1',
+                            val: running
+                        });
+                    }
+                    const countA = str.split('').filter(c => c === 'A').length;
+                    const countB = str.split('').filter(c => c === 'B').length;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-teal-100 text-teal-800 font-mono text-xs font-bold">Diapositiva 12 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Simulación vs. Atajo Algebraico</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Resultado final para ${str}: ${running}</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Compara la simulación paso a paso con el conteo directo de letras A y B</p>
+                            </div>
+
+                            <!-- Constructor interactivo de cadena de eventos -->
+                            <div class="my-3 p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-xs font-mono text-slate-500 font-bold uppercase">Secuencia actual:</span>
+                                    ${str.split('').map((c, i) => `
+                                        <span class="px-3 py-1.5 rounded-xl font-mono text-sm font-extrabold border ${c === 'A' ? 'bg-emerald-100 border-emerald-300 text-emerald-800' : 'bg-rose-100 border-rose-300 text-rose-800'}">
+                                            ${i + 1}:${c}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="if(state.slide11Str.length < 8) { state.slide11Str += 'A'; updateView(); }" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-mono text-xs font-bold">+ Agregar A (+2)</button>
+                                    <button onclick="if(state.slide11Str.length < 8) { state.slide11Str += 'B'; updateView(); }" class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-mono text-xs font-bold">+ Agregar B (−1)</button>
+                                    <button onclick="state.slide11Str = 'ABBAB'; updateView();" class="px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-slate-700 font-mono text-xs">Restaurar ABBAB</button>
+                                </div>
+                            </div>
+
+                            <!-- Comparativa entre rastro paso a paso y fórmula por conteo -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+                                <div class="p-4 rounded-2xl bg-sky-50/80 border border-sky-200">
+                                    <span class="text-xs font-mono uppercase text-sky-800 font-bold block mb-2">1. Evolución del Contador</span>
+                                    <div class="flex flex-wrap items-center gap-1.5 font-mono text-xs sm:text-sm">
+                                        ${customSteps.map((st, i) => `
+                                            <span class="px-2.5 py-1 rounded-lg bg-white border border-sky-200 text-slate-800 font-bold">
+                                                ${st.val}
+                                            </span>
+                                            ${i < customSteps.length - 1 ? `<span class="text-slate-400">→</span>` : ''}
+                                        `).join('')}
+                                    </div>
+                                    <p class="text-xs text-slate-600 mt-3">
+                                        Útil cuando el problema pregunta el valor en cada instante o si el contador nunca debe bajar de cero.
+                                    </p>
+                                </div>
+
+                                <div class="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200">
+                                    <span class="text-xs font-mono uppercase text-emerald-800 font-bold block mb-2">2. Comprobación por Conteo</span>
+                                    <div class="font-mono text-base sm:text-lg font-extrabold text-slate-800">
+                                        (${countA} letras A × 2) − (${countB} letras B × 1) = <span class="text-emerald-700">${countA * 2 - countB}</span>
+                                    </div>
+                                    <p class="text-xs text-slate-600 mt-2">
+                                        Como la suma es conmutativa y asociativa, el resultado final depende solo de cuántas <strong>A</strong> (${countA}) y cuántas <strong>B</strong> (${countB}) aparecieron.
+                                    </p>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Cuándo simular paso a paso y cuándo usar una fórmula',
+                                'Si solo te piden el valor final después de aplicar sumas y restas fijas, basta con contar cuántas veces ocurre cada letra: <span class="font-mono">2·(#A) − 1·(#B)</span>. Pero si las reglas cambian según el estado actual (por ejemplo, "si el contador llega a 0 se duplica"), entonces es obligatorio simular paso a paso con la tabla.',
+                                'En concursos, simular paso a paso toma tiempo <span class="font-mono">O(N)</span>, lo cual es rapidísimo hasta para cadenas de varios millones de caracteres.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 13: Errores frecuentes
+                case 12: {
+                    const errorsList = [
+                        {
+                            wrong: '7 ÷ 2 en división entera da 3, no 3.5',
+                            right: 'Explicación: En aritmética entera y entre variables int de C++, la parte decimal se trunca hacia cero. Caben 3 parejas completas en 7 y sobra 1 (residuo).'
+                        },
+                        {
+                            wrong: '47 alumnos en mesas de 6 necesitan 8 mesas, no 7',
+                            right: 'Explicación: 47 ÷ 6 da 7 mesas llenas (42 alumnos), pero faltan 5 alumnos por sentar. Se requiere redondear hacia arriba: ⌈47 ÷ 6⌉ = (47 + 5) ÷ 6 = 8 mesas.'
+                        },
+                        {
+                            wrong: 'Sumar cuando debía multiplicarse (o al revés)',
+                            right: 'Explicación: Pregúntate siempre si eliges UNA sola opción entre varias ("o" → suma) o si tomas una secuencia de decisiones combinadas ("y" → multiplicación).'
+                        },
+                        {
+                            wrong: 'Olvidar restar la intersección en los casos',
+                            right: 'Explicación: Si dos casos pueden ocurrir al mismo tiempo (como ser par y múltiplo de 3, es decir, múltiplo de 6), debes restar la intersección para no contarlos doble.'
+                        }
+                    ];
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 font-mono text-xs font-bold">Diapositiva 13 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Lista de Verificación antes del Examen</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Errores frecuentes</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Revísalos antes del examen <span class="text-xs text-teal-700 font-mono font-semibold">(Haz clic en cada tarjeta para ver la explicación detallada)</span></p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                                ${errorsList.map((item, idx) => {
+                                    const isFixed = state.slide12Fixed[idx];
+                                    return `
+                                        <div onclick="state.slide12Fixed[${idx}] = !state.slide12Fixed[${idx}]; updateView();" class="cursor-pointer p-5 rounded-2xl border-2 transition flex items-start gap-4 ${isFixed ? 'bg-emerald-50/80 border-emerald-300 shadow-sm' : 'bg-amber-50/60 border-amber-200 hover:border-amber-300'}">
+                                            <div class="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-lg border ${isFixed ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-amber-100 text-amber-700 border-amber-200'}">
+                                                <i class="fa-solid ${isFixed ? 'fa-check' : 'fa-triangle-exclamation'}"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-bold text-slate-800 text-sm sm:text-base">${item.wrong}</p>
+                                                <p class="text-xs sm:text-sm mt-2 leading-relaxed ${isFixed ? 'text-emerald-800 font-medium' : 'text-slate-500'}">
+                                                    ${isFixed ? item.right : 'Haz clic para desplegar el porqué y cómo evitarlo →'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Consejo de Competencia para Detectar Casos Borde',
+                                'Antes de entregar un examen o enviar código, verifica qué pasa cuando la división es exacta (por ejemplo, 48 alumnos en mesas de 6 deben dar exactamente 8 mesas, no 9) y cuando sobra 1 sola persona (49 alumnos en mesas de 6 necesitan 9 mesas).',
+                                'La expresión entera <span class="font-mono">(a + b - 1) / b</span> resuelve correctamente ambos casos borde sin necesidad de escribir un <span class="font-mono">if (a % b != 0)</span> adicional.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 14: Resumen de la clase (Con explicación interactiva en "Para saber más..." al hacer clic en cada tarjeta)
+                case 13: {
+                    const activePillar = state.slide13Pillar;
+                    const pillarDetails = {
+                        paridad: {
+                            title: 'Paridad: Residuo 0 al dividir entre 2',
+                            summary: 'Un número entero es par cuando al agruparlo en parejas no sobra nada (<span class="font-mono font-bold text-teal-800">n % 2 == 0</span>), e impar cuando sobra 1.',
+                            math: 'Todo entero par tiene la forma <span class="font-mono">2k</span> y todo impar la forma <span class="font-mono">2k + 1</span>. Además, la paridad cumple reglas muy útiles: <span class="font-mono">par + par = par</span>, <span class="font-mono">impar + impar = par</span>, y <span class="font-mono">par + impar = impar</span>.',
+                            cpp: 'En C++ puedes consultar la paridad con <span class="font-mono">n % 2 == 0</span>. En números positivos o máscaras de bits también verás frecuentemente <span class="font-mono">(n & 1) == 0</span> para saber si el último bit en binario es cero (par).'
+                        },
+                        aritmetica: {
+                            title: 'Aritmética: Cociente, residuo y techo',
+                            summary: 'Toda división entera separa una cantidad en grupos completos (<span class="font-mono font-bold text-sky-800">⌊a ÷ b⌋</span>) y elementos sueltos (<span class="font-mono font-bold text-sky-800">a % b</span>), o bien redondea hacia arriba (<span class="font-mono font-bold text-sky-800">⌈a ÷ b⌉</span>).',
+                            math: 'Siempre se cumple la identidad fundamental <span class="font-mono">a = b · q + r</span> con <span class="font-mono">0 ≤ r < b</span>. Si necesitas contar múltiplos de <span class="font-mono">m</span> entre <span class="font-mono">1</span> y <span class="font-mono">N</span> usas piso: <span class="font-mono">⌊N ÷ m⌋</span>; si necesitas cubrir <span class="font-mono">a</span> objetos con cajas de capacidad <span class="font-mono">b</span> sin dejar nada afuera usas techo: <span class="font-mono">⌈a ÷ b⌉ = (a + b − 1) ÷ b</span>.',
+                            cpp: 'En C++ con enteros positivos: piso es <span class="font-mono">a / b</span>, residuo es <span class="font-mono">a % b</span>, y techo es <span class="font-mono">(a + b - 1) / b</span>. Nunca uses <span class="font-mono">float</span> para divisiones exactas de conteo.'
+                        },
+                        conteo: {
+                            title: 'Conteo: "O" suma, "Y" multiplica',
+                            summary: 'Si eliges entre alternativas que no ocurren juntas sumas (<span class="font-mono font-bold text-purple-800">+</span>); si combinas decisiones en secuencia multiplicas (<span class="font-mono font-bold text-purple-800">×</span>).',
+                            math: 'El <strong>Principio de la Suma</strong> une opciones mutuamente excluyentes (3 autobuses o 2 trenes = <span class="font-mono">5</span>). El <strong>Principio del Producto</strong> encadena etapas independientes (3 entradas × 4 platos × 2 postres = <span class="font-mono">24</span>). Y si una persona u objeto no puede repetirse, cada etapa reduce en 1 las opciones disponibles (<span class="font-mono">5 × 4 = 20</span>).',
+                            cpp: 'Estos dos principios permiten reemplazar algoritmos lentos que generan todas las combinaciones posibles por una sola línea aritmética en tiempo <span class="font-mono">O(1)</span>.'
+                        },
+                        casos: {
+                            title: 'Casos: Revisar, simular y no repetir',
+                            summary: 'Al dividir un problema en casos debemos restar las intersecciones repetidas (<span class="font-mono font-bold text-amber-800">|A| + |B| − |A ∩ B|</span>) y apoyarnos en tablas de seguimiento.',
+                            math: 'Cuando dos propiedades pueden cumplirse al mismo tiempo (como ser par y múltiplo de 3), sumar ambos conteos cuenta dos veces a los múltiplos de 6. Restar la intersección garantiza que cada caso válido sea contado exactamente una vez.',
+                            cpp: 'Para problemas de simulación como <span class="font-mono">ABBAB</span>, construir una tabla de seguimiento paso a paso antes de programar te asegura entender todas las reglas y tener listo tu propio caso de prueba.'
+                        }
+                    };
+                    const currentP = pillarDetails[activePillar];
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 font-mono text-xs font-bold">Diapositiva 14 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Síntesis General · Haz clic en cada tarjeta para profundizar</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Resumen de la clase</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Selecciona cada pilar para ver su explicación detallada en el área inferior</p>
+                            </div>
+
+                            <!-- 4 tarjetas del Resumen del PPTX -->
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-4">
+                                <div onclick="state.slide13Pillar = 'paridad'; updateView();" class="cursor-pointer p-5 rounded-2xl border-2 transition flex flex-col items-center text-center ${activePillar === 'paridad' ? 'bg-teal-50 border-teal-400 shadow-md ring-2 ring-teal-200' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
+                                    <div class="w-12 h-12 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-2xl mb-3 border border-teal-200">
+                                        <i class="fa-solid fa-shuffle"></i>
+                                    </div>
+                                    <h3 class="font-bold text-slate-800 text-base sm:text-lg">Paridad</h3>
+                                    <p class="text-xs text-slate-600 mt-1">Residuo 0 al dividir entre 2</p>
+                                </div>
+
+                                <div onclick="state.slide13Pillar = 'aritmetica'; updateView();" class="cursor-pointer p-5 rounded-2xl border-2 transition flex flex-col items-center text-center ${activePillar === 'aritmetica' ? 'bg-sky-50 border-sky-400 shadow-md ring-2 ring-sky-200' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
+                                    <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-2xl mb-3 border border-sky-200">
+                                        <i class="fa-solid fa-divide"></i>
+                                    </div>
+                                    <h3 class="font-bold text-slate-800 text-base sm:text-lg">Aritmética</h3>
+                                    <p class="text-xs text-slate-600 mt-1">Cociente, residuo y techo</p>
+                                </div>
+
+                                <div onclick="state.slide13Pillar = 'conteo'; updateView();" class="cursor-pointer p-5 rounded-2xl border-2 transition flex flex-col items-center text-center ${activePillar === 'conteo' ? 'bg-purple-50 border-purple-400 shadow-md ring-2 ring-purple-200' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
+                                    <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-2xl mb-3 border border-purple-200">
+                                        <i class="fa-solid fa-arrow-up-1-9"></i>
+                                    </div>
+                                    <h3 class="font-bold text-slate-800 text-base sm:text-lg">Conteo</h3>
+                                    <p class="text-xs text-slate-600 mt-1">"O" suma, "Y" multiplica</p>
+                                </div>
+
+                                <div onclick="state.slide13Pillar = 'casos'; updateView();" class="cursor-pointer p-5 rounded-2xl border-2 transition flex flex-col items-center text-center ${activePillar === 'casos' ? 'bg-amber-50 border-amber-400 shadow-md ring-2 ring-amber-200' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
+                                    <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl mb-3 border border-amber-200">
+                                        <i class="fa-solid fa-filter"></i>
+                                    </div>
+                                    <h3 class="font-bold text-slate-800 text-base sm:text-lg">Casos</h3>
+                                    <p class="text-xs text-slate-600 mt-1">Revisar y no repetir</p>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-700">
+                                <span class="font-bold text-slate-900">Síntesis activa:</span> ${currentP.summary}
+                            </div>
+
+                            ${renderDeepExplanation(
+                                currentP.title,
+                                currentP.math,
+                                currentP.cpp
+                            )}
+                        </div>
+                    `;
+                }
+
+                // DIAPOSITIVA 15: ¿Por qué 0 es par?
+                case 14: {
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 font-mono text-xs font-bold">Diapositiva 15 de 15</span>
+                                    <span class="text-xs text-slate-500 font-medium">Pregunta de Cierre y Demostración</span>
+                                </div>
+                                <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-800">¿Por qué 0 es par?</h2>
+                                <p class="text-slate-600 text-base sm:text-xl mt-2 font-medium">
+                                    Pista: al dividir 0 entre 2, ¿qué residuo queda?
+                                </p>
+                            </div>
+
+                            <!-- 3 Pruebas Visuales de por qué 0 es par -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                                <div class="p-5 rounded-2xl bg-teal-50/80 border-2 border-teal-200 flex flex-col justify-between">
+                                    <div class="w-11 h-11 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-xl mb-3 border border-teal-200">
+                                        <i class="fa-solid fa-percent"></i>
+                                    </div>
+                                    <span class="text-xs font-mono uppercase text-teal-800 font-bold">1. Por su Residuo</span>
+                                    <div class="text-2xl font-mono font-extrabold text-slate-800 my-2">0 % 2 = 0</div>
+                                    <p class="text-xs sm:text-sm text-slate-700">
+                                        Como <span class="font-mono font-bold">0 = 2 · 0 + 0</span>, al dividir 0 entre 2 el cociente es 0 y el <strong>residuo es exactamente 0</strong>.
+                                    </p>
+                                </div>
+
+                                <div class="p-5 rounded-2xl bg-sky-50/80 border-2 border-sky-200 flex flex-col justify-between">
+                                    <div class="w-11 h-11 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-xl mb-3 border border-sky-200">
+                                        <i class="fa-solid fa-user-group"></i>
+                                    </div>
+                                    <span class="text-xs font-mono uppercase text-sky-800 font-bold">2. Por Parejas</span>
+                                    <div class="text-2xl font-mono font-extrabold text-slate-800 my-2">0 sueltos</div>
+                                    <p class="text-xs sm:text-sm text-slate-700">
+                                        Si hay 0 objetos sobre la mesa y agrupamos de dos en dos, se forman 0 parejas y <strong>no queda ningún elemento sin pareja</strong>.
+                                    </p>
+                                </div>
+
+                                <div class="p-5 rounded-2xl bg-amber-50/80 border-2 border-amber-200 flex flex-col justify-between">
+                                    <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl mb-3 border border-amber-200">
+                                        <i class="fa-solid fa-lightbulb"></i>
+                                    </div>
+                                    <span class="text-xs font-mono uppercase text-amber-800 font-bold">3. En la Recta Numérica</span>
+                                    <div class="text-xl font-mono font-extrabold text-slate-800 my-2">−2, −1, <span class="text-emerald-700 underline">0</span>, 1, 2</div>
+                                    <p class="text-xs sm:text-sm text-slate-700">
+                                        Los números enteros alternan siempre entre par e impar. Como <span class="font-mono">−1</span> y <span class="font-mono">1</span> son impares, el <span class="font-mono font-bold">0</span> en medio es par.
+                                    </p>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'El Cero en Aritmética Modular y Programación',
+                                'Por definición matemática, un número entero <span class="font-mono">n</span> es múltiplo de <span class="font-mono">m</span> si existe un entero <span class="font-mono">k</span> tal que <span class="font-mono">n = m · k</span>. Tomando <span class="font-mono">k = 0</span> vemos que <span class="font-mono">0 = 2 · 0</span>, y de hecho ¡el 0 es múltiplo de cualquier entero positivo!',
+                                'En C++, evaluar <span class="font-mono">0 % 2 == 0</span> devuelve <span class="font-mono">true</span>. Ten siempre en cuenta el caso <span class="font-mono">N = 0</span> en tus programas porque suele ser uno de los casos de prueba ocultos más comunes en competencias.'
+                            )}
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function toggleDeepNotes() {
+            showDeepNotes = !showDeepNotes;
+            const label = document.getElementById('deep-toggle-label');
+            if (label) {
+                label.textContent = showDeepNotes ? 'Para saber más...: Visible' : 'Para saber más...: Oculto';
+            }
+            updateView();
+        }
+
+        function updateView() {
+            const stage = document.getElementById('slide-stage');
+            stage.innerHTML = renderSlideContent(currentSlide);
+
+            // Actualizar contador y barra de progreso
+            document.getElementById('slide-counter-badge').textContent = `${currentSlide + 1} / ${totalSlides}`;
+            const progressPercent = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // Estado de botones anterior / siguiente
+            document.getElementById('btn-prev').disabled = (currentSlide === 0);
+            document.getElementById('btn-next').disabled = (currentSlide === totalSlides - 1);
+
+            renderDots();
+            renderIndexCards();
+        }
+
+        function renderDots() {
+            const container = document.getElementById('dots-container');
+            container.innerHTML = slidesMeta.map((s, idx) => `
+                <button onclick="goToSlide(${idx})" title="${s.num}. ${s.title}" class="h-2.5 rounded-full transition-all ${idx === currentSlide ? 'w-7 bg-teal-600' : 'w-2.5 bg-slate-300 hover:bg-slate-400'}"></button>
+            `).join('');
+        }
+
+        function renderIndexCards() {
+            const grid = document.getElementById('index-grid');
+            grid.innerHTML = slidesMeta.map((s, idx) => `
+                <button onclick="goToSlide(${idx}); toggleIndexModal();" class="text-left p-4 rounded-2xl border transition flex items-start gap-3 ${idx === currentSlide ? 'bg-teal-50 border-teal-400 shadow-sm' : 'bg-slate-50/70 border-slate-200 hover:bg-slate-100'}">
+                    <div class="w-9 h-9 rounded-xl bg-white text-teal-700 flex items-center justify-center shrink-0 font-mono text-xs font-bold border border-slate-200 shadow-sm">
+                        ${s.num}
+                    </div>
+                    <div class="overflow-hidden">
+                        <h4 class="font-bold text-slate-800 text-sm truncate">${s.title}</h4>
+                        <p class="text-xs text-slate-500 line-clamp-2 mt-0.5">${s.subtitle}</p>
+                    </div>
+                </button>
+            `).join('');
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateView();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateView();
+            }
+        }
+
+        function goToSlide(index) {
+            if (index >= 0 && index < totalSlides) {
+                currentSlide = index;
+                updateView();
+            }
+        }
+
+        function toggleIndexModal() {
+            const modal = document.getElementById('index-modal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+
+        function toggleFullScreen() {
+            const icon = document.getElementById('fullscreen-icon');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+                icon.classList.replace('fa-expand', 'fa-compress');
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    icon.classList.replace('fa-compress', 'fa-expand');
+                }
+            }
+        }
+
+        // Navegación con teclado (flechas izquierda/derecha)
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('index-modal');
+                if (!modal.classList.contains('hidden')) toggleIndexModal();
+            }
+        });
+
+        // Soporte para gestos táctiles (swipe en móviles/tablets)
+        let touchStartX = 0;
+        let touchEndX = 0;
+        window.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        window.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 60) {
+                if (diff > 0) nextSlide();
+                else prevSlide();
+            }
+        }, { passive: true });
+
+        window.onload = function () {
+            updateView();
+        };
+    </script>
+</body>
+</html>
