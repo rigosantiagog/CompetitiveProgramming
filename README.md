@@ -1,6 +1,6 @@
 # Programación Competitiva en C++ · Bug Squad
 
-Sitio estático (HTML5, CSS3, Bootstrap 5, Font Awesome y Google Fonts) del curso.
+Sitio estático (HTML5, CSS3, Bootstrap 5, Font Awesome, Google Fonts y KaTeX) del curso.
 No requiere compilación: Vercel lo publica tal cual.
 
 Diseñado y organizado por Prof. Rigoberto Santiago Garzón.
@@ -9,48 +9,29 @@ Diseñado y organizado por Prof. Rigoberto Santiago Garzón.
 
 ```
 curso-cpp-web/
-├── index.html                  Portada, temario y acceso al Bloque 1
+├── index.html                  Portada, ruta de bloques, guía de estudio y acceso a NotebookLM
 ├── bloque1/
-│   └── index.html              Bloque 1: Aprender, quiz conceptual y ejercicios por tema
+│   ├── index.html              Bloque 1: Lectura, Sección A · Práctica y Sección B · Quizz
+│   ├── presentacion-tema1.html Presentación interactiva del Tema 1
+│   ├── presentacion-tema2.html Presentación interactiva del Tema 2
+│   └── presentacion-tema3.html Presentación interactiva del Tema 3
 ├── css/
-│   └── estilos.css             Paleta, tipografía y diseño del sitio
+│   └── estilos.css             Paleta, tipografía y diseño responsivo del sitio
 ├── js/
-│   ├── ejercicios-bloque1.js   Banco de 30 ejercicios (respuestas y explicaciones)
-│   ├── quiz-conceptual.js      Quiz conceptual por tema (8 preguntas, aprueba con 6)
-│   └── quiz.js                 Motor de ejercicios con retroalimentación
+│   ├── lecturas-bloque1.js     Lecturas completas de los temas del Bloque 1
+│   ├── ejercicios-bloque1.js   Banco de 34 ejercicios (14 del Tema 1 + 10 del Tema 2 + 10 del Tema 3)
+│   ├── quiz-conceptual.js      Quizz del Tema 1 (10 preguntas con clave) y quizzes de Temas 2 y 3
+│   ├── quiz.js                 Motor de práctica con normalización y soluciones desplegables
+│   └── pestanas-bloque1.js     Navegación del bloque y renderizado matemático con KaTeX (en memoria)
 └── assets/
     └── docs/                   Presentaciones (PPTX) y PDF de ejercicios para alumnos
 ```
 
-## Archivos en `assets/docs/`
+## Asistente de estudio en NotebookLM
 
-| Archivo | Uso |
-|---|---|
-| `Tema2_Aritmetica_conteo_y_casos.pptx` | Presentación del tema 2 (descarga) |
-| `Tema3_Geometria_trigonometria_y_patrones.pptx` | Presentación del tema 3 (descarga) |
-| `Ejercicios_y_tareas_Bloque1.pdf` | Ejercicios y tareas para alumnos (sin clave) |
+- Cuaderno especializado del curso: [https://notebook.google.com/notebook/96292e5d-c336-4242-b978-d758b5de839b](https://notebook.google.com/notebook/96292e5d-c336-4242-b978-d758b5de839b)
 
-La presentación del tema 1 no es un archivo: se abre desde un enlace externo en una ventana dentro de la página (`bloque1/index.html`, atributo `data-src`).
+## Privacidad y funcionamiento en memoria
 
-## Subir a GitHub y publicar en Vercel
-
-1. Crea un repositorio nuevo en GitHub (por ejemplo, `curso-cpp-web`).
-2. Sube todo el contenido de esta carpeta:
-   ```bash
-   cd curso-cpp-web
-   git init
-   git add .
-   git commit -m "Bloque 1 del curso"
-   git branch -M main
-   git remote add origin https://github.com/TU_USUARIO/curso-cpp-web.git
-   git push -u origin main
-   ```
-3. En [vercel.com](https://vercel.com), elige **Add New → Project**, importa el repositorio y pulsa **Deploy**.
-   No hay que configurar nada.
-
-## Notas
-
-- Colores y tipografía están en `css/estilos.css`, en las variables de `:root`.
-- Las respuestas de los ejercicios y del quiz están en los archivos de `js/`. Como el sitio es público, se pueden ver en el código fuente de la página.
-- Si la presentación del tema 1 no se muestra dentro de la ventana, el botón **Abrir en otra pestaña** del mismo modal la abre en una pestaña nueva.
-- En preparación: ejemplos resueltos en C++ y problemas tipo OMI, ICPC e IOI.
+- Todo el avance de la práctica y la calificación del quizz se procesan únicamente en la memoria de la página.
+- No se guarda información en el navegador ni en ningún servidor.

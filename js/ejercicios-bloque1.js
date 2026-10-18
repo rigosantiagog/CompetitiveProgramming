@@ -1,62 +1,179 @@
 /* ==========================================================
    Bloque 1 · Banco de ejercicios
-   Fuente: temas 1, 2 y 3 (clase1_ejercicios.md, clase2_ejercicios.md, clase3_ejercicios.md)
-   Las fórmulas van en LaTeX entre $…$ y se muestran con MathJax.
-   Tipos de respuesta:
-     "num"   -> el alumno escribe un número (campo: valor)
-     "opc"   -> el alumno elige una opción (campos: opciones, correcta = índice)
-     "multi" -> varios números (campo: campos = [{etiqueta, valor}, ...])
+   Tema 1 actualizado con 14 ejercicios de respuesta abierta,
+   normalización simbólica/algebraica y solución desplegable.
+   Las fórmulas se muestran con KaTeX ($…$ y $$…$$).
    ========================================================== */
 
 const EJERCICIOS_BLOQUE1 = [
 
-  /* ---------------- TEMA 1 · Álgebra y lógica ---------------- */
+  /* ---------------- TEMA 1 · Álgebra y lógica (14 ejercicios) ---------------- */
 
-  { clase: 1, parte: "A", n: 1, tipo: "num", valor: 13,
-    enunciado: "Evalúa $3x - 2$ cuando $x = 5$.",
-    explicacion: "$3 \\cdot 5 - 2 = 15 - 2 = 13$." },
+  {
+    clase: 1,
+    grupo: "Evaluación de expresiones",
+    n: 1,
+    titulo: "Ejercicio 1 · Evaluación de expresiones.",
+    enunciado: "Evalúa la expresión $f(x, y) = 2x^2 - 3xy + y^2$ para $x = -3$ y $y = 4$.",
+    tipo: "texto",
+    aceptadas: ["70"],
+    solucion: "<ol><li>Sustituimos: $f(-3, 4) = 2(-3)^2 - 3(-3)(4) + (4)^2$.</li><li>Potencias: $(-3)^2 = 9$ y $4^2 = 16$. Recuerda que una potencia par de un número negativo es positiva.</li><li>Multiplicaciones: $-3 \\cdot (-3) \\cdot 4 = +36$. Entonces $2(9) = 18$.</li><li>Suma final: $f(-3, 4) = 18 + 36 + 16 = 70$.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> $70$.</p>"
+  },
 
-  { clase: 1, parte: "A", n: 2, tipo: "num", valor: 11,
-    enunciado: "Resuelve $x + 9 = 20$.",
-    explicacion: "Restamos $9$ a ambos lados: $x = 11$. Comprobación: $11 + 9 = 20$." },
+  {
+    clase: 1,
+    grupo: "Evaluación de expresiones",
+    n: 2,
+    titulo: "Ejercicio 2 · Propiedades de las operaciones.",
+    enunciado: "Simplifica la expresión $3(2x - 5) - 4(x - 2) + 0$, agrupando términos semejantes.",
+    tipo: "texto",
+    aceptadas: ["2x-7", "-7+2x"],
+    solucion: "<ol><li>Distributiva: $3(2x) - 3(5) - 4(x) + 4(2) = 6x - 15 - 4x + 8$. Observa que $-4 \\cdot (-2) = +8$.</li><li>El $+0$ es el elemento neutro aditivo, así que no cambia la expresión.</li><li>Agrupamos términos semejantes: $(6x - 4x) + (-15 + 8) = 2x - 7$.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> $2x - 7$.</p>"
+  },
 
-  { clase: 1, parte: "A", n: 3, tipo: "opc",
-    enunciado: "Simplifica $4(x + 2) - 3x$.",
-    opciones: ["$x + 8$", "$x + 2$", "$7x + 8$", "$x - 8$"], correcta: 0,
-    explicacion: "Distribuimos: $4x + 8 - 3x = x + 8$." },
+  {
+    clase: 1,
+    grupo: "Evaluación de expresiones",
+    n: 3,
+    titulo: "Ejercicio 3 · Términos semejantes.",
+    enunciado: "Reduce la expresión $5a - [2b - 3(a - 2b) + 4a]$.",
+    tipo: "texto",
+    aceptadas: ["4a-8b", "-8b+4a"],
+    solucion: "<ol><li>Distribuimos el $-3$ dentro del paréntesis: $5a - [2b - 3a + 6b + 4a]$.</li><li>Agrupamos dentro del corchete: $(-3a + 4a) = a$ y $(2b + 6b) = 8b$. Queda $5a - [a + 8b]$.</li><li>Distribuimos el signo negativo del corchete: $5a - a - 8b$.</li><li>Reducimos: $4a - 8b$.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> $4a - 8b$.</p>"
+  },
 
-  { clase: 1, parte: "A", n: 4, tipo: "opc",
-    enunciado: "Escribe la negación de: «Si tengo tarea, entonces no salgo».",
-    opciones: ["Tengo tarea $\\land$ salgo.", "No tengo tarea $\\land$ salgo.", "Tengo tarea $\\lor$ salgo.", "No tengo tarea $\\lor$ no salgo."], correcta: 0,
-    explicacion: "$\\neg(p \\rightarrow \\neg q) \\equiv p \\land q$. Con $p$ = tengo tarea y $q$ = salgo, la negación es «tengo tarea y salgo»." },
+  {
+    clase: 1,
+    grupo: "Evaluación de expresiones",
+    n: 4,
+    titulo: "Ejercicio 4 · Evaluación con signos.",
+    enunciado: "Calcula el valor de $E = -2(a - b) + 3(ab - c)$ para $a = -2$, $b = -5$ y $c = 3$.",
+    tipo: "texto",
+    aceptadas: ["15"],
+    solucion: "<ol><li>Evaluamos por bloques: $a - b = -2 - (-5) = 3$, y $ab - c = (-2)(-5) - 3 = 10 - 3 = 7$.</li><li>Sustituimos: $E = -2(3) + 3(7)$.</li><li>Calculamos: $E = -6 + 21 = 15$.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> $15$.</p>"
+  },
 
-  { clase: 1, parte: "A", n: 5, tipo: "opc",
-    enunciado: "Sean $p = V$, $q = F$, $r = V$. ¿Cuál es el valor de $(p \\lor q) \\land \\neg r$?",
-    opciones: ["Verdadero", "Falso"], correcta: 1,
-    explicacion: "$p \\lor q = V$, $\\neg r = F$, y $V \\land F = F$." },
+  {
+    clase: 1,
+    grupo: "Ecuaciones de primer grado",
+    n: 5,
+    titulo: "Ejercicio 5.",
+    enunciado: "Resuelve $4x - 7 = 13$. Piensa en la balanza: haz lo mismo en ambos lados.",
+    tipo: "texto",
+    aceptadas: ["5", "x=5"],
+    solucion: "<ol><li>Sumamos $7$ en ambos lados: $4x = 20$.</li><li>Dividimos entre $4$: $x = 5$.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> $x = 5$.</p>"
+  },
 
-  { clase: 1, parte: "B", n: 6, tipo: "num", valor: 14,
-    enunciado: "Evalúa $2 + 3 \\cdot 4$. Escribe el resultado (explica por qué no es $20$).",
-    explicacion: "Primero se multiplica: $3 \\cdot 4 = 12$. Después se suma: $2 + 12 = 14$. Si se sumara primero, se obtendría $20$, pero eso no respeta la jerarquía de operaciones." },
+  {
+    clase: 1,
+    grupo: "Ecuaciones de primer grado",
+    n: 6,
+    titulo: "Ejercicio 6.",
+    enunciado: "Resuelve $2(3x - 4) = 3(x + 2) + 1$.",
+    tipo: "texto",
+    aceptadas: ["5", "x=5"],
+    solucion: "<ol><li>Distributiva en ambos lados: $6x - 8 = 3x + 6 + 1$.</li><li>Simplificamos el lado derecho: $6x - 8 = 3x + 7$.</li><li>Restamos $3x$: $3x - 8 = 7$.</li><li>Sumamos $8$: $3x = 15$, y dividimos entre $3$: $x = 5$.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> $x = 5$.</p>"
+  },
 
-  { clase: 1, parte: "B", n: 7, tipo: "num", valor: 5,
-    enunciado: "Resuelve $5x - 7 = 18$.",
-    explicacion: "$5x = 25$, entonces $x = 5$. Comprobación: $5 \\cdot 5 - 7 = 18$." },
+  {
+    clase: 1,
+    grupo: "Ecuaciones de primer grado",
+    n: 7,
+    titulo: "Ejercicio 7.",
+    enunciado: "Resuelve $7x - 3 = 2x + 12$, con la variable en ambos lados.",
+    tipo: "texto",
+    aceptadas: ["3", "x=3"],
+    solucion: "<ol><li>Restamos $2x$: $5x - 3 = 12$.</li><li>Sumamos $3$: $5x = 15$.</li><li>Dividimos entre $5$: $x = 3$.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> $x = 3$.</p>"
+  },
 
-  { clase: 1, parte: "B", n: 8, tipo: "opc",
-    enunciado: "Expande y simplifica $3(2x + 5) - 4x$.",
-    opciones: ["$2x + 15$", "$10x + 15$", "$2x + 5$", "$6x + 15$"], correcta: 0,
-    explicacion: "$3(2x + 5) = 6x + 15$. Luego $6x + 15 - 4x = 2x + 15$." },
+  {
+    clase: 1,
+    grupo: "Ecuaciones de primer grado",
+    n: 8,
+    titulo: "Ejercicio 8 · Comprobación.",
+    enunciado: "Resuelve $5(x - 2) = 2(x + 4) - 3$ y comprueba tu solución sustituyéndola en la ecuación original.",
+    tipo: "texto",
+    aceptadas: ["5", "x=5"],
+    solucion: "<ol><li>Distributiva: $5x - 10 = 2x + 8 - 3$, es decir, $5x - 10 = 2x + 5$.</li><li>Restamos $2x$ y sumamos $10$: $3x = 15$, así que $x = 5$.</li><li>Comprobación: en el lado izquierdo, $5(5 - 2) = 15$. En el derecho, $2(5 + 4) - 3 = 15$. Como $15 = 15$, la solución es correcta.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> $x = 5$.</p>"
+  },
 
-  { clase: 1, parte: "B", n: 9, tipo: "opc",
-    enunciado: "Verdadero o falso: «$x + 3 = 3x$ para todo $x$».",
-    opciones: ["Verdadero", "Falso"], correcta: 1,
-    explicacion: "Es falso. Con $x = 1$: $1 + 3 = 4$, pero $3 \\cdot 1 = 3$. Basta un contraejemplo para refutar una afirmación «para todo»." },
+  {
+    clase: 1,
+    grupo: "Problemas verbales",
+    n: 9,
+    titulo: "Ejercicio 9.",
+    enunciado: "En una competencia de lógica, el equipo A acumuló el doble de los puntos del equipo B menos 150. Entre los dos sumaron 1 200 puntos. ¿Cuántos puntos acumuló el equipo B?",
+    tipo: "texto",
+    aceptadas: ["450"],
+    solucion: "<ol><li>Sea $x$ los puntos del equipo B. Entonces el equipo A tiene $2x - 150$.</li><li>Planteamos: $x + (2x - 150) = 1200$.</li><li>Resolvemos: $3x - 150 = 1200$, así que $3x = 1350$ y $x = 450$.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> el equipo B acumuló $450$ puntos. (El equipo A tiene $750$.)</p>"
+  },
 
-  { clase: 1, parte: "B", n: 10, tipo: "opc",
-    enunciado: "Escribe la negación de: «Hoy llueve y hace frío».",
-    opciones: ["Llueve $\\lor$ no hace frío.", "No llueve $\\lor$ no hace frío.", "No llueve $\\land$ no hace frío.", "No llueve $\\lor$ hace frío."], correcta: 1,
-    explicacion: "Ley de De Morgan: $\\neg(p \\land q) \\equiv \\neg p \\lor \\neg q$." },
+  {
+    clase: 1,
+    grupo: "Problemas verbales",
+    n: 10,
+    titulo: "Ejercicio 10.",
+    enunciado: "Una reserva de memoria se reparte entre dos entidades. La primera almacena 40 elementos más que el triple de la segunda. Entre las dos suman 520 elementos. ¿Cuántos elementos almacena la segunda entidad?",
+    tipo: "texto",
+    aceptadas: ["120"],
+    solucion: "<ol><li>Sea $y$ los elementos de la segunda entidad. La primera tiene $3y + 40$.</li><li>Planteamos: $y + (3y + 40) = 520$.</li><li>Resolvemos: $4y + 40 = 520$, así que $4y = 480$ y $y = 120$.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> la segunda entidad almacena $120$ elementos (la primera, $360$).</p>"
+  },
+
+  {
+    clase: 1,
+    grupo: "Problemas verbales",
+    n: 11,
+    titulo: "Ejercicio 11.",
+    enunciado: "En una olimpiada, Ana, Beto y Carla resuelven en conjunto 45 problemas. Beto resolvió 3 más que Ana, y Carla resolvió el doble que Beto. ¿Cuántos problemas resolvió cada uno?",
+    tipo: "multi-texto",
+    campos: [
+      { etiqueta: "Ana", aceptadas: ["9"] },
+      { etiqueta: "Beto", aceptadas: ["12"] },
+      { etiqueta: "Carla", aceptadas: ["24"] }
+    ],
+    solucion: "<ol><li>Sea $x$ los problemas de Ana. Beto tiene $x + 3$ y Carla tiene $2(x + 3) = 2x + 6$.</li><li>Planteamos: $x + (x + 3) + (2x + 6) = 45$.</li><li>Simplificamos: $4x + 9 = 45$, así que $4x = 36$ y $x = 9$.</li><li>Entonces Ana resolvió $9$, Beto $12$ y Carla $24$. Comprobación: $9 + 12 + 24 = 45$.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> Ana 9, Beto 12, Carla 24.</p>"
+  },
+
+  {
+    clase: 1,
+    grupo: "Lógica",
+    n: 12,
+    titulo: "Ejercicio 12 · Tablas de verdad.",
+    enunciado: "Sean $P$ verdadera ($V$) y $Q$ falsa ($F$). Determina el valor de verdad de $(\\lnot P \\lor Q) \\land \\lnot(P \\land Q)$.",
+    tipo: "texto",
+    esLogica: true,
+    aceptadas: ["F", "falso"],
+    solucion: "<ol><li>Primer bloque: $\\lnot P = \\lnot V = F$, y $F \\lor Q = F \\lor F = F$.</li><li>Segundo bloque: $P \\land Q = V \\land F = F$, y $\\lnot(F) = V$.</li><li>Resultado: $F \\land V = F$.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> falso ($F$).</p>"
+  },
+
+  {
+    clase: 1,
+    grupo: "Lógica",
+    n: 13,
+    titulo: "Ejercicio 13 · Negación del condicional.",
+    enunciado: "Sea la proposición \"Si entreno diariamente ($P$), entonces gano la competencia ($Q$)\". Escribe su negación en forma simbólica.",
+    tipo: "texto",
+    esLogica: true,
+    botonesSimbolos: true,
+    aceptadas: ["P ∧ ¬Q", "P y no Q", "P ∧ NO Q"],
+    solucion: "<ol><li>El condicional $P \\rightarrow Q$ solo es falso cuando $P$ es verdadera y $Q$ es falsa. Por eso, su negación es $\\lnot(P \\rightarrow Q) \\equiv P \\land \\lnot Q$.</li><li>En palabras: \"Entreno diariamente y no gano la competencia\".</li><li>Cuidado: \"Si no entreno, no gano\" <strong>no</strong> es la negación. Es un error común llamado falacia de negar el antecedente.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> $P \\land \\lnot Q$, es decir, \"entreno diariamente y no gano la competencia\".</p>"
+  },
+
+  {
+    clase: 1,
+    grupo: "Lógica",
+    n: 14,
+    titulo: "Ejercicio 14 · Leyes de De Morgan.",
+    enunciado: "Aplica las leyes de De Morgan para simplificar $\\lnot(\\lnot P \\lor Q)$ y $\\lnot(P \\land \\lnot Q)$.",
+    tipo: "multi-texto",
+    esLogica: true,
+    botonesSimbolos: true,
+    campos: [
+      { etiqueta: "Parte 1: ¬(¬P ∨ Q)", aceptadas: ["P ∧ ¬Q", "P y no Q", "P ∧ NO Q"] },
+      { etiqueta: "Parte 2: ¬(P ∧ ¬Q)", aceptadas: ["¬P ∨ Q", "NO P o Q", "no P o Q", "¬P o Q", "no P ∨ Q"] }
+    ],
+    solucion: "<p>Las leyes de De Morgan son:</p><ul><li>$\\lnot(A \\lor B) \\equiv \\lnot A \\land \\lnot B$</li><li>$\\lnot(A \\land B) \\equiv \\lnot A \\lor \\lnot B$</li></ul><ol><li>$\\lnot(\\lnot P \\lor Q) \\equiv \\lnot(\\lnot P) \\land \\lnot Q \\equiv P \\land \\lnot Q$. La doble negación se anula: $\\lnot(\\lnot P) \\equiv P$.</li><li>$\\lnot(P \\land \\lnot Q) \\equiv \\lnot P \\lor \\lnot(\\lnot Q) \\equiv \\lnot P \\lor Q$.</li></ol><p class=\"mb-0\"><strong>Resultado:</strong> $\\lnot(\\lnot P \\lor Q) \\equiv P \\land \\lnot Q$ y $\\lnot(P \\land \\lnot Q) \\equiv \\lnot P \\lor Q$.</p>"
+  },
 
   /* ---------------- TEMA 2 · Aritmética, conteo y casos ---------------- */
 

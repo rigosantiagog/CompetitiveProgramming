@@ -1632,3 +1632,320 @@ pre code {
     justify-content: center;
   }
 }
+
+/* ---------- Estilos Tema 1 actualizado (KaTeX, Práctica, Quizz y NotebookLM) ---------- */
+html, body {
+  overflow-x: hidden;
+}
+
+.katex-display {
+  display: block;
+  text-align: center;
+  margin: 1.05rem 0;
+  padding: 0.35rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.lectura-titulo-general {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+.lectura-fuentes {
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--section-accent);
+  border-radius: 14px;
+  padding: 1.15rem 1.35rem;
+  margin-top: 1.25rem;
+}
+
+.lectura-fuentes h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 0.6rem;
+  color: var(--ink);
+}
+
+.lectura-fuentes ul {
+  margin-bottom: 0;
+  padding-left: 1.2rem;
+}
+
+.lectura-fuentes li {
+  font-size: 0.93rem;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+
+.titulo-seccion-interna {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.aviso-memoria {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: var(--section-soft);
+  border: 1px solid color-mix(in srgb, var(--section-accent) 22%, transparent);
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.aviso-memoria i {
+  color: var(--section-accent);
+}
+
+.cabecera-practica-tema1 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.cabecera-practica-tema1 > div:first-child {
+  flex: 1 1 420px;
+}
+
+.contador-aciertos-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.1rem;
+  min-height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(110deg, var(--section-accent), var(--section-accent-2));
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--section-accent) 25%, transparent);
+  white-space: nowrap;
+}
+
+.subtitulo-grupo-practica {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--section-accent);
+  background: var(--section-soft);
+  border: 1px solid color-mix(in srgb, var(--section-accent) 18%, transparent);
+  padding: 0.38rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
+  margin: 1.4rem 0 0.9rem;
+}
+
+.barra-simbolos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-simbolo {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.35rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--line-strong);
+  background: #f8fafc;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.15s ease;
+}
+
+.btn-simbolo:hover,
+.btn-simbolo:focus {
+  background: var(--section-soft);
+  border-color: var(--section-accent);
+  color: var(--section-accent);
+}
+
+.btn-ver-solucion {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  background: #f8fafc;
+  color: var(--ink);
+  font-weight: 650;
+  transition: all 0.16s ease;
+}
+
+.btn-ver-solucion:hover,
+.btn-ver-solucion.activa {
+  background: var(--section-soft);
+  border-color: color-mix(in srgb, var(--section-accent) 35%, var(--line));
+  color: var(--section-accent);
+}
+
+.solucion-desplegable {
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  background: #f8fafc;
+  padding: 1rem 1.2rem;
+}
+
+.solucion-cabecera {
+  font-weight: 750;
+  font-size: 0.92rem;
+  color: var(--section-accent);
+  margin-bottom: 0.6rem;
+}
+
+.solucion-cuerpo ol,
+.solucion-cuerpo ul {
+  padding-left: 1.25rem;
+  margin-bottom: 0.65rem;
+}
+
+.solucion-cuerpo li {
+  margin-bottom: 0.3rem;
+}
+
+.tarjeta-pregunta.pregunta-correcta {
+  border-color: #22c55e;
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.1);
+}
+
+.tarjeta-pregunta.pregunta-incorrecta {
+  border-color: #ef4444;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.1);
+}
+
+.estado-pregunta-quiz {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.estado-pregunta-quiz.correcta {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.estado-pregunta-quiz.incorrecta {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.puntaje-grande {
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-weight: 800;
+  font-family: var(--font-mono);
+}
+
+/* ---------- Tarjeta y enlaces de NotebookLM ---------- */
+.nav-link-notebook {
+  color: var(--section-accent) !important;
+  background: var(--section-soft);
+  border: 1px solid color-mix(in srgb, var(--section-accent) 20%, transparent);
+}
+
+.nav-link-notebook:hover {
+  background: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.16);
+}
+
+.btn-hero-notebook {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  color: #ffffff;
+  padding: 0.75rem 1.4rem;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  transition: all 0.18s ease;
+}
+
+.btn-hero-notebook:hover,
+.btn-hero-notebook:focus {
+  background: rgba(255, 255, 255, 0.24);
+  border-color: #ffffff;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.tarjeta-notebook {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: linear-gradient(145deg, #ffffff 0%, #f3f2ff 60%, #e8faff 100%);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radio-lg);
+  padding: 1.65rem 1.75rem;
+  box-shadow: var(--sombra);
+}
+
+.badge-notebook {
+  background: var(--section-soft);
+  color: var(--section-accent);
+  border: 1px solid color-mix(in srgb, var(--section-accent) 22%, transparent);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+}
+
+.asistente-sidebar {
+  background: linear-gradient(155deg, #ffffff 0%, #f3f2ff 100%);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  padding: 1rem 1.05rem;
+  box-shadow: 0 4px 12px #183b630a;
+}
+
+.chip-notebook {
+  border-color: rgba(125, 211, 252, 0.55);
+}
+
+/* Garantizar altura mínima accesible (44px) en botones y recuadros */
+.btn,
+.tab-btn,
+.form-control,
+.form-check,
+.enlace-recurso {
+  min-height: 44px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+@media (max-width: 576px) {
+  #contenido-bloque,
+  main.container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .contador-aciertos-badge {
+    width: 100%;
+  }
+}
