@@ -4,8 +4,9 @@
      Tema 3, Tareas en PDF o Próximamente) como pestañas.
    - Dentro de cada tema muestra un panel a la vez
      (Aprender · Practicar · Quiz).
-   - Dibuja la lectura interactiva y guarda, en este navegador,
-     qué secciones ya marcaste como leídas.
+   - En la sección Aprender, agrupa los subtemas en tarjetas
+     interactivas; al hacer clic en una tarjeta se abre la
+     lectura completa de ese subtema.
    ========================================================== */
 
 (function () {
@@ -36,39 +37,225 @@
     catch (e) { /* sin almacenamiento: el progreso solo dura mientras la página esté abierta */ }
   }
 
-  /* ---------- Lectura interactiva ---------- */
+  /* ---------- Lectura interactiva por tarjetas de subtemas ---------- */
 
-  function actualizarProgresoLectura(contenedor) {
-    const casillas = contenedor.querySelectorAll("input[data-leer]");
-    const leidas = Array.prototype.filter.call(casillas, function (c) { return c.checked; }).length;
-    const texto = contenedor.querySelector(".lectura-progreso");
-    if (texto) texto.textContent = leidas + " de " + casillas.length + " secciones leídas";
+  function iconoParaSubtema(titulo, idx) {
+    const t = titulo.toLowerCase();
+    if (t.indexOf("errores") !== -1) return "fa-triangle-exclamation";
+    if (t.indexOf("resumen") !== -1) return "fa-list-check";
+    if (t.indexOf("reflexión") !== -1 || t.indexOf("reflexion") !== -1) return "fa-lightbulb";
+    const iconos = ["fa-book-open", "fa-sliders", "fa-scale-balanced", "fa-diagram-project"];
+    return iconos[idx % iconos.length] || "fa-book-open";
+  }
+
+  function etiquetaCortaSubtema(titulo, idx) {
+    const partes = titulo.split("·");
+    if (partes.length > 1) {
+      return partes[0].trim();
+    }
+    const t = titulo.toLowerCase();
+    if (t.indexOf("errores") !== -1) return "Repaso";
+    if (t.indexOf("resumen") !== -1) return "Síntesis";
+    if (t.indexOf("reflexión") !== -1 || t.indexOf("reflexion") !== -1) return "Reflexión";
+    return "Subtema " + (idx + 1);
+  }
+
+  function tituloLimpioSubtema(titulo) {
+    const partes = titulo.split("·");
+    return partes.length > 1 ? partes.slice(1).join("·").trim() : titulo.trim();
+  }
+
+  function extraerSubtemas(htmlCrudo, idTema) {
+    const temp = document.createElement("div");
+    temp.innerHTML = htmlCrudo;
+    const bloques = temp.querySelectorAll("details.lectura-seccion");
+    const lista = [];
+
+    bloques.forEach(function (det, idx) {
+      const summary = det.querySelector("summary");
+      const cuerpo = det.querySelector(".lectura-cuerpo");
+      const input = det.querySelector("input[data-leer]");
+      const tituloCompleto = summary ? summary.textContent.trim() : ("Subtema " + (idx + 1));
+      const clave = input ? input.getAttribute("data-leer") : (idTema + "-" + (idx + 1));
+      const cuerpoHtml = cuerpo ? cuerpo.innerHTML : "";
+
+      // Extraer un resumen breve en texto plano para la tarjeta
+      let resumen = "";
+      if (cuerpo) {
+        const primerParrafo = cuerpo.querySelector("p, li");
+        const textoBase = primerParrafo ? primerParrafo.textContent : cuerpo.textContent;
+        resumen = textoBase.replace(/\s+/g, " ").trim();
+        if (resumen.length > 115) {
+          resumen = resumen.slice(0, 112).trim() + "…";
+        }
+      }
+
+      lista.push({
+        indice: idx,
+        clave: clave,
+        etiqueta: etiquetaCortaSubtema(tituloCompleto, idx),
+        titulo: tituloLimpioSubtema(tituloCompleto),
+        tituloCompleto: tituloCompleto,
+        icono: iconoParaSubtema(tituloCompleto, idx),
+        resumen: resumen,
+        cuerpoHtml: cuerpoHtml
+      });
+    });
+
+    return lista;
   }
 
   function dibujarLecturas() {
-    const progreso = leerProgreso();
-
     document.querySelectorAll("[data-lectura]").forEach(function (contenedor) {
-      const lectura = (typeof LECTURAS_BLOQUE1 !== "undefined") && LECTURAS_BLOQUE1[contenedor.dataset.lectura];
+      const idTema = contenedor.dataset.lectura;
+      const lectura = (typeof LECTURAS_BLOQUE1 !== "undefined") && LECTURAS_BLOQUE1[idTema];
       if (!lectura) return;
 
-      contenedor.innerHTML =
-        '<div class="lectura">' +
-          '<p class="lectura-progreso small text-secondary mb-3"></p>' +
-          lectura.html +
-        '</div>';
+      const subtemas = extraerSubtemas(lectura.html, idTema);
+      let indiceActual = null; // null = vista de tarjetas; número = subtema abierto
 
-      contenedor.querySelectorAll("input[data-leer]").forEach(function (casilla) {
-        casilla.checked = !!progreso[casilla.dataset.leer];
-        casilla.addEventListener("change", function () {
-          const datos = leerProgreso();
-          datos[casilla.dataset.leer] = casilla.checked;
-          guardarProgreso(datos);
-          actualizarProgresoLectura(contenedor);
-        });
+      function contarLeidos() {
+        const prog = leerProgreso();
+        return subtemas.filter(function (s) { return !!prog[s.clave]; }).length;
+      }
+
+      function renderizarVistaTarjetas() {
+        indiceActual = null;
+        const prog = leerProgreso();
+        const leidos = contarLeidos();
+
+        let tarjetasHtml = subtemas.map(function (s) {
+          const estaLeido = !!prog[s.clave];
+          return (
+            '<button type="button" class="tarjeta-subtema' + (estaLeido ? " leida" : "") + '" data-abrir-subtema="' + s.indice + '">' +
+              '<div>' +
+                '<div class="tarjeta-subtema-top">' +
+                  '<span class="tarjeta-subtema-badge"><i class="fa-solid ' + s.icono + '"></i> ' + s.etiqueta + '</span>' +
+                  '<span class="tarjeta-subtema-estado">' +
+                    (estaLeido
+                      ? '<i class="fa-solid fa-circle-check"></i> Leída'
+                      : '<i class="fa-regular fa-circle"></i> Pendiente') +
+                  '</span>' +
+                '</div>' +
+                '<h3 class="tarjeta-subtema-titulo">' + s.titulo + '</h3>' +
+                '<p class="tarjeta-subtema-resumen">' + s.resumen + '</p>' +
+              '</div>' +
+              '<span class="tarjeta-subtema-cta">' +
+                (estaLeido ? 'Repasar lectura' : 'Leer subtema') +
+                ' <i class="fa-solid fa-arrow-right"></i>' +
+              '</span>' +
+            '</button>'
+          );
+        }).join("");
+
+        contenedor.innerHTML =
+          '<div class="lectura">' +
+            '<div class="lectura-cabecera">' +
+              '<p class="lectura-instruccion"><i class="fa-solid fa-layer-group me-1 text-secondary"></i> Selecciona una tarjeta para abrir la lectura del subtema:</p>' +
+              '<span class="lectura-progreso small">' + leidos + ' de ' + subtemas.length + ' subtemas leídos</span>' +
+            '</div>' +
+            '<div class="subtemas-grid">' +
+              tarjetasHtml +
+            '</div>' +
+          '</div>';
+
+        tipografiar(contenedor);
+      }
+
+      function renderizarVisorSubtema(idx) {
+        const s = subtemas[idx];
+        if (!s) return;
+        indiceActual = idx;
+        const prog = leerProgreso();
+        const estaLeido = !!prog[s.clave];
+        const leidos = contarLeidos();
+
+        const tieneAnterior = idx > 0;
+        const tieneSiguiente = idx < subtemas.length - 1;
+
+        contenedor.innerHTML =
+          '<div class="lectura">' +
+            '<div class="lectura-cabecera">' +
+              '<button type="button" class="btn-volver-subtemas" data-volver-subtemas="1">' +
+                '<i class="fa-solid fa-arrow-left"></i> Volver a los subtemas' +
+              '</button>' +
+              '<span class="lectura-progreso small" data-progreso-visor="1">' + leidos + ' de ' + subtemas.length + ' subtemas leídos</span>' +
+            '</div>' +
+            '<article class="visor-subtema">' +
+              '<div class="visor-subtema-barra">' +
+                '<span class="visor-subtema-contador">' + s.etiqueta + ' · (' + (idx + 1) + ' de ' + subtemas.length + ')</span>' +
+                '<label class="lectura-leida">' +
+                  '<input type="checkbox" data-leer="' + s.clave + '"' + (estaLeido ? " checked" : "") + '> Marcar como leída' +
+                '</label>' +
+              '</div>' +
+              '<h3 class="visor-subtema-titulo">' + s.tituloCompleto + '</h3>' +
+              '<div class="lectura-cuerpo">' +
+                s.cuerpoHtml +
+              '</div>' +
+              '<div class="visor-subtema-pie">' +
+                '<button type="button" class="btn-nav-subtema" data-ir-subtema="' + (idx - 1) + '"' + (!tieneAnterior ? " disabled" : "") + '>' +
+                  '<i class="fa-solid fa-chevron-left"></i> Subtema anterior' +
+                '</button>' +
+                '<button type="button" class="btn-nav-subtema" data-volver-subtemas="1">' +
+                  '<i class="fa-solid fa-grip"></i> Ver tarjetas' +
+                '</button>' +
+                '<button type="button" class="btn-nav-subtema" data-ir-subtema="' + (idx + 1) + '"' + (!tieneSiguiente ? " disabled" : "") + '>' +
+                  'Siguiente subtema <i class="fa-solid fa-chevron-right"></i>' +
+                '</button>' +
+              '</div>' +
+            '</article>' +
+          '</div>';
+
+        const casilla = contenedor.querySelector("input[data-leer]");
+        if (casilla) {
+          casilla.addEventListener("change", function () {
+            const datos = leerProgreso();
+            datos[s.clave] = casilla.checked;
+            guardarProgreso(datos);
+            const indicador = contenedor.querySelector("[data-progreso-visor]");
+            if (indicador) {
+              indicador.textContent = contarLeidos() + " de " + subtemas.length + " subtemas leídos";
+            }
+          });
+        }
+
+        tipografiar(contenedor);
+      }
+
+      contenedor.addEventListener("click", function (evento) {
+        const btnAbrir = evento.target.closest("[data-abrir-subtema]");
+        if (btnAbrir) {
+          const idx = Number(btnAbrir.getAttribute("data-abrir-subtema"));
+          renderizarVisorSubtema(idx);
+          contenedor.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          return;
+        }
+
+        const btnVolver = evento.target.closest("[data-volver-subtemas]");
+        if (btnVolver) {
+          renderizarVistaTarjetas();
+          contenedor.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          return;
+        }
+
+        const btnIr = evento.target.closest("[data-ir-subtema]");
+        if (btnIr && !btnIr.disabled) {
+          const destino = Number(btnIr.getAttribute("data-ir-subtema"));
+          if (destino >= 0 && destino < subtemas.length) {
+            renderizarVisorSubtema(destino);
+            contenedor.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+        }
       });
 
-      actualizarProgresoLectura(contenedor);
+      // Exponer función para volver a la cuadrícula de tarjetas cuando se pulsa la pestaña Aprender
+      contenedor._mostrarTarjetasSubtemas = function () {
+        if (indiceActual !== null) {
+          renderizarVistaTarjetas();
+        }
+      };
+
+      renderizarVistaTarjetas();
     });
   }
 
@@ -139,6 +326,14 @@
     contenedor.querySelectorAll(".tab-panel").forEach(function (panel) {
       panel.hidden = panel.id !== idActivo;
     });
+
+    // Si el usuario selecciona "Aprender", mostramos las tarjetas de subtemas
+    if (nombre === "aprender") {
+      const contLectura = document.querySelector('[data-lectura="' + tema + '"]');
+      if (contLectura && typeof contLectura._mostrarTarjetasSubtemas === "function") {
+        contLectura._mostrarTarjetasSubtemas();
+      }
+    }
 
     // La barra lateral marca la sub-pestaña que se está viendo
     document.querySelectorAll(".indice-lista a").forEach(function (enlace) {
