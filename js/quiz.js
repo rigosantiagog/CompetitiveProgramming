@@ -334,9 +334,53 @@
     }
   });
 
+
+  /* Dibuja los 15 ejercicios de la Tarea del Bloque 1 con su botón "Ver clave" oculto al inicio. */
+  function dibujarTarea(contenedor) {
+    if (typeof TAREA_BLOQUE1 === "undefined" || !contenedor) return;
+    let html =
+      '<div class="bloque-pestana mb-4">' +
+        '<h3><span class="icono-bloque sky"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></span> Ejercicios</h3>' +
+        '<p class="mb-2">¡Bienvenido al primer bloque de entrenamiento! Antes de resolver cualquier problema, lo más importante es aprender a traducir una situación del entorno real a un modelo matemático claro. Lee con atención cada problema, identifica los datos y construye tu procedimiento con lenguaje matemático exacto.</p>' +
+        '<p class="mb-0 texto-suave">Revisa cada planteamiento y cada operación. Respalda cada paso con su justificación antes de comparar tu resultado con la clave.</p>' +
+      '</div>';
+
+    let temaActual = null;
+    TAREA_BLOQUE1.forEach(function (item) {
+      if (item.tema !== temaActual) {
+        temaActual = item.tema;
+        html += '<h3 class="subtitulo-grupo-practica">' + item.tema + '</h3>';
+      }
+      const claveId = "tarea-b1-clave-" + item.n;
+      html +=
+        '<div class="tarjeta-pregunta" id="tarea-b1-' + item.n + '">' +
+          '<div class="mb-3"><span class="numero">' + item.n + '</span><strong>' + item.titulo + '</strong> ' + item.enunciado + '</div>' +
+          '<div class="d-flex flex-wrap gap-2 align-items-center mt-2">' +
+            '<button type="button" class="btn btn-sm btn-ver-solucion btn-ver-clave" data-toggle-solucion="' + claveId + '" aria-expanded="false" aria-controls="' + claveId + '" aria-label="Ver clave del ejercicio ' + item.n + ' de la tarea">' +
+              '<i class="fa-solid fa-key" aria-hidden="true"></i> Ver clave' +
+            '</button>' +
+          '</div>' +
+          '<div id="' + claveId + '" class="solucion-desplegable mt-3" hidden>' +
+            '<div class="solucion-cabecera"><i class="fa-solid fa-check-double me-1" aria-hidden="true"></i> Clave de respuesta · Ejercicio ' + item.n + '</div>' +
+            '<div class="solucion-cuerpo">' +
+              '<p class="mb-2"><strong>Respuesta final:</strong> ' + item.respuestaFinal + '</p>' +
+              '<p class="mb-1"><strong>Procedimiento breve:</strong></p>' +
+              item.procedimiento +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    });
+
+    contenedor.innerHTML = html;
+    tipografiar(contenedor);
+  }
+
   function iniciar() {
     document.querySelectorAll("[data-ejercicios]").forEach(function (contenedor) {
       dibujarTema(Number(contenedor.dataset.ejercicios), contenedor);
+    });
+    document.querySelectorAll("[data-tarea-bloque1]").forEach(function (contenedor) {
+      dibujarTarea(contenedor);
     });
     actualizarAvance();
   }
@@ -347,7 +391,7 @@
     iniciar();
   }
   window.addEventListener("load", function () {
-    document.querySelectorAll("[data-ejercicios]").forEach(tipografiar);
+    document.querySelectorAll("[data-ejercicios], [data-tarea-bloque1]").forEach(tipografiar);
   });
 
 })();

@@ -437,3 +437,131 @@ const EJERCICIOS_BLOQUE1 = [
   }
 
 ];
+
+
+/* ==========================================================
+   Tarea del Bloque 1 · 15 ejercicios con clave desplegable
+   ========================================================== */
+
+const TAREA_BLOQUE1 = [
+  {
+    tema: "Tema 1 · Álgebra y lógica (ejercicios 1 a 5)",
+    n: 1,
+    titulo: "Ejercicio 1 · Evaluación de expresiones y propiedades.",
+    enunciado: "En la cooperativa de la preparatoria, el encargado arma paquetes de útiles para el inicio de semestre. Cada paquete contiene 5 cuadernos y 3 lápices. Durante el receso se venden 8 de estos paquetes completos y, además, 4 cuadernos sueltos.<ul class=\"mt-2 mb-0\"><li>a) Plantea la expresión numérica sin simplificar que representa el total de artículos vendidos, usando paréntesis, multiplicación y suma, y evalúala respetando el orden de las operaciones.</li><li>b) Aplica la propiedad distributiva para separar el cálculo en cuadernos y lápices, y verifica que obtienes el mismo resultado final.</li></ul>",
+    respuestaFinal: "68 artículos en total.",
+    procedimiento: "<ol class=\"mb-0\"><li>Expresión sin simplificar: $8 \\cdot (5 + 3) + 4 = 8 \\cdot 8 + 4$.</li><li>Multiplicación y suma: $64 + 4 = 68$.</li><li>Con la propiedad distributiva: $8 \\cdot 5 + 8 \\cdot 3 + 4 = 40 + 24 + 4 = 68$.</li></ol>"
+  },
+  {
+    tema: "Tema 1 · Álgebra y lógica (ejercicios 1 a 5)",
+    n: 2,
+    titulo: "Ejercicio 2 · Ecuaciones de primer grado con paréntesis.",
+    enunciado: "En el tianguis cercano a la escuela, dos puestos de fruta venden guayabas del mismo proveedor. En el puesto A, el costo de comprar $x$ kilogramos con empaque especial es $3(x + 4)$ pesos. En el puesto B, el costo por una compra equivalente es $2(x - 1) + 26$ pesos. Si el gasto es el mismo en ambos puestos:<ul class=\"mt-2 mb-0\"><li>Plantea y resuelve la ecuación $3(x + 4) = 2(x - 1) + 26$.</li><li>Indica cuántos kilogramos se compraron.</li></ul>",
+    respuestaFinal: "$x = 12$ kilogramos.",
+    procedimiento: "<ol class=\"mb-0\"><li>Distributiva en ambos lados: $3x + 12 = 2x - 2 + 26$.</li><li>Simplificamos: $3x + 12 = 2x + 24$.</li><li>Agrupamos: $3x - 2x = 24 - 12$, así que $x = 12$.</li></ol>"
+  },
+  {
+    tema: "Tema 1 · Álgebra y lógica (ejercicios 1 a 5)",
+    n: 3,
+    titulo: "Ejercicio 3 · Planteamiento verbal.",
+    enunciado: "En el torneo intercolegial de básquetbol, el equipo acumuló su puntaje así: obtuvo el triple del número de partidos ganados $g$, sumó un punto por cada partido empatado $e$ y tuvo una penalización fija de 2 puntos por faltas técnicas.<ul class=\"mt-2 mb-0\"><li>Traduce la descripción a una expresión algebraica reducida para el puntaje total $P$.</li><li>Calcula $P$ si el equipo ganó $g = 5$ partidos y empató $e = 3$.</li></ul>",
+    respuestaFinal: "$P = 3g + e - 2$; con $g = 5$ y $e = 3$, $P = 16$ puntos.",
+    procedimiento: "<ol class=\"mb-0\"><li>Expresión: $P = 3g + e - 2$.</li><li>Sustituimos: $P = 3(5) + 3 - 2$.</li><li>Resultado: $P = 15 + 3 - 2 = 16$.</li></ol>"
+  },
+  {
+    tema: "Tema 1 · Álgebra y lógica (ejercicios 1 a 5)",
+    n: 4,
+    titulo: "Ejercicio 4 · Tablas de verdad.",
+    enunciado: "Para tener tarifa preferencial en el Metro, un estudiante debe cumplir una regla lógica. Sean las proposiciones:<ul class=\"mt-2 mb-2\"><li>$p$: \"El estudiante porta credencial escolar vigente.\"</li><li>$q$: \"El viaje se realiza en domingo.\"</li></ul>La regla de acceso es $E = (p \\lor q) \\land \\lnot(p \\land q)$. Determina el valor de verdad de $E$ en el caso en que el estudiante porta credencial ($p$ es V) pero el viaje no es en domingo ($q$ es F).",
+    respuestaFinal: "V (verdadero).",
+    procedimiento: "<ol class=\"mb-0\"><li>Con $p$ = V y $q$ = F: $p \\lor q = V \\lor F = V$.</li><li>$p \\land q = V \\land F = F$, y su negación es $\\lnot F = V$.</li><li>Resultado: $V \\land V = V$.</li></ol>"
+  },
+  {
+    tema: "Tema 1 · Álgebra y lógica (ejercicios 1 a 5)",
+    n: 5,
+    titulo: "Ejercicio 5 · Negación del condicional.",
+    enunciado: "El reglamento de becas establece: \"Si entregas todas las tareas a tiempo ($A$), entonces obtienes la beca de excelencia ($B$)\", es decir, $A \\Rightarrow B$.<ul class=\"mt-2 mb-0\"><li>Redacta en lenguaje natural la negación de esta proposición, $\\lnot(A \\Rightarrow B)$.</li><li>Demuestra que $\\lnot(A \\Rightarrow B)$ es equivalente a $A \\land \\lnot B$, y explica en qué único caso de valores de verdad para $A$ y $B$ ambas expresiones son verdaderas.</li></ul>",
+    respuestaFinal: "\"Entregas todas las tareas a tiempo y no obtienes la beca de excelencia.\"",
+    procedimiento: "<ol class=\"mb-0\"><li>Por la equivalencia $A \\Rightarrow B \\equiv \\lnot A \\lor B$, tenemos $\\lnot(A \\Rightarrow B) \\equiv \\lnot(\\lnot A \\lor B)$.</li><li>Por las leyes de De Morgan: $\\lnot(\\lnot A \\lor B) \\equiv \\lnot(\\lnot A) \\land \\lnot B \\equiv A \\land \\lnot B$.</li><li>En la tabla de verdad, $A \\land \\lnot B$ es V solo cuando $A$ = V y $B$ = F, que es el único caso donde $A \\Rightarrow B$ es falsa.</li></ol>"
+  },
+  {
+    tema: "Tema 2 · Aritmética, conteo y casos (ejercicios 6 a 10)",
+    n: 6,
+    titulo: "Ejercicio 6 · Paridad y división con residuo.",
+    enunciado: "Un pesero aborda a 47 pasajeros. Sus asientos están distribuidos en parejas (filas de 2 asientos).<ul class=\"mt-2 mb-0\"><li>Realiza la división entera $47 \\div 2$ para hallar el cociente $q$ (parejas completamente ocupadas) y el residuo $r$ (pasajeros sin pareja de asiento).</li><li>Determina si el número total de pasajeros es par o impar, argumentando con la forma $2q + r$.</li></ul>",
+    respuestaFinal: "cociente $q = 23$, residuo $r = 1$; el número de pasajeros es impar.",
+    procedimiento: "<ol class=\"mb-0\"><li>División entera: $47 = 2 \\cdot 23 + 1$.</li><li>Con la forma $2q + r$, el número es $2 \\cdot 23 + 1$.</li><li>Como $r = 1 \\neq 0$, el número 47 es impar.</li></ol>"
+  },
+  {
+    tema: "Tema 2 · Aritmética, conteo y casos (ejercicios 6 a 10)",
+    n: 7,
+    titulo: "Ejercicio 7 · Piso y techo.",
+    enunciado: "Para remodelar un salón se requieren 14.3 litros de pintura. La tienda solo vende cubetas cerradas de 3 litros.<ul class=\"mt-2 mb-0\"><li>Usa la función techo para calcular cuántas cubetas se deben comprar.</li><li>Usa la función piso para calcular cuántos litros completos se consumen, y después calcula cuántos litros comprados quedan sin usar.</li></ul>",
+    respuestaFinal: "se compran 5 cubetas; quedan 0.7 litros sin usar.",
+    procedimiento: "<ol class=\"mb-0\"><li>Techo: $\\left\\lceil 14.3 / 3 \\right\\rceil = \\lceil 4.77 \\rceil = 5$ cubetas, que son $5 \\cdot 3 = 15$ litros.</li><li>Piso: $\\lfloor 14.3 \\rfloor = 14$ litros completos se consumen.</li><li>Sobrante: $15 - 14.3 = 0.7$ litros comprados que no se usan.</li></ol>"
+  },
+  {
+    tema: "Tema 2 · Aritmética, conteo y casos (ejercicios 6 a 10)",
+    n: 8,
+    titulo: "Ejercicio 8 · Suma y producto.",
+    enunciado: "Un estudiante va de su casa a la preparatoria y de ahí al gimnasio. Para el primer trayecto puede elegir entre 2 rutas independientes de camión o 1 línea de metro. Para el segundo trayecto hay 2 rutas distintas de pesero.<ul class=\"mt-2 mb-0\"><li>Usa el principio de la suma para contar las opciones del primer trayecto.</li><li>Usa el principio del producto para contar los trayectos completos distintos de la casa al gimnasio.</li></ul>",
+    respuestaFinal: "6 trayectos distintos.",
+    procedimiento: "<ol class=\"mb-0\"><li>Principio de la suma para el primer trayecto: $2 + 1 = 3$ opciones.</li><li>Segundo trayecto: 2 opciones de pesero.</li><li>Principio del producto: $3 \\cdot 2 = 6$ trayectos completos.</li></ol>"
+  },
+  {
+    tema: "Tema 2 · Aritmética, conteo y casos (ejercicios 6 a 10)",
+    n: 9,
+    titulo: "Ejercicio 9 · Inclusión-exclusión.",
+    enunciado: "En una encuesta a 50 estudiantes sobre dos talleres extracurriculares, Música y Robótica, 22 participan en Música, 19 en Robótica y 8 en ambos talleres.<ul class=\"mt-2 mb-0\"><li>¿Cuántos estudiantes participan en al menos uno de los dos talleres?</li><li>¿Cuántos estudiantes no participan en ninguno?</li></ul>",
+    respuestaFinal: "33 estudiantes participan en al menos un taller; 17 no participan en ninguno.",
+    procedimiento: "<ol class=\"mb-0\"><li>Inclusión-exclusión: $|M \\cup R| = 22 + 19 - 8 = 33$.</li><li>Los que participan en al menos uno son 33.</li><li>Los que no participan en ninguno son $50 - 33 = 17$.</li></ol>"
+  },
+  {
+    tema: "Tema 2 · Aritmética, conteo y casos (ejercicios 6 a 10)",
+    n: 10,
+    titulo: "Ejercicio 10 · Conteo de múltiplos en un rango.",
+    enunciado: "En una kermés de la escuela, las fichas de rifa están numeradas del 1 al 200. Las fichas cuyo número es múltiplo de 7 ganan un premio.<ul class=\"mt-2 mb-0\"><li>¿Cuántas fichas ganan premio?</li><li>¿Cuál es el número de la última ficha premiada?</li></ul>",
+    respuestaFinal: "28 fichas premiadas; la última premiada es la 196.",
+    procedimiento: "<ol class=\"mb-0\"><li>Cantidad de múltiplos de 7 entre 1 y 200: $\\lfloor 200 / 7 \\rfloor = \\lfloor 28.57 \\rfloor = 28$.</li><li>Comprobación: $7 \\cdot 28 = 196 \\le 200$, y $7 \\cdot 29 = 203 > 200$.</li><li>Resultado: 28 fichas premiadas, y la última es la 196.</li></ol>"
+  },
+  {
+    tema: "Tema 3 · Geometría, trigonometría y patrones (ejercicios 11 a 15)",
+    n: 11,
+    titulo: "Ejercicio 11 · Ángulos de un polígono.",
+    enunciado: "El área de juegos del patio tiene forma de pentágono convexo. Al trazar la cancha se midieron cuatro de sus ángulos internos: $100^\\circ$, $110^\\circ$, $120^\\circ$ y $90^\\circ$.<ul class=\"mt-2 mb-0\"><li>Calcula la suma de los ángulos internos del pentágono usando $S = (n - 2) \\cdot 180^\\circ$.</li><li>Determina la medida del quinto ángulo interno.</li></ul>",
+    respuestaFinal: "la suma es $540^\\circ$; el quinto ángulo mide $120^\\circ$.",
+    procedimiento: "<ol class=\"mb-0\"><li>Para $n = 5$: $S = (5 - 2) \\cdot 180^\\circ = 540^\\circ$.</li><li>Los cuatro ángulos conocidos suman $100^\\circ + 110^\\circ + 120^\\circ + 90^\\circ = 420^\\circ$.</li><li>Quinto ángulo: $540^\\circ - 420^\\circ = 120^\\circ$.</li></ol>"
+  },
+  {
+    tema: "Tema 3 · Geometría, trigonometría y patrones (ejercicios 11 a 15)",
+    n: 12,
+    titulo: "Ejercicio 12 · Pitágoras y distancia.",
+    enunciado: "Un alumno cruza en línea recta la plaza del municipio desde la esquina $A(1, 2)$ hasta la esquina opuesta $B(7, 10)$, medidas en metros.<ul class=\"mt-2 mb-0\"><li>Aplica la fórmula de distancia $d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$.</li><li>Calcula la distancia recorrida en metros.</li></ul>",
+    respuestaFinal: "10 metros.",
+    procedimiento: "<ol class=\"mb-0\"><li>$\\Delta x = 7 - 1 = 6$ y $\\Delta y = 10 - 2 = 8$.</li><li>$d = \\sqrt{6^2 + 8^2} = \\sqrt{36 + 64}$.</li><li>$d = \\sqrt{100} = 10$ metros.</li></ol>"
+  },
+  {
+    tema: "Tema 3 · Geometría, trigonometría y patrones (ejercicios 11 a 15)",
+    n: 13,
+    titulo: "Ejercicio 13 · Razones trigonométricas en ángulos notables.",
+    enunciado: "Un asta bandera proyecta una sombra de $6\\sqrt{3}$ metros sobre el suelo plano, cuando el ángulo de elevación del sol es de $30^\\circ$.<ul class=\"mt-2 mb-0\"><li>Usa $\\tan 30^\\circ = \\frac{1}{\\sqrt{3}}$ para plantear la relación con la altura $h$ del asta.</li><li>Calcula el valor exacto de $h$, sin aproximaciones decimales.</li></ul>",
+    respuestaFinal: "$h = 6$ metros.",
+    procedimiento: "<ol class=\"mb-0\"><li>$\\tan 30^\\circ = \\frac{h}{6\\sqrt{3}}$.</li><li>Sustituimos $\\tan 30^\\circ = \\frac{1}{\\sqrt{3}}$: $\\frac{1}{\\sqrt{3}} = \\frac{h}{6\\sqrt{3}}$.</li><li>Despejamos: $h = \\frac{6\\sqrt{3}}{\\sqrt{3}} = 6$ metros.</li></ol>"
+  },
+  {
+    tema: "Tema 3 · Geometría, trigonometría y patrones (ejercicios 11 a 15)",
+    n: 14,
+    titulo: "Ejercicio 14 · Progresión aritmética.",
+    enunciado: "Un estudiante inicia un entrenamiento físico con 10 lagartijas diarias en la primera semana. Cada semana aumenta 4 lagartijas diarias respecto a la semana anterior.<ul class=\"mt-2 mb-0\"><li>Calcula $a_{10}$, la cantidad diaria de lagartijas en la décima semana.</li><li>Calcula la suma de las cantidades diarias de las 10 semanas (un valor por semana) con la fórmula $S_n = \\frac{n(a_1 + a_n)}{2}$.</li></ul>",
+    respuestaFinal: "$a_{10} = 46$ lagartijas diarias; la suma de las 10 semanas es 280.",
+    procedimiento: "<ol class=\"mb-0\"><li>$a_{10} = a_1 + (10 - 1) \\cdot d = 10 + 9 \\cdot 4 = 46$.</li><li>$S_{10} = \\frac{10 (10 + 46)}{2}$.</li><li>$S_{10} = 5 \\cdot 56 = 280$.</li></ol>"
+  },
+  {
+    tema: "Tema 3 · Geometría, trigonometría y patrones (ejercicios 11 a 15)",
+    n: 15,
+    titulo: "Ejercicio 15 · Suma de impares.",
+    enunciado: "Para una ceremonia escolar, las sillas se acomodan en un arreglo piramidal. La primera fila tiene 1 silla, la segunda 3, la tercera 5, y así sucesivamente. La fila $k$ tiene $2k - 1$ sillas.<ul class=\"mt-2 mb-0\"><li>Demuestra que $\\sum_{k=1}^{n} (2k - 1) = n^2$.</li><li>Calcula el total de sillas si el arreglo tiene 8 filas completas.</li></ul>",
+    respuestaFinal: "64 sillas.",
+    procedimiento: "<ol class=\"mb-0\"><li>Demostración: $\\sum_{k=1}^{n} (2k - 1) = 2 \\sum_{k=1}^{n} k - \\sum_{k=1}^{n} 1 = 2 \\cdot \\frac{n(n+1)}{2} - n = n^2 + n - n = n^2$.</li><li>Para $n = 8$: $S_8 = 8^2 = 64$.</li><li>Comprobación: $1 + 3 + 5 + 7 + 9 + 11 + 13 + 15 = 64$.</li></ol>"
+  }
+];

@@ -290,6 +290,16 @@
     const matchTema = idSeccion.match(/^tema-([1-3])$/);
     if (matchTema) {
       const numTema = matchTema[1];
+      ["1", "2", "3"].forEach(function (n) {
+        const grupo = document.getElementById("grupo-tema-" + n);
+        const btn = document.querySelector('[data-bs-target="#grupo-tema-' + n + '"]');
+        const abrir = n === numTema;
+        if (grupo) grupo.classList.toggle("show", abrir);
+        if (btn) {
+          btn.classList.toggle("collapsed", !abrir);
+          btn.setAttribute("aria-expanded", abrir ? "true" : "false");
+        }
+      });
       const contenedor = document.querySelector('[data-pestanas="' + numTema + '"]');
       const btnActivo = contenedor && contenedor.querySelector(".tab-btn.activa");
       const tabActiva = btnActivo ? btnActivo.dataset.tab : "aprender";
@@ -298,6 +308,15 @@
         enlace.classList.toggle("activo", enlace.getAttribute("href") === hashSub);
       });
     } else {
+      ["1", "2", "3"].forEach(function (n) {
+        const grupo = document.getElementById("grupo-tema-" + n);
+        const btn = document.querySelector('[data-bs-target="#grupo-tema-' + n + '"]');
+        if (grupo) grupo.classList.remove("show");
+        if (btn) {
+          btn.classList.add("collapsed");
+          btn.setAttribute("aria-expanded", "false");
+        }
+      });
       document.querySelectorAll(".indice-lista a").forEach(function (enlace) {
         enlace.classList.remove("activo");
       });

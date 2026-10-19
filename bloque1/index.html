@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Bloque 1 · Lógica, álgebra, aritmética y geometría básica. Lectura, práctica y quiz conceptual con retroalimentación.">
   <title>Bloque 1 · Programación Competitiva · Bug Squad</title>
-  <link rel="icon" type="image/x-icon" href="../favicon.ico">
-  <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,13 +13,16 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <link rel="stylesheet" href="../css/estilos.css">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
 </head>
 <body>
 
   <nav class="navbar navbar-expand-lg navbar-curso sticky-top">
     <div class="container-fluid px-lg-4">
       <a class="navbar-brand" href="../index.html">
-        <img src="../favicon.ico" alt="" width="32" height="32" class="icono-sitio">
+        <img class="logo-nav" src="../assets/img/icono.png" alt="" width="34" height="34">
         <span>Programación Competitiva <span class="marca-bug">· Bug Squad</span></span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menú">
@@ -77,11 +78,11 @@
                   <span class="grupo-numero">2</span>
                   <span>Aritmética y conteo</span>
                 </a>
-                <button class="grupo-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-2" aria-expanded="true" aria-controls="grupo-tema-2" aria-label="Mostrar u ocultar Tema 2">
+                <button class="grupo-toggle collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-2" aria-expanded="false" aria-controls="grupo-tema-2" aria-label="Mostrar u ocultar Tema 2">
                   <i class="fa-solid fa-chevron-down"></i>
                 </button>
               </div>
-              <div class="collapse show" id="grupo-tema-2">
+              <div class="collapse" id="grupo-tema-2">
                 <ul class="indice-lista">
                   <li><a href="#tema-2-aprender">Aprender</a></li>
                   <li><a href="#tema-2-practicar">Practicar</a></li>
@@ -96,11 +97,11 @@
                   <span class="grupo-numero">3</span>
                   <span>Geometría y patrones</span>
                 </a>
-                <button class="grupo-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-3" aria-expanded="true" aria-controls="grupo-tema-3" aria-label="Mostrar u ocultar Tema 3">
+                <button class="grupo-toggle collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-3" aria-expanded="false" aria-controls="grupo-tema-3" aria-label="Mostrar u ocultar Tema 3">
                   <i class="fa-solid fa-chevron-down"></i>
                 </button>
               </div>
-              <div class="collapse show" id="grupo-tema-3">
+              <div class="collapse" id="grupo-tema-3">
                 <ul class="indice-lista">
                   <li><a href="#tema-3-aprender">Aprender</a></li>
                   <li><a href="#tema-3-practicar">Practicar</a></li>
@@ -299,38 +300,15 @@
         <!-- CIERRE DEL BLOQUE: TAREAS EN PDF -->
         <section class="seccion" id="tareas-pdf" data-vista-seccion="tareas-pdf" hidden>
           <div class="numero-seccion" aria-hidden="true"><i class="fa-solid fa-file-pdf"></i></div>
-          <h2>Ejercicios y tareas · Bloque 1</h2>
-          <p class="lead-tema">Álgebra, lógica, aritmética, conteo, geometría, trigonometría y patrones. Antes de resolver cualquier problema, traduce cada situación a un modelo matemático claro.</p>
+          <h2>Tareas en PDF · Cierre del Bloque 1</h2>
+          <p class="lead-tema">Compendio de ejercicios de los tres temas del bloque para reforzar lo aprendido en cuaderno, imprimir o trabajar sin conexión.</p>
 
           <div class="bloque-pestana" id="tema-3-tareas">
-            <h3><span class="icono-bloque amber"><i class="fa-solid fa-file-pdf"></i></span> Tarea · Bloque 1 (PDF con ejercicios y clave de respuestas)</h3>
-            <p class="texto-suave mb-3">Compendio de 15 problemas de entrenamiento distribuidos en los tres temas del bloque, acompañado de su clave de respuestas y procedimientos breves para comparar tu razonamiento:</p>
-            <div class="row g-3 mb-4">
-              <div class="col-md-4">
-                <div class="p-3 rounded border bg-light-subtle h-100">
-                  <p class="fw-bold mb-1"><i class="fa-solid fa-scale-balanced me-1 text-primary" aria-hidden="true"></i> Tema 1 · Álgebra y lógica</p>
-                  <p class="small text-secondary mb-0">Ejercicios 1 a 5: evaluación de expresiones y propiedades, ecuaciones de primer grado con paréntesis, planteamiento verbal, tablas de verdad y negación del condicional.</p>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="p-3 rounded border bg-light-subtle h-100">
-                  <p class="fw-bold mb-1"><i class="fa-solid fa-calculator me-1 text-primary" aria-hidden="true"></i> Tema 2 · Aritmética, conteo y casos</p>
-                  <p class="small text-secondary mb-0">Ejercicios 6 a 10: paridad y división con residuo, funciones piso y techo, principios de suma y producto, inclusión-exclusión y conteo de múltiplos en un rango.</p>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="p-3 rounded border bg-light-subtle h-100">
-                  <p class="fw-bold mb-1"><i class="fa-solid fa-draw-polygon me-1 text-primary" aria-hidden="true"></i> Tema 3 · Geometría, trigonometría y patrones</p>
-                  <p class="small text-secondary mb-0">Ejercicios 11 a 15: ángulos de un polígono, Pitágoras y distancia, razones trigonométricas en ángulos notables, progresión aritmética y suma de impares.</p>
-                </div>
-              </div>
-            </div>
+            <h3><span class="icono-bloque amber"><i class="fa-solid fa-file-pdf"></i></span> Cuadernillo de ejercicios del Bloque 1</h3>
+            <p class="texto-suave mb-3">Incluye 15 ejercicios seleccionados de Álgebra y lógica, Aritmética, conteo y casos, y Geometría, trigonometría y patrones para reforzar los temas del bloque.</p>
             <div class="d-flex flex-wrap gap-2 align-items-center">
-              <button type="button" class="btn btn-tide" data-bs-toggle="modal" data-bs-target="#modalPresentacion" data-src="../assets/docs/Ejercicios_y_tareas_Bloque1.pdf" data-titulo="Ejercicios y tareas · Bloque 1 (PDF)">
-                <i class="fa-solid fa-eye me-1" aria-hidden="true"></i> Ver tarea en pantalla (PDF)
-              </button>
-              <a class="enlace-recurso m-0" href="../assets/docs/Ejercicios_y_tareas_Bloque1.pdf" download="Ejercicios_y_tareas_Bloque1.pdf" target="_blank" rel="noopener">
-                <i class="fa-solid fa-file-arrow-down me-1" aria-hidden="true"></i> Descargar Ejercicios y tareas (PDF)
+              <a class="btn btn-tide" href="../assets/docs/Ejercicios_Bloque1_sin_respuestas.pdf" target="_blank" rel="noopener">
+                <i class="fa-solid fa-file-arrow-down me-1"></i> Descargar Ejercicios del Bloque 1 (PDF)
               </a>
             </div>
           </div>
@@ -350,8 +328,8 @@
             <div class="col-md-6">
               <div class="pendiente-card">
                 <span class="badge rounded-pill mb-2">En preparación</span>
-                <h3 class="h5">Ejemplos resueltos paso a paso</h3>
-                <p class="texto-suave mb-0">Soluciones comentadas línea por línea para cada tema del bloque.</p>
+                <h3 class="h5">Ejemplos resueltos en C++</h3>
+                <p class="texto-suave mb-0">Código comentado línea por línea para cada tema del bloque.</p>
               </div>
             </div>
             <div class="col-md-6">
@@ -385,7 +363,7 @@
           <iframe id="iframePresentacion" title="Presentación del tema" allow="fullscreen" loading="lazy"></iframe>
         </div>
         <div class="modal-footer justify-content-between">
-          <span class="small text-secondary">¿No se muestra el documento aquí?</span>
+          <span class="small text-secondary">¿No se muestra la presentación aquí?</span>
           <a id="enlacePresentacion" href="#" target="_blank" rel="noopener" class="btn btn-tide btn-sm">Abrir en otra pestaña</a>
         </div>
       </div>
@@ -394,14 +372,14 @@
 
   <footer class="pie-curso">
     <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
-      <span>Programación Competitiva · Bug Squad · Mazatlán, Sinaloa</span>
+      <span>Programación Competitiva en C++ · Bug Squad · Mazatlán, Sinaloa</span>
       <span>Diseñado y organizado por Prof. Rigoberto Santiago Garzón</span>
     </div>
   </footer>
 
   <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\(',right:'\)',display:false},{left:'\[',right:'\]',display:true}],throwOnError:false});}"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}],throwOnError:false});}"></script>
   <script src="../js/lecturas-bloque1.js"></script>
   <script src="../js/ejercicios-bloque1.js"></script>
   <script src="../js/quiz-conceptual.js"></script>
