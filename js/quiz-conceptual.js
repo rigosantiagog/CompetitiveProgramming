@@ -1,11 +1,15 @@
 /* ==========================================================
-   Sección B · Quizz · Bloque 1
-   - Tema 1: 10 preguntas con opciones A, B, C, D, calificación
-     global ("Tu puntaje: X / 10"), aviso si hay preguntas sin
-     responder, explicación de la clave en cada pregunta (incluso
-     cuando el alumno acierta) y botón "Reintentar".
-   - Renderizado matemático con KaTeX.
-   - Sin almacenamiento en navegador ni servidor.
+   Quiz · Bloque 1 (Temas 1, 2 y 3)
+   - Tema 1: 10 preguntas
+   - Tema 2: 8 preguntas agrupadas en Subtemas 5 a 8
+   - Tema 3: 8 preguntas agrupadas en Subtemas 9 a 12
+   - Al calificar: muestra "Tu puntaje: X / N", "Aprobado" (verde, >= 6)
+     o "No aprobado" (rojo, < 6), marca cada pregunta como correcta
+     o incorrecta y despliega la explicación de la clave debajo de
+     cada pregunta aunque el alumno haya acertado.
+   - Si hay preguntas sin responder, avisa antes de calificar:
+     "Tienes preguntas sin responder. ¿Calificar de todos modos?".
+   - Botón "Reintentar" limpia las respuestas y oculta resultados.
    ========================================================== */
 
 (function () {
@@ -15,6 +19,7 @@
   const QUIZ = {
     1: {
       titulo: "Tema 1 · Álgebra y lógica",
+      intro: "Este cuestionario te ayuda a detectar errores de procedimiento antes de usar estas ideas en problemas más difíciles. Responde las 10 preguntas, elige una opción en cada una y después califica para ver tu puntaje y la explicación de cada respuesta.",
       preguntas: [
         {
           titulo: "1. Evaluación de expresiones.",
@@ -98,62 +103,181 @@
         }
       ]
     },
+
     2: {
       titulo: "Tema 2 · Aritmética, conteo y casos",
+      intro: "Responde las 8 preguntas de opción múltiple y pulsa Calificar para conocer tu puntaje y revisar la explicación de cada respuesta. Se aprueba con 6 o más aciertos.",
       preguntas: [
-        { q: "¿Cuál es el cociente y el residuo de $23 \\div 5$?",
-          o: ["Cociente $4$, residuo $3$", "Cociente $5$, residuo $3$", "Cociente $4$, residuo $2$", "Cociente $3$, residuo $8$"], c: 0,
-          e: "$23 = 5 \\cdot 4 + 3$. El cociente es $4$ y el residuo es $3$." },
-        { q: "Si al repartir sobran objetos y hace falta un grupo más, ¿qué función se usa?",
-          o: ["Piso $\\lfloor x \\rfloor$", "Techo $\\lceil x \\rceil$", "Redondeo al entero más cercano", "Multiplicación"], c: 1,
-          e: "El techo redondea hacia arriba: $\\lceil 100 \\div 36 \\rceil = 3$ autobuses cuando sobran pasajeros." },
-        { q: "Hay $3$ autobuses o $2$ trenes para viajar. ¿Qué operación da el total de opciones?",
-          o: ["Suma: $3 + 2 = 5$", "Producto: $3 \\cdot 2 = 6$", "Resta: $3 - 2 = 1$", "División: $3 \\div 2$"], c: 0,
-          e: "Las opciones no se mezclan (o uno o el otro), así que se suman." },
-        { q: "Tienes $4$ camisas y $3$ pantalones, y cualquier combinación sirve. ¿Cuántos outfits hay?",
-          o: ["$7$", "$12$", "$9$", "$24$"], c: 1,
-          e: "Son decisiones independientes que se combinan: $4 \\cdot 3 = 12$." },
-        { q: "Al elegir presidente y secretario distintos entre $5$ personas, ¿el orden importa?",
-          o: ["Sí, porque los cargos son distintos", "No, nunca importa", "Depende del número de personas", "Solo si hay dos personas"], c: 0,
-          e: "Ana presidenta y Luis secretario es distinto de Luis presidente y Ana secretaria. Por eso se multiplica $5 \\cdot 4 = 20$." },
-        { q: "Al contar los números del $1$ al $20$ que son múltiplos de $2$ o de $5$ ($10 + 4 - 2$), ¿por qué se resta $2$?",
-          o: ["Para no contar dos veces los que cumplen ambas condiciones", "Porque el $0$ no cuenta", "Por error de cálculo", "No se resta nada"], c: 0,
-          e: "Los múltiplos de $10$ ($10$ y $20$) están en los dos casos. Se restan una vez para contarlos solo una vez." },
-        { q: "¿Cuál es el residuo de $17 \\bmod 5$?",
-          o: ["$2$", "$3$", "$5$", "$0$"], c: 0,
-          e: "$5 \\cdot 3 = 15$ y $17 - 15 = 2$. El residuo siempre es menor que el divisor." },
-        { q: "¿Es el $0$ un número par?",
-          o: ["Sí, porque $0 = 2 \\cdot 0$", "No, porque no es positivo", "Depende del contexto", "No tiene paridad"], c: 0,
-          e: "Al dividir $0$ entre $2$ el residuo es $0$, así que es par." }
+        {
+          subtema: "Subtema 5 · Paridad y divisibilidad",
+          titulo: "",
+          q: "Si $a$ y $b$ son enteros impares, ¿cuál de las siguientes proposiciones es siempre verdadera?",
+          o: [
+            "(A) La suma $a + b$ es impar.",
+            "(B) El producto $a \\cdot b$ es par.",
+            "(C) La suma $a + b$ es par.",
+            "(D) $(a + b) \\bmod 2 = 1$."
+          ],
+          c: 2,
+          e: "<strong>Respuesta correcta: (C).</strong> Sean $a = 2k + 1$ y $b = 2m + 1$. Entonces $a + b = 2k + 2m + 2 = 2(k + m + 1)$, que es múltiplo de 2 y, por tanto, par. (A) supone erróneamente que la suma de impares es impar; (B) olvida que impar $\\cdot$ impar = impar; (D) afirma que una suma par deja residuo 1 al dividirse entre 2."
+        },
+        {
+          subtema: "Subtema 5 · Paridad y divisibilidad",
+          titulo: "",
+          q: "En una competencia escolar se reparten equitativamente 83 dulces entre 4 alumnos. ¿Cuántos dulces quedan sobrantes sin poderse repartir en partes iguales?",
+          o: ["(A) 0", "(B) 3", "(C) 20", "(D) 21"],
+          c: 1,
+          e: "<strong>Respuesta correcta: (B).</strong> $83 = 4 \\cdot 20 + 3$, así que $83 \\bmod 4 = 3$ dulces sobrantes. (C) reporta el cociente $\\lfloor 83 / 4 \\rfloor = 20$ en lugar del residuo; (D) suma 1 al cociente sin justificación."
+        },
+        {
+          subtema: "Subtema 6 · Aritmética con enteros",
+          titulo: "",
+          q: "Una fábrica empaqueta 45 componentes electrónicos. Cada caja tiene un límite máximo de 6 componentes. ¿Cuál es la cantidad mínima de cajas necesarias para transportar la totalidad de los componentes?",
+          o: [
+            "(A) $\\lfloor 45 / 6 \\rfloor = 7$",
+            "(B) $\\lceil 45 / 6 \\rceil = 8$",
+            "(C) $45 \\bmod 6 = 3$",
+            "(D) $\\lfloor 45 / 6 \\rfloor + 3 = 10$"
+          ],
+          c: 1,
+          e: "<strong>Respuesta correcta: (B).</strong> Para transportar todos los componentes sin dejar ninguno, usamos el techo: $\\lceil 45 / 6 \\rceil = 8$. (A) trunca con piso y deja 3 componentes fuera; (C) da solo los componentes sobrantes; (D) suma 3 cajas sin justificación."
+        },
+        {
+          subtema: "Subtema 6 · Aritmética con enteros",
+          titulo: "",
+          q: "¿Cuál es el valor exacto de la expresión $\\lfloor -4.2 \\rfloor + \\lceil 3.1 \\rceil$?",
+          o: [
+            "(A) $-4 + 4 = 0$",
+            "(B) $-5 + 3 = -2$",
+            "(C) $-5 + 4 = -1$",
+            "(D) $-4 + 5 = 1$"
+          ],
+          c: 2,
+          e: "<strong>Respuesta correcta: (C).</strong> El piso redondea hacia $-\\infty$, así que $\\lfloor -4.2 \\rfloor = -5$. El techo redondea hacia $+\\infty$, así que $\\lceil 3.1 \\rceil = 4$. La suma es $-5 + 4 = -1$. (A) trunca $-4.2$ hacia cero (obteniendo $-4$), aunque el techo de 3.1 sí es 4; (B) aplica piso a 3.1 en vez de techo; (D) trunca $-4.2$ hacia cero y suma un 5 sin justificación."
+        },
+        {
+          subtema: "Subtema 7 · Conteo básico (suma, producto, orden)",
+          titulo: "",
+          q: "¿Cuántos enteros existen en el intervalo cerrado de días $[12, 35]$?",
+          o: [
+            "(A) $35 - 12 = 23$",
+            "(B) $35 - 12 + 1 = 24$",
+            "(C) $35 - 12 - 1 = 22$",
+            "(D) $35 + 12 = 47$"
+          ],
+          c: 1,
+          e: "<strong>Respuesta correcta: (B).</strong> El número de enteros en un intervalo cerrado $[a, b]$ es $b - a + 1$. Aquí, $35 - 12 + 1 = 24$. (A) es el error off-by-one de no incluir el extremo inicial (la \"cerca de madera\"); (C) resta un elemento de más."
+        },
+        {
+          subtema: "Subtema 7 · Conteo básico (suma, producto, orden)",
+          titulo: "",
+          q: "¿Cuál es el valor exacto de la sumatoria de los primeros 50 enteros positivos, $\\sum_{x=1}^{50} x$?",
+          o: ["(A) 1225", "(B) 2550", "(C) 2500", "(D) 1275"],
+          c: 3,
+          e: "<strong>Respuesta correcta: (D).</strong> Con $\\frac{n(n+1)}{2}$ y $n = 50$: $\\frac{50 \\cdot 51}{2} = 25 \\cdot 51 = 1275$. (A) = 1225 usa $(n - 1)$ en la fórmula; (B) = 2550 es $50 \\cdot 51$ sin dividir entre 2; (C) = 2500 es $50^2$, que confunde la fórmula."
+        },
+        {
+          subtema: "Subtema 8 · Razonamiento por casos y simulación",
+          titulo: "",
+          q: "Un club de ciencias tiene 30 alumnos que estudian Ajedrez, 25 que estudian Danza y 10 que cursan ambas actividades. ¿Cuántos alumnos integran el club si cada integrante participa en al menos una de las dos actividades?",
+          o: [
+            "(A) $30 + 25 = 55$",
+            "(B) $30 + 25 + 10 = 65$",
+            "(C) $30 + 25 - 10 = 45$",
+            "(D) $30 \\cdot 25 / 10 = 75$"
+          ],
+          c: 2,
+          e: "<strong>Respuesta correcta: (C).</strong> Por Inclusión-Exclusión, $|A \\cup B| = 30 + 25 - 10 = 45$. (A) suma ambas cantidades sin restar los 10 que están en la intersección (sobreconteo); (B) suma la intersección en lugar de restarla; (D) no corresponde a ninguna regla de conteo."
+        },
+        {
+          subtema: "Subtema 8 · Razonamiento por casos y simulación",
+          titulo: "",
+          q: "Al aplicar el Principio de Inclusión-Exclusión a dos conjuntos $A$ y $B$ totalmente disjuntos ($A \\cap B = \\emptyset$), ¿a qué expresión se reduce $|A \\cup B|$?",
+          o: [
+            "(A) $|A| + |B|$",
+            "(B) $|A| + |B| - 1$",
+            "(C) $|A| \\cdot |B|$",
+            "(D) $0$"
+          ],
+          c: 0,
+          e: "<strong>Respuesta correcta: (A).</strong> Si $A \\cap B = \\emptyset$, entonces $|A \\cap B| = 0$ y $|A \\cup B| = |A| + |B| - 0 = |A| + |B|$, lo que coincide con la regla de la suma para eventos excluyentes. (B), (C) y (D) no corresponden a la fórmula."
+        }
       ]
     },
+
     3: {
       titulo: "Tema 3 · Geometría, trigonometría y patrones",
+      intro: "Responde las 8 preguntas de opción múltiple y pulsa Calificar para conocer tu puntaje y revisar la explicación de cada respuesta. Se aprueba con 6 o más aciertos.",
       preguntas: [
-        { q: "¿Cuánto suman los ángulos interiores de un triángulo?",
-          o: ["$90^\\circ$", "$180^\\circ$", "$270^\\circ$", "$360^\\circ$"], c: 1,
-          e: "Los tres ángulos de cualquier triángulo suman $180^\\circ$. Los $360^\\circ$ corresponden a un cuadrilátero." },
-        { q: "El teorema de Pitágoras $a^2 + b^2 = c^2$ se aplica a:",
-          o: ["Cualquier triángulo", "Triángulos rectángulos", "Triángulos isósceles", "Triángulos equiláteros"], c: 1,
-          e: "Solo funciona en triángulos rectángulos, donde $c$ es la hipotenusa." },
-        { q: "¿Cuál es la distancia entre $(0, 0)$ y $(3, 4)$?",
-          o: ["$5$", "$7$", "$12$", "$25$"], c: 0,
-          e: "$d = \\sqrt{(3 - 0)^2 + (4 - 0)^2} = \\sqrt{25} = 5$." },
-        { q: "En un triángulo rectángulo, $\\sin\\theta$ es igual a:",
-          o: ["$\\dfrac{\\text{opuesto}}{\\text{adyacente}}$", "$\\dfrac{\\text{opuesto}}{\\text{hipotenusa}}$", "$\\dfrac{\\text{adyacente}}{\\text{hipotenusa}}$", "$\\dfrac{\\text{hipotenusa}}{\\text{opuesto}}$"], c: 1,
-          e: "SOH: $\\sin\\theta = \\dfrac{\\text{opuesto}}{\\text{hipotenusa}}$." },
-        { q: "¿Cuánto vale $\\sin 30^\\circ$?",
-          o: ["$\\dfrac{1}{2}$", "$\\dfrac{\\sqrt{3}}{2}$", "$1$", "$0$"], c: 0,
-          e: "$\\sin 30^\\circ = \\dfrac{1}{2}$. Conviene memorizar los valores de $30^\\circ$, $45^\\circ$ y $60^\\circ$." },
-        { q: "Dos ángulos complementarios suman:",
-          o: ["$90^\\circ$", "$180^\\circ$", "$360^\\circ$", "$45^\\circ$"], c: 0,
-          e: "Los complementarios suman $90^\\circ$. Los suplementarios suman $180^\\circ$." },
-        { q: "En la fórmula $a_n = a_1 + (n - 1)\\cdot d$, ¿qué representa $d$?",
-          o: ["El primer término", "La diferencia constante entre términos consecutivos", "El número de términos", "La suma de la secuencia"], c: 1,
-          e: "En una progresión aritmética, cada término se obtiene sumando la misma diferencia $d$ al anterior." },
-        { q: "¿Cuánto vale la suma $1 + 3 + 5 + 7$?",
-          o: ["$16$", "$14$", "$20$", "$12$"], c: 0,
-          e: "La suma de los primeros $n$ impares es $n^2$. Aquí son $4$ impares: $4^2 = 16$." }
+        {
+          subtema: "Subtema 9 · Ángulos y triángulos",
+          titulo: "",
+          q: "¿Cuál es el valor del ángulo complementario de un ángulo de $35^\\circ$?",
+          o: ["(A) $55^\\circ$", "(B) $145^\\circ$", "(C) $65^\\circ$", "(D) $90^\\circ$"],
+          c: 0,
+          e: "<strong>Respuesta correcta: (A).</strong> Dos ángulos son complementarios si suman $90^\\circ$. Entonces $90^\\circ - 35^\\circ = 55^\\circ$. La opción (B) es el suplementario, $180^\\circ - 35^\\circ = 145^\\circ$, que se confunde con frecuencia."
+        },
+        {
+          subtema: "Subtema 9 · Ángulos y triángulos",
+          titulo: "",
+          q: "Si la suma de los ángulos internos de un polígono convexo es $1260^\\circ$, ¿cuántos lados tiene?",
+          o: ["(A) 7 lados", "(B) 9 lados", "(C) 8 lados", "(D) 10 lados"],
+          c: 1,
+          e: "<strong>Respuesta correcta: (B).</strong> $1260 = (n - 2) \\cdot 180$. Como $1260 / 180 = 7$, entonces $n - 2 = 7$ y $n = 9$."
+        },
+        {
+          subtema: "Subtema 10 · Pitágoras y distancia entre dos puntos",
+          titulo: "",
+          q: "En un triángulo rectángulo, los catetos miden 5 cm y 12 cm. ¿Cuánto mide la hipotenusa?",
+          o: ["(A) 17 cm", "(B) 15 cm", "(C) 13 cm", "(D) 169 cm"],
+          c: 2,
+          e: "<strong>Respuesta correcta: (C).</strong> $c = \\sqrt{5^2 + 12^2} = \\sqrt{25 + 144} = \\sqrt{169} = 13$ cm. La opción (D) olvida sacar la raíz cuadrada final."
+        },
+        {
+          subtema: "Subtema 10 · Pitágoras y distancia entre dos puntos",
+          titulo: "",
+          q: "¿Cuál es la distancia exacta entre los puntos $P_1(1, 1)$ y $P_2(4, 5)$?",
+          o: ["(A) 7", "(B) $\\sqrt{7}$", "(C) 25", "(D) 5"],
+          c: 3,
+          e: "<strong>Respuesta correcta: (D).</strong> $d = \\sqrt{(4 - 1)^2 + (5 - 1)^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$. La opción (A) suma $3 + 4$ sin elevar al cuadrado; la opción (C) olvida sacar la raíz."
+        },
+        {
+          subtema: "Subtema 11 · Razones trigonométricas",
+          titulo: "",
+          q: "En un triángulo rectángulo con hipotenusa $H = 10$ y un ángulo de referencia $\\theta = 30^\\circ$, ¿cuánto mide el cateto adyacente?",
+          o: ["(A) $5\\sqrt{3}$", "(B) 5", "(C) $10\\sqrt{3}$", "(D) $\\frac{5}{\\sqrt{3}}$"],
+          c: 0,
+          e: "<strong>Respuesta correcta: (A).</strong> $\\cos 30^\\circ = \\frac{\\text{adyacente}}{10}$, así que el adyacente es $10 \\cdot \\frac{\\sqrt{3}}{2} = 5\\sqrt{3}$. La opción (D) confunde el coseno con la tangente."
+        },
+        {
+          subtema: "Subtema 11 · Razones trigonométricas",
+          titulo: "",
+          q: "Un estudiante calcula $\\cos(60^\\circ)$ en su calculadora y obtiene $-0.9524$. ¿A qué se debe?",
+          o: [
+            "(A) Confundió el cateto opuesto con la hipotenusa.",
+            "(B) La calculadora está en modo Radianes (RAD) en lugar de Grados (DEG).",
+            "(C) Dividió erróneamente la tangente entre el seno.",
+            "(D) La calculadora está en modo Grados (DEG) y debía estar en Radianes."
+          ],
+          c: 1,
+          e: "<strong>Respuesta correcta: (B).</strong> Un resultado negativo al calcular el coseno de un ángulo agudo como $60^\\circ$ indica que la calculadora procesa el número 60 en radianes. Debe estar en grados (DEG)."
+        },
+        {
+          subtema: "Subtema 12 · Patrones y secuencias",
+          titulo: "",
+          q: "¿Cuál es la suma exacta de los primeros 50 enteros positivos, $1 + 2 + 3 + \\dots + 50$?",
+          o: ["(A) 2500", "(B) 1225", "(C) 1275", "(D) 2550"],
+          c: 2,
+          e: "<strong>Respuesta correcta: (C).</strong> $S_{50} = \\frac{50 \\cdot 51}{2} = 25 \\cdot 51 = 1275$. La opción (A) aplica $n^2$, fórmula que solo sirve para impares."
+        },
+        {
+          subtema: "Subtema 12 · Patrones y secuencias",
+          titulo: "",
+          q: "¿Cuál es la suma de los primeros 20 números impares, $1 + 3 + 5 + \\dots + 39$?",
+          o: ["(A) 200", "(B) 380", "(C) 420", "(D) 400"],
+          c: 3,
+          e: "<strong>Respuesta correcta: (D).</strong> La suma de los primeros $n$ impares es $n^2$. Con $n = 20$, $S_{20} = 20^2 = 400$. La opción (C) es un error de cálculo."
+        }
       ]
     }
   };
@@ -188,101 +312,61 @@
   /* Dibuja el quiz de un tema dentro de su contenedor. */
   function dibujar(tema, contenedor) {
     const datos = QUIZ[tema];
-    let html = "";
+    let html = '<p class="mb-3">' + datos.intro + '</p>';
+    let subtemaActual = null;
 
-    if (tema === 1) {
-      html += '<p class="mb-3">Este cuestionario te ayuda a detectar errores de procedimiento antes de usar estas ideas en problemas más difíciles. Responde las 10 preguntas, elige una opción en cada una y después califica para ver tu puntaje y la explicación de cada respuesta.</p>';
-      datos.preguntas.forEach(function (p, i) {
-        const id = "cq-" + tema + "-" + i;
-        html +=
-          '<div class="tarjeta-pregunta" id="' + id + '">' +
-            '<div class="d-flex justify-content-between align-items-start gap-2 mb-3">' +
-              '<p class="mb-0"><span class="numero">' + (i + 1) + '</span><strong>' + p.titulo + '</strong> ' + p.q + '</p>' +
-              '<span class="estado-pregunta-quiz" id="' + id + '-estado" hidden></span>' +
-            '</div>' +
-            '<div role="radiogroup" aria-label="Opciones de la pregunta ' + (i + 1) + '">' +
-              p.o.map(function (op, j) {
-                return '<div class="form-check">' +
-                         '<input class="form-check-input" type="radio" name="' + id + '" id="' + id + '-' + j + '" value="' + j + '">' +
-                         '<label class="form-check-label" for="' + id + '-' + j + '">' + op + '</label>' +
-                       '</div>';
-              }).join("") +
-            '</div>' +
-            '<div id="' + id + '-fb" aria-live="polite"></div>' +
-          '</div>';
-      });
+    datos.preguntas.forEach(function (p, i) {
+      if (p.subtema && p.subtema !== subtemaActual) {
+        subtemaActual = p.subtema;
+        html += '<h4 class="subtitulo-grupo-practica">' + p.subtema + '</h4>';
+      }
+      const id = "cq-" + tema + "-" + i;
+      const tituloHtml = p.titulo ? ('<strong>' + p.titulo + '</strong> ') : '';
       html +=
-        '<div id="cq-1-aviso" aria-live="assertive"></div>' +
-        '<div id="cq-1-resultado" aria-live="polite"></div>' +
-        '<div class="d-flex flex-wrap gap-2 align-items-center mt-3">' +
-          '<button type="button" class="btn btn-ocean btn-calificar-cq" data-tema="1" aria-label="Calificar quizz del Tema 1">' +
-            '<i class="fa-solid fa-clipboard-check me-1" aria-hidden="true"></i> Calificar' +
-          '</button>' +
-          '<button type="button" class="btn btn-outline-secondary btn-reintentar-cq" data-tema="1" aria-label="Reintentar quizz del Tema 1">' +
-            '<i class="fa-solid fa-rotate-right me-1" aria-hidden="true"></i> Reintentar' +
-          '</button>' +
-        '</div>';
-    } else {
-      datos.preguntas.forEach(function (p, i) {
-        const id = "cq-" + tema + "-" + i;
-        html +=
-          '<div class="tarjeta-pregunta" id="' + id + '">' +
-            '<p class="mb-3"><span class="numero">' + (i + 1) + '</span>' + p.q + '</p>' +
+        '<div class="tarjeta-pregunta" id="' + id + '">' +
+          '<div class="d-flex justify-content-between align-items-start gap-2 mb-3">' +
+            '<p class="mb-0"><span class="numero">' + (i + 1) + '</span>' + tituloHtml + p.q + '</p>' +
+            '<span class="estado-pregunta-quiz" id="' + id + '-estado" hidden></span>' +
+          '</div>' +
+          '<div role="radiogroup" aria-label="Opciones de la pregunta ' + (i + 1) + ' del Tema ' + tema + '">' +
             p.o.map(function (op, j) {
               return '<div class="form-check">' +
                        '<input class="form-check-input" type="radio" name="' + id + '" id="' + id + '-' + j + '" value="' + j + '">' +
                        '<label class="form-check-label" for="' + id + '-' + j + '">' + op + '</label>' +
                      '</div>';
             }).join("") +
-            '<button type="button" class="btn btn-sm btn-tide mt-3 btn-comprobar-cq" data-tema="' + tema + '" data-i="' + i + '">' +
-              '<i class="fa-solid fa-check"></i> Comprobar</button>' +
-            '<div id="' + id + '-fb"></div>' +
-          '</div>';
-      });
-      html += '<div class="d-flex flex-wrap gap-2 align-items-center mt-2">' +
-                '<button type="button" class="btn btn-ocean btn-calificar-cq" data-tema="' + tema + '">Calificar quiz</button>' +
-                '<span class="small text-secondary">Aprueba con ' + APROBAR_CON + ' de ' + datos.preguntas.length + '</span>' +
-              '</div>' +
-              '<div id="cq-' + tema + '-resultado"></div>';
-    }
+          '</div>' +
+          '<div id="' + id + '-fb" aria-live="polite"></div>' +
+        '</div>';
+    });
+
+    html +=
+      '<div id="cq-' + tema + '-aviso" aria-live="assertive"></div>' +
+      '<div id="cq-' + tema + '-resultado" aria-live="polite"></div>' +
+      '<div class="d-flex flex-wrap gap-2 align-items-center mt-3">' +
+        '<button type="button" class="btn btn-ocean btn-calificar-cq" data-tema="' + tema + '" aria-label="Calificar quiz del Tema ' + tema + '">' +
+          '<i class="fa-solid fa-clipboard-check me-1" aria-hidden="true"></i> Calificar' +
+        '</button>' +
+        '<button type="button" class="btn btn-outline-secondary btn-reintentar-cq" data-tema="' + tema + '" aria-label="Reintentar quiz del Tema ' + tema + '">' +
+          '<i class="fa-solid fa-rotate-right me-1" aria-hidden="true"></i> Reintentar' +
+        '</button>' +
+        '<span class="small text-secondary ms-1">Aprueba con ' + APROBAR_CON + ' o más de ' + datos.preguntas.length + '</span>' +
+      '</div>';
 
     contenedor.innerHTML = html;
     tipografiar(contenedor);
   }
 
-  /* Comprueba una pregunta individual (Temas 2 y 3). */
-  function comprobar(tema, i) {
-    const p = QUIZ[tema].preguntas[i];
-    const id = "cq-" + tema + "-" + i;
-    const sel = document.querySelector('input[name="' + id + '"]:checked');
-    const caja = document.getElementById(id + "-fb");
-    if (!sel) {
-      caja.className = "retroalimentacion p-3 rounded bg-warning-subtle border border-warning";
-      caja.innerHTML = "Elige una opción antes de comprobar.";
-      return null;
-    }
-    const ok = Number(sel.value) === p.c;
-    caja.className = "retroalimentacion p-3 rounded " + (ok
-      ? "bg-success-subtle border border-success"
-      : "bg-danger-subtle border border-danger");
-    caja.innerHTML = (ok
-      ? "<strong><i class='fa-solid fa-circle-check'></i> Correcto.</strong> "
-      : "<strong><i class='fa-solid fa-circle-xmark'></i> No es esa.</strong> La respuesta es " + p.o[p.c] + ". ")
-      + p.e;
-    tipografiar(caja);
-    return ok;
-  }
-
-  /* Ejecuta la calificación completa del Quizz del Tema 1. */
-  function ejecutarCalificacionTema1() {
-    const datos = QUIZ[1];
+  /* Ejecuta la calificación completa del Quiz de un tema. */
+  function ejecutarCalificacion(tema) {
+    const datos = QUIZ[tema];
     let correctas = 0;
-    const aviso = document.getElementById("cq-1-aviso");
+    const aviso = document.getElementById("cq-" + tema + "-aviso");
     if (aviso) aviso.innerHTML = "";
-    avisoPendienteTema[1] = false;
+    avisoPendienteTema[tema] = false;
 
     datos.preguntas.forEach(function (p, i) {
-      const id = "cq-1-" + i;
+      const id = "cq-" + tema + "-" + i;
       const tarjeta = document.getElementById(id);
       const sel = document.querySelector('input[name="' + id + '"]:checked');
       const cajaFb = document.getElementById(id + "-fb");
@@ -317,29 +401,40 @@
     });
 
     const total = datos.preguntas.length;
-    const aprobado = correctas >= 7;
-    aprobados[1] = aprobado;
+    const aprobado = correctas >= APROBAR_CON;
+    aprobados[tema] = aprobado;
     actualizarAvance();
 
-    const cajaResultado = document.getElementById("cq-1-resultado");
+    const cajaResultado = document.getElementById("cq-" + tema + "-resultado");
     if (cajaResultado) {
       cajaResultado.innerHTML =
         '<div class="resultado-quiz ' + (aprobado ? "aprobado" : "no-aprobado") + ' mt-3">' +
-          '<p class="puntaje-grande mb-1">Tu puntaje: ' + correctas + ' / ' + total + '</p>' +
-          '<p class="mb-0 texto-suave">Revisa debajo de cada pregunta la explicación detallada de la clave.</p>' +
+          '<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-1">' +
+            '<p class="puntaje-grande mb-0">Tu puntaje: ' + correctas + ' / ' + total + '</p>' +
+            '<span class="estado-pregunta-quiz ' + (aprobado ? "correcta" : "incorrecta") + ' fs-6 px-3 py-1">' +
+              (aprobado
+                ? '<i class="fa-solid fa-circle-check" aria-hidden="true"></i> Aprobado'
+                : '<i class="fa-solid fa-circle-xmark" aria-hidden="true"></i> No aprobado') +
+            '</span>' +
+          '</div>' +
+          '<p class="mb-0 texto-suave">' +
+            (aprobado
+              ? "Aprobado. Revisa debajo de cada pregunta la explicación detallada de la clave."
+              : "No aprobado (se requieren al menos " + APROBAR_CON + " aciertos). Revisa las explicaciones de cada pregunta y vuelve a intentarlo.") +
+          '</p>' +
         '</div>';
     }
   }
 
-  /* Limpia todas las respuestas y oculta los resultados del Quizz del Tema 1. */
-  function reintentarTema1() {
-    const datos = QUIZ[1];
-    avisoPendienteTema[1] = false;
-    aprobados[1] = false;
+  /* Limpia las respuestas y oculta los resultados del Quiz de un tema. */
+  function reintentar(tema) {
+    const datos = QUIZ[tema];
+    avisoPendienteTema[tema] = false;
+    aprobados[tema] = false;
     actualizarAvance();
 
     datos.preguntas.forEach(function (p, i) {
-      const id = "cq-1-" + i;
+      const id = "cq-" + tema + "-" + i;
       const tarjeta = document.getElementById(id);
       if (tarjeta) {
         tarjeta.classList.remove("pregunta-correcta", "pregunta-incorrecta");
@@ -359,73 +454,42 @@
       }
     });
 
-    const aviso = document.getElementById("cq-1-aviso");
+    const aviso = document.getElementById("cq-" + tema + "-aviso");
     if (aviso) aviso.innerHTML = "";
-    const resultado = document.getElementById("cq-1-resultado");
+    const resultado = document.getElementById("cq-" + tema + "-resultado");
     if (resultado) resultado.innerHTML = "";
   }
 
-  /* Calcula la calificación final del quiz de un tema. */
+  /* Verifica si hay preguntas sin responder antes de calificar. */
   function calificar(tema, forzar) {
     const datos = QUIZ[tema];
-    if (tema === 1) {
-      let sin = 0;
-      datos.preguntas.forEach(function (p, i) {
-        const sel = document.querySelector('input[name="cq-1-' + i + '"]:checked');
-        if (!sel) sin++;
-      });
-
-      if (sin > 0 && !forzar && !avisoPendienteTema[1]) {
-        avisoPendienteTema[1] = true;
-        const aviso = document.getElementById("cq-1-aviso");
-        if (aviso) {
-          aviso.innerHTML =
-            '<div class="alerta-sin-responder p-3 rounded bg-warning-subtle border border-warning mt-3" role="alert">' +
-              '<p class="fw-semibold mb-2"><i class="fa-solid fa-triangle-exclamation me-1" aria-hidden="true"></i> Tienes preguntas sin responder. ¿Calificar de todos modos?</p>' +
-              '<div class="d-flex flex-wrap gap-2">' +
-                '<button type="button" class="btn btn-sm btn-tide btn-confirmar-calificar" data-tema="1">Calificar de todos modos</button>' +
-                '<button type="button" class="btn btn-sm btn-outline-secondary btn-cancelar-calificar" data-tema="1">Volver a las preguntas</button>' +
-              '</div>' +
-            '</div>';
-        }
-        return;
-      }
-
-      ejecutarCalificacionTema1();
-      return;
-    }
-
-    let correctas = 0;
     let sin = 0;
     datos.preguntas.forEach(function (p, i) {
       const sel = document.querySelector('input[name="cq-' + tema + '-' + i + '"]:checked');
-      if (!sel) { sin++; return; }
-      if (Number(sel.value) === p.c) correctas++;
+      if (!sel) sin++;
     });
-    const caja = document.getElementById("cq-" + tema + "-resultado");
-    const aprobado = correctas >= APROBAR_CON;
-    const total = datos.preguntas.length;
-    aprobados[tema] = aprobado && sin === 0;
-    if (sin > 0) {
-      caja.innerHTML = '<div class="resultado-quiz"><p class="mb-0">Responde las ' + sin + ' preguntas que faltan para calificar.</p></div>';
-    } else {
-      caja.innerHTML = '<div class="resultado-quiz ' + (aprobado ? "aprobado" : "no-aprobado") + '">' +
-        '<p class="fw-semibold mb-1">' + (aprobado ? "Quiz aprobado" : "Quiz no aprobado") + ': ' + correctas + ' de ' + total + '</p>' +
-        '<p class="mb-0 texto-suave">' + (aprobado
-          ? "Buen trabajo. Puedes pasar a los ejercicios del tema."
-          : "Repasa la presentación del tema y vuelve a intentarlo. Se requieren " + APROBAR_CON + " aciertos.") + '</p>' +
-        '</div>';
-    }
-    actualizarAvance();
-  }
 
-  /* Eventos: comprobar pregunta, calificar quiz y reintentar, por delegación. */
-  document.addEventListener("click", function (evento) {
-    const btnPregunta = evento.target.closest(".btn-comprobar-cq");
-    if (btnPregunta) {
-      comprobar(Number(btnPregunta.dataset.tema), Number(btnPregunta.dataset.i));
+    if (sin > 0 && !forzar && !avisoPendienteTema[tema]) {
+      avisoPendienteTema[tema] = true;
+      const aviso = document.getElementById("cq-" + tema + "-aviso");
+      if (aviso) {
+        aviso.innerHTML =
+          '<div class="alerta-sin-responder p-3 rounded bg-warning-subtle border border-warning mt-3" role="alert">' +
+            '<p class="fw-semibold mb-2"><i class="fa-solid fa-triangle-exclamation me-1" aria-hidden="true"></i> Tienes preguntas sin responder. ¿Calificar de todos modos?</p>' +
+            '<div class="d-flex flex-wrap gap-2">' +
+              '<button type="button" class="btn btn-sm btn-tide btn-confirmar-calificar" data-tema="' + tema + '">Calificar de todos modos</button>' +
+              '<button type="button" class="btn btn-sm btn-outline-secondary btn-cancelar-calificar" data-tema="' + tema + '">Volver a las preguntas</button>' +
+            '</div>' +
+          '</div>';
+      }
       return;
     }
+
+    ejecutarCalificacion(tema);
+  }
+
+  /* Eventos delegados */
+  document.addEventListener("click", function (evento) {
     const btnConfirmar = evento.target.closest(".btn-confirmar-calificar");
     if (btnConfirmar) {
       calificar(Number(btnConfirmar.dataset.tema), true);
@@ -433,14 +497,15 @@
     }
     const btnCancelar = evento.target.closest(".btn-cancelar-calificar");
     if (btnCancelar) {
-      avisoPendienteTema[1] = false;
-      const aviso = document.getElementById("cq-1-aviso");
+      const t = Number(btnCancelar.dataset.tema);
+      avisoPendienteTema[t] = false;
+      const aviso = document.getElementById("cq-" + t + "-aviso");
       if (aviso) aviso.innerHTML = "";
       return;
     }
     const btnReintentar = evento.target.closest(".btn-reintentar-cq");
     if (btnReintentar) {
-      reintentarTema1();
+      reintentar(Number(btnReintentar.dataset.tema));
       return;
     }
     const btnQuiz = evento.target.closest(".btn-calificar-cq");

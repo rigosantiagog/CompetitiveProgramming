@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Bloque 1 · Lógica, álgebra, aritmética y geometría básica. Lectura, práctica y quiz conceptual con retroalimentación.">
   <title>Bloque 1 · Programación Competitiva · Bug Squad</title>
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +21,7 @@
   <nav class="navbar navbar-expand-lg navbar-curso sticky-top">
     <div class="container-fluid px-lg-4">
       <a class="navbar-brand" href="../index.html">
-        <i class="fa-solid fa-bug-slash" aria-hidden="true"></i>
+        <img src="../favicon.ico" alt="" width="32" height="32" class="icono-sitio">
         <span>Programación Competitiva <span class="marca-bug">· Bug Squad</span></span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menú">
@@ -128,7 +130,7 @@
             <div class="progress mb-2" role="progressbar" aria-label="Ejercicios respondidos" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
               <div class="progress-bar" id="avance-ejercicios-barra" style="width: 0%"></div>
             </div>
-            <p class="small text-secondary mb-0 font-monospace" id="avance-ejercicios-texto">0 de 34</p>
+            <p class="small text-secondary mb-0 font-monospace" id="avance-ejercicios-texto">0 de 35</p>
           </div>
 
           <div class="asistente-sidebar">
@@ -216,7 +218,7 @@
                 <i class="fa-solid fa-book-open"></i> Aprender
               </button>
               <button class="tab-btn" type="button" role="tab" data-tab="practicar" id="tab-2-practicar" aria-controls="tema-2-practicar" aria-selected="false" tabindex="-1">
-                <i class="fa-solid fa-list-check"></i> Practicar <span class="tab-contador">10</span>
+                <i class="fa-solid fa-list-check"></i> Practicar <span class="tab-contador">11</span>
               </button>
               <button class="tab-btn" type="button" role="tab" data-tab="quiz" id="tab-2-quiz" aria-controls="tema-2-quiz" aria-selected="false" tabindex="-1">
                 <i class="fa-solid fa-trophy"></i> Quiz <span class="tab-contador">8</span>
@@ -235,12 +237,10 @@
             </div>
 
             <div class="tab-panel" role="tabpanel" id="tema-2-practicar" aria-labelledby="tab-2-practicar" hidden>
-              <p class="texto-suave">Cinco ejercicios guiados y cinco independientes, con retroalimentación al momento.</p>
               <div data-ejercicios="2"></div>
             </div>
 
             <div class="tab-panel" role="tabpanel" id="tema-2-quiz" aria-labelledby="tab-2-quiz" hidden>
-              <p class="texto-suave">Ocho preguntas de conceptos. Aprueba con 6 o más.</p>
               <div data-quiz="2"></div>
             </div>
           </div>
@@ -282,12 +282,10 @@
             </div>
 
             <div class="tab-panel" role="tabpanel" id="tema-3-practicar" aria-labelledby="tab-3-practicar" hidden>
-              <p class="texto-suave">Cinco ejercicios guiados y cinco independientes, con retroalimentación al momento.</p>
               <div data-ejercicios="3"></div>
             </div>
 
             <div class="tab-panel" role="tabpanel" id="tema-3-quiz" aria-labelledby="tab-3-quiz" hidden>
-              <p class="texto-suave">Ocho preguntas de conceptos. Aprueba con 6 o más.</p>
               <div data-quiz="3"></div>
             </div>
           </div>
@@ -301,15 +299,38 @@
         <!-- CIERRE DEL BLOQUE: TAREAS EN PDF -->
         <section class="seccion" id="tareas-pdf" data-vista-seccion="tareas-pdf" hidden>
           <div class="numero-seccion" aria-hidden="true"><i class="fa-solid fa-file-pdf"></i></div>
-          <h2>Tareas en PDF · Cierre del Bloque 1</h2>
-          <p class="lead-tema">Compendio general de ejercicios y tareas de los tres temas del bloque para resolver en cuaderno, imprimir o trabajar sin conexión.</p>
+          <h2>Ejercicios y tareas · Bloque 1</h2>
+          <p class="lead-tema">Álgebra, lógica, aritmética, conteo, geometría, trigonometría y patrones. Antes de resolver cualquier problema, traduce cada situación a un modelo matemático claro.</p>
 
           <div class="bloque-pestana" id="tema-3-tareas">
-            <h3><span class="icono-bloque amber"><i class="fa-solid fa-file-pdf"></i></span> Cuadernillo de ejercicios y tareas del Bloque 1</h3>
-            <p class="texto-suave mb-3">Incluye problemas seleccionados de Álgebra y lógica, Aritmética y conteo, y Geometría, trigonometría y patrones para consolidar lo aprendido antes de pasar al siguiente bloque.</p>
+            <h3><span class="icono-bloque amber"><i class="fa-solid fa-file-pdf"></i></span> Tarea · Bloque 1 (PDF con ejercicios y clave de respuestas)</h3>
+            <p class="texto-suave mb-3">Compendio de 15 problemas de entrenamiento distribuidos en los tres temas del bloque, acompañado de su clave de respuestas y procedimientos breves para comparar tu razonamiento:</p>
+            <div class="row g-3 mb-4">
+              <div class="col-md-4">
+                <div class="p-3 rounded border bg-light-subtle h-100">
+                  <p class="fw-bold mb-1"><i class="fa-solid fa-scale-balanced me-1 text-primary" aria-hidden="true"></i> Tema 1 · Álgebra y lógica</p>
+                  <p class="small text-secondary mb-0">Ejercicios 1 a 5: evaluación de expresiones y propiedades, ecuaciones de primer grado con paréntesis, planteamiento verbal, tablas de verdad y negación del condicional.</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="p-3 rounded border bg-light-subtle h-100">
+                  <p class="fw-bold mb-1"><i class="fa-solid fa-calculator me-1 text-primary" aria-hidden="true"></i> Tema 2 · Aritmética, conteo y casos</p>
+                  <p class="small text-secondary mb-0">Ejercicios 6 a 10: paridad y división con residuo, funciones piso y techo, principios de suma y producto, inclusión-exclusión y conteo de múltiplos en un rango.</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="p-3 rounded border bg-light-subtle h-100">
+                  <p class="fw-bold mb-1"><i class="fa-solid fa-draw-polygon me-1 text-primary" aria-hidden="true"></i> Tema 3 · Geometría, trigonometría y patrones</p>
+                  <p class="small text-secondary mb-0">Ejercicios 11 a 15: ángulos de un polígono, Pitágoras y distancia, razones trigonométricas en ángulos notables, progresión aritmética y suma de impares.</p>
+                </div>
+              </div>
+            </div>
             <div class="d-flex flex-wrap gap-2 align-items-center">
-              <a class="btn btn-tide" href="../assets/docs/Ejercicios_y_tareas_Bloque1.pdf" target="_blank" rel="noopener">
-                <i class="fa-solid fa-file-arrow-down me-1"></i> Descargar Ejercicios y tareas (PDF)
+              <button type="button" class="btn btn-tide" data-bs-toggle="modal" data-bs-target="#modalPresentacion" data-src="../assets/docs/Ejercicios_y_tareas_Bloque1.pdf" data-titulo="Ejercicios y tareas · Bloque 1 (PDF)">
+                <i class="fa-solid fa-eye me-1" aria-hidden="true"></i> Ver tarea en pantalla (PDF)
+              </button>
+              <a class="enlace-recurso m-0" href="../assets/docs/Ejercicios_y_tareas_Bloque1.pdf" download="Ejercicios_y_tareas_Bloque1.pdf" target="_blank" rel="noopener">
+                <i class="fa-solid fa-file-arrow-down me-1" aria-hidden="true"></i> Descargar Ejercicios y tareas (PDF)
               </a>
             </div>
           </div>
@@ -329,8 +350,8 @@
             <div class="col-md-6">
               <div class="pendiente-card">
                 <span class="badge rounded-pill mb-2">En preparación</span>
-                <h3 class="h5">Ejemplos resueltos en C++</h3>
-                <p class="texto-suave mb-0">Código comentado línea por línea para cada tema del bloque.</p>
+                <h3 class="h5">Ejemplos resueltos paso a paso</h3>
+                <p class="texto-suave mb-0">Soluciones comentadas línea por línea para cada tema del bloque.</p>
               </div>
             </div>
             <div class="col-md-6">
@@ -364,7 +385,7 @@
           <iframe id="iframePresentacion" title="Presentación del tema" allow="fullscreen" loading="lazy"></iframe>
         </div>
         <div class="modal-footer justify-content-between">
-          <span class="small text-secondary">¿No se muestra la presentación aquí?</span>
+          <span class="small text-secondary">¿No se muestra el documento aquí?</span>
           <a id="enlacePresentacion" href="#" target="_blank" rel="noopener" class="btn btn-tide btn-sm">Abrir en otra pestaña</a>
         </div>
       </div>
@@ -373,7 +394,7 @@
 
   <footer class="pie-curso">
     <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
-      <span>Programación Competitiva en C++ · Bug Squad · Mazatlán, Sinaloa</span>
+      <span>Programación Competitiva · Bug Squad · Mazatlán, Sinaloa</span>
       <span>Diseñado y organizado por Prof. Rigoberto Santiago Garzón</span>
     </div>
   </footer>

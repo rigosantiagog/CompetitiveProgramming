@@ -1,9 +1,12 @@
 /* ==========================================================
-   Motor de ejercicios con retroalimentación (Sección A · Práctica)
-   - Tema 1: 14 ejercicios con respuesta abierta, normalización,
-     botones de símbolos lógicos (¬, ∧, ∨), botón "Ver solución"
-     (mostrar/ocultar) y contador "Aciertos: X de 14".
-   - No guarda nada en almacenamiento del navegador ni servidor.
+   Motor de ejercicios con retroalimentación (Practicar · Temas 1, 2 y 3)
+   - Comprobación en pantalla por cada recuadro y por ejercicio completo.
+   - Normalización de mayúsculas/minúsculas, espacios, símbolo $,
+     comas de miles, unidades escritas, grados (°), raíces y
+     prefijo "x =". En lógica acepta "y", "o", "no" y ∧, ∨, ¬.
+   - Contador "Aciertos: X de N" en cada tema.
+   - Botón "Ver solución" (mostrar/ocultar) siempre disponible.
+   - Manejo en memoria de la página.
    ========================================================== */
 
 (function () {
@@ -12,11 +15,7 @@
   const textoAvance = document.getElementById("avance-ejercicios-texto");
 
   const total = EJERCICIOS_BLOQUE1.length;
-  const resultados = {};   // id -> true (correcto) / false (incorrecto), solo en memoria
-  const NOMBRES_PARTE = {
-    A: "Parte A · Ejercicios guiados (en parejas)",
-    B: "Parte B · Ejercicios independientes"
-  };
+  const resultados = {};   // id -> true (correcto) / false (incorrecto)
 
   /* Renderiza las fórmulas con KaTeX ($...$ en línea y $$...$$ en bloque). */
   function tipografiar(elemento) {
@@ -36,17 +35,10 @@
     }
   }
 
-  /* Convierte el texto del alumno a número (para temas 2 y 3). */
-  function aNumero(texto) {
-    const limpio = String(texto || "").trim().replace(",", ".");
-    if (limpio === "") return NaN;
-    return Number(limpio);
-  }
-
-  /* Normaliza respuestas de texto/álgebra/lógica (Tema 1):
-     - Ignora mayúsculas/minúsculas y espacios.
-     - Elimina el prefijo "x=" (por ejemplo, "x = 5" -> "5").
-     - En lógica acepta "y", "o", "no" en lugar de ∧, ∨, ¬. */
+  /* Normaliza una respuesta antes de comparar:
+     - Ignora mayúsculas/minúsculas, espacios, $, comas de miles,
+       símbolo de grados (°), unidades escritas y el prefijo "x =".
+     - En lógica acepta "y", "o", "no" además de ∧, ∨, ¬. */
   function normalizarTexto(cadena, esLogica) {
     let s = String(cadena || "")
       .toLowerCase()
@@ -54,6 +46,9 @@
       .trim();
 
     if (esLogica) {
+      if (s.indexOf("entreno") !== -1 && s.indexOf("gano") !== -1) {
+        return s.replace(/[.,;:"'«»]/g, "").replace(/\s+/g, " ").trim();
+      }
       s = s
         .replace(/\\lnot\b|\\neg\b/g, "¬")
         .replace(/\\land\b/g, "∧")
@@ -70,14 +65,33 @@
       return s;
     }
 
+    // Normalizar raíces como "20 raíz de 3" o "20\sqrt{3}" -> "20√3"
+    s = s
+      .replace(/\\sqrt\s*\{\s*(\d+)\s*\}/g, "√$1")
+      .replace(/ra[íi]z\s*(cuadrada\s*)?de\s*/g, "√");
+
+    // Quitar símbolo de dólar, comas de miles y símbolo de grados
+    s = s
+      .replace(/\$/g, "")
+      .replace(/(\d),(\d{3})\b/g, "$1$2")
+      .replace(/°|\\circ|\bgrados?\b/g, "");
+
+    // Quitar unidades comunes al final cuando acompañan a un número
+    s = s.replace(/\b(pesos?|libros?|kilogramos?|kg|cajas?|estudiantes?|parejas?|jueces|juez|rejas?\s*llenas?|rejas?|refrescos?\s*sueltos?|refrescos?|atletas?|d[íi]as?|errores?|error|metros?|unidades?|luces|camiones?|impares?|p[íi]xeles?|puntos?|elementos?)\b/g, "");
+
+    // Si es un número seguido de "m" o "cm" como unidad de longitud (ej. "15 m", "20 m")
+    s = s.replace(/^([+-]?\d+(?:\.\d+)?)\s*(?:m|cm)$/, "$1");
+
+    // Quitar espacios y prefijo "x="
     s = s.replace(/\s+/g, "");
     s = s.replace(/^x=/, "");
+
     return s;
   }
 
   function coincideRespuesta(valorUsuario, listaAceptadas, esLogica) {
     const normUsuario = normalizarTexto(valorUsuario, esLogica);
-    if (normUsuario === "") return null;
+    if (normUsuario === "") return false;
     return listaAceptadas.some(function (ac) {
       return normalizarTexto(ac, esLogica) === normUsuario;
     });
@@ -85,7 +99,7 @@
 
   /* Identificador único para cada ejercicio. */
   function idDe(ej) {
-    return "ej-" + ej.clase + "-" + (ej.parte || "A") + "-" + ej.n;
+    return "ej-" + ej.clase + "-A-" + ej.n;
   }
 
   /* Botones pequeños para insertar ¬, ∧ y ∨ en un campo de texto. */
@@ -114,118 +128,74 @@
       );
     }
     if (ej.tipo === "multi-texto") {
+      const colClass = ej.campos.length === 3 ? "col-12 col-md-4" : "col-12 col-md-6";
       return (
         '<div class="row g-2 mb-1">' +
         ej.campos.map(function (c, i) {
           const inputId = id + "-" + i;
           return (
-            '<div class="col-12 col-md-4">' +
+            '<div class="' + colClass + '">' +
               '<label class="form-label fw-semibold mb-1" for="' + inputId + '">' + c.etiqueta + '</label>' +
               (ej.botonesSimbolos ? barraSimbolosDe(inputId, c.etiqueta) : "") +
-              '<input type="text" class="form-control mb-2 campo" id="' + inputId + '" placeholder="Respuesta (' + c.etiqueta + ')" aria-label="Respuesta para ' + c.etiqueta + '" autocomplete="off">' +
+              '<input type="text" class="form-control mb-1 campo" id="' + inputId + '" placeholder="Respuesta (' + c.etiqueta + ')" aria-label="Respuesta para ' + c.etiqueta + '" autocomplete="off">' +
+              '<div class="small estado-recuadro" id="' + inputId + '-fb" aria-live="polite"></div>' +
             '</div>'
           );
         }).join("") +
         '</div>'
       );
     }
-    if (ej.tipo === "num") {
-      return (
-        '<label class="form-label visually-hidden" for="' + id + '-in">Respuesta del ejercicio ' + ej.n + '</label>' +
-        '<input type="text" inputmode="decimal" class="form-control mb-2 campo" id="' + id + '-in" placeholder="Escribe tu respuesta" aria-label="Respuesta del ejercicio ' + ej.n + '">'
-      );
-    }
-    if (ej.tipo === "multi") {
-      return ej.campos.map(function (c, i) {
-        return '<label class="form-label fw-semibold mb-1" for="' + id + '-' + i + '">' + c.etiqueta + '</label>' +
-               '<input type="text" inputmode="decimal" class="form-control mb-2 campo" id="' + id + '-' + i + '" placeholder="Escribe tu respuesta">';
-      }).join("");
-    }
-    return ej.opciones.map(function (op, i) {
-      return '<div class="form-check">' +
-               '<input class="form-check-input" type="radio" name="' + id + '" id="' + id + '-op' + i + '" value="' + i + '">' +
-               '<label class="form-check-label" for="' + id + '-op' + i + '">' + op + '</label>' +
-             '</div>';
-    }).join("");
-  }
-
-  /* Texto de la respuesta correcta para Temas 2 y 3. */
-  function respuestaCorrectaTexto(ej) {
-    if (ej.tipo === "num") return String(ej.valor);
-    if (ej.tipo === "multi") {
-      return ej.campos.map(function (c) { return c.etiqueta + ": " + c.valor; }).join(", ");
-    }
-    if (ej.opciones) return ej.opciones[ej.correcta];
     return "";
   }
 
-  /* Revisa la respuesta. Devuelve true, false o null (sin respuesta). */
+  /* Revisa la respuesta de cada recuadro y devuelve true si todos son correctos. */
   function calificar(ej, id) {
     if (ej.tipo === "texto") {
-      const val = document.getElementById(id + "-in").value;
-      if (String(val || "").trim() === "") return false;
-      return coincideRespuesta(val, ej.aceptadas, !!ej.esLogica);
+      const input = document.getElementById(id + "-in");
+      const ok = coincideRespuesta(input ? input.value : "", ej.aceptadas, !!ej.esLogica);
+      if (input) {
+        input.classList.remove("is-valid", "is-invalid");
+        input.classList.add(ok ? "is-valid" : "is-invalid");
+      }
+      return ok;
     }
     if (ej.tipo === "multi-texto") {
-      const respuestas = ej.campos.map(function (c, i) {
-        return document.getElementById(id + "-" + i).value;
+      const estados = ej.campos.map(function (c, i) {
+        const inputId = id + "-" + i;
+        const input = document.getElementById(inputId);
+        const fbRecuadro = document.getElementById(inputId + "-fb");
+        const okCampo = coincideRespuesta(input ? input.value : "", c.aceptadas, !!ej.esLogica);
+        if (input) {
+          input.classList.remove("is-valid", "is-invalid");
+          input.classList.add(okCampo ? "is-valid" : "is-invalid");
+        }
+        if (fbRecuadro) {
+          fbRecuadro.className = "small mt-1 fw-semibold " + (okCampo ? "text-success" : "text-danger");
+          fbRecuadro.innerHTML = okCampo
+            ? '<i class="fa-solid fa-circle-check" aria-hidden="true"></i> Correcto'
+            : '<i class="fa-solid fa-circle-xmark" aria-hidden="true"></i> Incorrecto';
+        }
+        return okCampo;
       });
-      if (respuestas.some(function (r) { return String(r || "").trim() === ""; })) {
-        return false;
-      }
-      return ej.campos.every(function (c, i) {
-        return coincideRespuesta(respuestas[i], c.aceptadas, !!ej.esLogica) === true;
-      });
+      return estados.every(Boolean);
     }
-    if (ej.tipo === "num") {
-      const v = aNumero(document.getElementById(id + "-in").value);
-      if (isNaN(v)) return null;
-      return Math.abs(v - ej.valor) < 1e-6;
-    }
-    if (ej.tipo === "multi") {
-      const valores = ej.campos.map(function (c, i) {
-        return aNumero(document.getElementById(id + "-" + i).value);
-      });
-      if (valores.some(isNaN)) return null;
-      return ej.campos.every(function (c, i) { return Math.abs(valores[i] - c.valor) < 1e-6; });
-    }
-    const sel = document.querySelector('input[name="' + id + '"]:checked');
-    if (!sel) return null;
-    return Number(sel.value) === ej.correcta;
+    return false;
   }
 
-  /* Mensaje de retroalimentación debajo de la tarjeta. */
+  /* Mensaje de retroalimentación debajo de la tarjeta (sin revelar la respuesta si es incorrecto). */
   function mostrarRetroalimentacion(ej, id, ok) {
     const caja = document.getElementById(id + "-fb");
-    if (ej.clase === 1) {
-      if (ok) {
-        caja.className = "retroalimentacion p-3 rounded bg-success-subtle border border-success text-success-emphasis";
-        caja.innerHTML = "<strong><i class='fa-solid fa-circle-check'></i> Correcto</strong>";
-      } else {
-        caja.className = "retroalimentacion p-3 rounded bg-danger-subtle border border-danger text-danger-emphasis";
-        caja.innerHTML = "<strong><i class='fa-solid fa-circle-xmark'></i> Incorrecto.</strong> Revisa tu procedimiento.";
-      }
-      return;
-    }
-
-    if (ok === null) {
-      caja.className = "retroalimentacion p-3 rounded bg-warning-subtle border border-warning";
-      caja.innerHTML = "Escribe o elige una respuesta antes de comprobar.";
-      return;
-    }
+    if (!caja) return;
     if (ok) {
-      caja.className = "retroalimentacion p-3 rounded bg-success-subtle border border-success";
-      caja.innerHTML = "<strong><i class='fa-solid fa-circle-check'></i> Correcto.</strong> " + ej.explicacion;
+      caja.className = "retroalimentacion p-3 rounded bg-success-subtle border border-success text-success-emphasis";
+      caja.innerHTML = "<strong><i class='fa-solid fa-circle-check'></i> Correcto</strong>";
     } else {
-      caja.className = "retroalimentacion p-3 rounded bg-danger-subtle border border-danger";
-      caja.innerHTML = "<strong><i class='fa-solid fa-circle-xmark'></i> Revisa de nuevo.</strong> " +
-                       "La respuesta correcta es: <strong>" + respuestaCorrectaTexto(ej) + "</strong>. " +
-                       ej.explicacion;
+      caja.className = "retroalimentacion p-3 rounded bg-danger-subtle border border-danger text-danger-emphasis";
+      caja.innerHTML = "<strong><i class='fa-solid fa-circle-xmark'></i> Incorrecto.</strong> Revisa tu procedimiento.";
     }
-    tipografiar(caja);
   }
 
-  /* Actualiza el contador "Aciertos: X de 14" del Tema 1 y la barra lateral. */
+  /* Actualiza el contador "Aciertos: X de N" de cada tema y la barra lateral. */
   function actualizarAvance() {
     const respondidos = Object.keys(resultados).length;
     const porcentaje = Math.round((respondidos / total) * 100);
@@ -237,76 +207,66 @@
       textoAvance.textContent = respondidos + " de " + total;
     }
 
-    const contadorTema1 = document.getElementById("contador-aciertos-tema1");
-    if (contadorTema1) {
-      const ejerciciosTema1 = EJERCICIOS_BLOQUE1.filter(function (e) { return e.clase === 1; });
-      const aciertosTema1 = ejerciciosTema1.filter(function (e) { return resultados[idDe(e)] === true; }).length;
-      contadorTema1.textContent = "Aciertos: " + aciertosTema1 + " de " + ejerciciosTema1.length;
-    }
+    [1, 2, 3].forEach(function (numTema) {
+      const contadorTema = document.getElementById("contador-aciertos-tema" + numTema);
+      if (contadorTema) {
+        const ejsTema = EJERCICIOS_BLOQUE1.filter(function (e) { return e.clase === numTema; });
+        const aciertos = ejsTema.filter(function (e) { return resultados[idDe(e)] === true; }).length;
+        contadorTema.textContent = "Aciertos: " + aciertos + " de " + ejsTema.length;
+      }
+    });
   }
 
   /* Dibuja los ejercicios de un tema dentro de su contenedor. */
   function dibujarTema(tema, contenedor) {
-    let html = "";
+    const ejsTema = EJERCICIOS_BLOQUE1.filter(function (e) { return e.clase === tema; });
+    let introExtra = "";
     if (tema === 1) {
-      html +=
-        '<div class="aviso-memoria mb-3" role="note">' +
-          '<i class="fa-solid fa-circle-info me-2" aria-hidden="true"></i>' +
-          '<span>Tu avance no se guarda. Si recargas la página, los resultados se reinician.</span>' +
-        '</div>' +
-        '<div class="cabecera-practica-tema1 mb-3">' +
-          '<div>' +
-            '<p class="mb-2">Intenta resolver cada ejercicio por tu cuenta antes de ver la solución. Escribe tu respuesta final en el recuadro y comprueba. Después revisa el procedimiento paso a paso para consolidar lo aprendido.</p>' +
-            '<p class="mb-0 texto-suave">Para escribir las respuestas en el sitio, usa este formato: números como <code>70</code>, expresiones como <code>2x-7</code> o <code>4a-8b</code>, y en lógica usa <code>Y</code> para "y", <code>O</code> para "o" y <code>NO</code> para "no" (o los símbolos $\\land$, $\\lor$, $\\lnot$ con los botones del sitio).</p>' +
-          '</div>' +
-          '<div class="contador-aciertos-badge" id="contador-aciertos-tema1" aria-live="polite">Aciertos: 0 de 14</div>' +
-        '</div>';
-
-      let grupoActual = null;
-      EJERCICIOS_BLOQUE1.filter(function (e) { return e.clase === 1; }).forEach(function (ej) {
-        if (ej.grupo !== grupoActual) {
-          grupoActual = ej.grupo;
-          html += '<h4 class="subtitulo-grupo-practica">' + ej.grupo + '</h4>';
-        }
-        const id = idDe(ej);
-        const solId = id + "-sol";
-        html +=
-          '<div class="tarjeta-pregunta" id="' + id + '">' +
-            '<p class="mb-3"><span class="numero">' + ej.n + '</span><strong>' + ej.titulo + '</strong> ' + ej.enunciado + '</p>' +
-            controlesDe(ej, id) +
-            '<div class="acciones-ejercicio d-flex flex-wrap gap-2 align-items-center mt-2">' +
-              '<button type="button" class="btn btn-sm btn-tide btn-comprobar" data-id="' + id + '" aria-label="Comprobar respuesta del ejercicio ' + ej.n + '">' +
-                '<i class="fa-solid fa-check" aria-hidden="true"></i> Comprobar' +
-              '</button>' +
-              '<button type="button" class="btn btn-sm btn-ver-solucion" data-toggle-solucion="' + solId + '" aria-expanded="false" aria-controls="' + solId + '" aria-label="Ver solución del ejercicio ' + ej.n + '">' +
-                '<i class="fa-regular fa-lightbulb" aria-hidden="true"></i> Ver solución' +
-              '</button>' +
-            '</div>' +
-            '<div id="' + id + '-fb" aria-live="polite"></div>' +
-            '<div id="' + solId + '" class="solucion-desplegable mt-3" hidden>' +
-              '<div class="solucion-cabecera"><i class="fa-solid fa-list-ol me-1" aria-hidden="true"></i> Procedimiento y solución paso a paso</div>' +
-              '<div class="solucion-cuerpo">' + ej.solucion + '</div>' +
-            '</div>' +
-          '</div>';
-      });
+      introExtra =
+        '<p class="mb-2">Intenta resolver cada ejercicio por tu cuenta antes de ver la solución. Escribe tu respuesta final en el recuadro y comprueba. Después revisa el procedimiento paso a paso para consolidar lo aprendido.</p>' +
+        '<p class="mb-0 texto-suave">Para escribir las respuestas en el sitio, usa este formato: números como <code>70</code>, expresiones como <code>2x-7</code> o <code>4a-8b</code>, y en lógica usa <code>Y</code> para "y", <code>O</code> para "o" y <code>NO</code> para "no" (o los símbolos $\\land$, $\\lor$, $\\lnot$ con los botones del sitio).</p>';
     } else {
-      let parteActual = null;
-      EJERCICIOS_BLOQUE1.filter(function (e) { return e.clase === tema; }).forEach(function (ej) {
-        if (ej.parte !== parteActual) {
-          parteActual = ej.parte;
-          html += '<p class="subtitulo-parte">' + NOMBRES_PARTE[ej.parte] + '</p>';
-        }
-        const id = idDe(ej);
-        html +=
-          '<div class="tarjeta-pregunta" id="' + id + '">' +
-            '<p class="mb-3"><span class="numero">' + ej.n + '</span>' + ej.enunciado + '</p>' +
-            controlesDe(ej, id) +
-            '<button type="button" class="btn btn-sm btn-tide mt-3 btn-comprobar" data-id="' + id + '">' +
-              '<i class="fa-solid fa-check"></i> Comprobar</button>' +
-            '<div id="' + id + '-fb"></div>' +
-          '</div>';
-      });
+      introExtra =
+        '<p class="mb-0 texto-suave">Intenta resolver cada ejercicio por tu cuenta antes de ver la solución. Escribe tu respuesta final en el recuadro y pulsa <strong>Comprobar</strong>.</p>';
     }
+
+    let html =
+      '<div class="aviso-memoria mb-3" role="note">' +
+        '<i class="fa-solid fa-circle-info me-2" aria-hidden="true"></i>' +
+        '<span>Tu avance no se guarda. Si recargas la página, los resultados se reinician.</span>' +
+      '</div>' +
+      '<div class="cabecera-practica-tema1 mb-3">' +
+        '<div>' + introExtra + '</div>' +
+        '<div class="contador-aciertos-badge" id="contador-aciertos-tema' + tema + '" aria-live="polite">Aciertos: 0 de ' + ejsTema.length + '</div>' +
+      '</div>';
+
+    let grupoActual = null;
+    ejsTema.forEach(function (ej) {
+      if (ej.grupo && ej.grupo !== grupoActual) {
+        grupoActual = ej.grupo;
+        html += '<h4 class="subtitulo-grupo-practica">' + ej.grupo + '</h4>';
+      }
+      const id = idDe(ej);
+      const solId = id + "-sol";
+      html +=
+        '<div class="tarjeta-pregunta" id="' + id + '">' +
+          '<p class="mb-3"><span class="numero">' + ej.n + '</span><strong>' + ej.titulo + '</strong> ' + ej.enunciado + '</p>' +
+          controlesDe(ej, id) +
+          '<div class="acciones-ejercicio d-flex flex-wrap gap-2 align-items-center mt-2">' +
+            '<button type="button" class="btn btn-sm btn-tide btn-comprobar" data-id="' + id + '" aria-label="Comprobar respuesta del ejercicio ' + ej.n + ' del Tema ' + tema + '">' +
+              '<i class="fa-solid fa-check" aria-hidden="true"></i> Comprobar' +
+            '</button>' +
+            '<button type="button" class="btn btn-sm btn-ver-solucion" data-toggle-solucion="' + solId + '" aria-expanded="false" aria-controls="' + solId + '" aria-label="Ver solución del ejercicio ' + ej.n + ' del Tema ' + tema + '">' +
+              '<i class="fa-regular fa-lightbulb" aria-hidden="true"></i> Ver solución' +
+            '</button>' +
+          '</div>' +
+          '<div id="' + id + '-fb" aria-live="polite"></div>' +
+          '<div id="' + solId + '" class="solucion-desplegable mt-3" hidden>' +
+            '<div class="solucion-cabecera"><i class="fa-solid fa-list-ol me-1" aria-hidden="true"></i> Solución paso a paso</div>' +
+            '<div class="solucion-cuerpo">' + ej.solucion + '</div>' +
+          '</div>' +
+        '</div>';
+    });
 
     contenedor.innerHTML = html;
     tipografiar(contenedor);
@@ -356,9 +316,7 @@
     if (!ej) return;
     const ok = calificar(ej, id);
 
-    if (ok !== null) {
-      resultados[id] = ok;
-    }
+    resultados[id] = ok;
     mostrarRetroalimentacion(ej, id, ok);
     actualizarAvance();
   });

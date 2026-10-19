@@ -1949,3 +1949,14 @@ html, body {
     width: 100%;
   }
 }
+
+.navbar-curso .navbar-brand .icono-sitio {
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 10px;
+  object-fit: contain;
+  background: #ffffff;
+  padding: 2px;
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.18);
+}

@@ -63,10 +63,12 @@
       return partes[0].trim();
     }
     const t = titulo.toLowerCase();
+    if (t.indexOf("introducción") !== -1 || t.indexOf("introduccion") !== -1) return "Introducción";
     if (t.indexOf("errores") !== -1) return "Repaso";
     if (t.indexOf("resumen") !== -1) return "Síntesis";
     if (t.indexOf("reflexión") !== -1 || t.indexOf("reflexion") !== -1) return "Reflexión";
-    if (t.indexOf("fuentes") !== -1) return "Fuentes";
+    const mNum = titulo.match(/^(\d+)\./);
+    if (mNum) return "Subtema " + mNum[1];
     return "Subtema " + (idx + 1);
   }
 
