@@ -1,16 +1,12 @@
 /* ==========================================================
-   Bloque 1 · Navegación por temas y secciones internas
+   Bloque 1 · Navegación por temas y pestañas internas
    - Muestra un único tema/sección a la vez (Tema 1, Tema 2,
-     Tema 3, Tareas en PDF o Próximamente).
-   - En el Tema 1 ("Álgebra y lógica"), muestra en orden:
-       1. Lectura del tema
-       2. Sección A · Práctica
-       3. Sección B · Quizz
-     y permite saltar a cualquiera desde la barra de pestañas o
-     la barra lateral.
-   - Renderiza todas las fórmulas con KaTeX.
-   - NO usa almacenamiento del navegador ni servidores:
-     todo se maneja en la memoria de la página.
+     Tema 3, Tareas en PDF o Próximamente) como pestañas.
+   - Dentro de cada tema muestra un panel a la vez
+     (Aprender · Practicar · Quiz).
+   - En la sección Aprender, agrupa los subtemas en tarjetas
+     interactivas; al hacer clic en una tarjeta se abre la
+     lectura completa de ese subtema.
    ========================================================== */
 
 (function () {
@@ -19,7 +15,7 @@
   const TEMA_HASH = /^(tema-[1-3]|tareas-pdf|pendientes)$/;
   const SECCIONES_VALIDAS = ["tema-1", "tema-2", "tema-3", "tareas-pdf", "pendientes"];
 
-  // Estado únicamente en memoria de la sesión (sin almacenamiento persistente)
+  // Estado en memoria mientras la página permanece abierta
   let memoriaLectura = {};
 
   /* ---------- Utilidades ---------- */
@@ -49,13 +45,14 @@
     memoriaLectura = datos || {};
   }
 
-  /* ---------- Lectura del Tema 1 (completa en orden) y Temas 2-3 ---------- */
+  /* ---------- Lectura interactiva por tarjetas de subtemas ---------- */
 
   function iconoParaSubtema(titulo, idx) {
     const t = titulo.toLowerCase();
     if (t.indexOf("errores") !== -1) return "fa-triangle-exclamation";
     if (t.indexOf("resumen") !== -1) return "fa-list-check";
     if (t.indexOf("reflexión") !== -1 || t.indexOf("reflexion") !== -1) return "fa-lightbulb";
+    if (t.indexOf("fuentes") !== -1) return "fa-book-bookmark";
     const iconos = ["fa-book-open", "fa-sliders", "fa-scale-balanced", "fa-diagram-project"];
     return iconos[idx % iconos.length] || "fa-book-open";
   }
@@ -69,6 +66,7 @@
     if (t.indexOf("errores") !== -1) return "Repaso";
     if (t.indexOf("resumen") !== -1) return "Síntesis";
     if (t.indexOf("reflexión") !== -1 || t.indexOf("reflexion") !== -1) return "Reflexión";
+    if (t.indexOf("fuentes") !== -1) return "Fuentes";
     return "Subtema " + (idx + 1);
   }
 
@@ -122,15 +120,8 @@
       const lectura = (typeof LECTURAS_BLOQUE1 !== "undefined") && LECTURAS_BLOQUE1[idTema];
       if (!lectura) return;
 
-      // Para el Tema 1 mostramos la lectura íntegra en su orden original con sus 7 secciones y Fuentes usadas
-      if (idTema === "1") {
-        contenedor.innerHTML = '<div class="lectura">' + lectura.html + '</div>';
-        tipografiar(contenedor);
-        return;
-      }
-
       const subtemas = extraerSubtemas(lectura.html, idTema);
-      let indiceActual = null;
+      let indiceActual = null; // null = vista de tarjetas; número = subtema abierto
 
       function contarLeidos() {
         const prog = leerProgreso();
@@ -142,7 +133,7 @@
         const prog = leerProgreso();
         const leidos = contarLeidos();
 
-        const tarjetasHtml = subtemas.map(function (s) {
+        let tarjetasHtml = subtemas.map(function (s) {
           const estaLeido = !!prog[s.clave];
           return (
             '<button type="button" class="tarjeta-subtema' + (estaLeido ? " leida" : "") + '" data-abrir-subtema="' + s.indice + '">' +
@@ -336,25 +327,19 @@
     });
 
     const idActivo = "tema-" + tema + "-" + nombre;
+    contenedor.querySelectorAll(".tab-panel").forEach(function (panel) {
+      panel.hidden = panel.id !== idActivo;
+    });
 
-    // En el Tema 1 mantenemos visibles en orden las 3 secciones (Lectura, Sección A · Práctica y Sección B · Quizz)
-    // para que siempre se vean en el orden indicado y los botones/enlaces desplacen suavemente a cada sección.
-    if (String(tema) === "1") {
-      contenedor.querySelectorAll(".tab-panel").forEach(function (panel) {
-        panel.hidden = false;
-      });
-    } else {
-      contenedor.querySelectorAll(".tab-panel").forEach(function (panel) {
-        panel.hidden = panel.id !== idActivo;
-      });
-      if (nombre === "aprender") {
-        const contLectura = document.querySelector('[data-lectura="' + tema + '"]');
-        if (contLectura && typeof contLectura._mostrarTarjetasSubtemas === "function") {
-          contLectura._mostrarTarjetasSubtemas();
-        }
+    // Si el usuario selecciona "Aprender", mostramos las tarjetas de subtemas
+    if (nombre === "aprender") {
+      const contLectura = document.querySelector('[data-lectura="' + tema + '"]');
+      if (contLectura && typeof contLectura._mostrarTarjetasSubtemas === "function") {
+        contLectura._mostrarTarjetasSubtemas();
       }
     }
 
+    // La barra lateral marca la sub-pestaña que se está viendo
     document.querySelectorAll(".indice-lista a").forEach(function (enlace) {
       enlace.classList.toggle("activo", enlace.getAttribute("href") === "#" + idActivo);
     });
@@ -362,11 +347,13 @@
     const panelActivo = document.getElementById(idActivo);
     tipografiar(panelActivo);
 
-    if (hacerScroll && panelActivo) {
-      panelActivo.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (hacerScroll) {
+      const seccion = document.getElementById(idSeccion);
+      if (seccion) seccion.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }
 
+  // Atiende cambios en el hash (#tema-1, #tema-2-practicar, #tareas-pdf, #pendientes)
   function atenderHash(hacerScroll) {
     const hash = location.hash.slice(1);
     if (!hash) return;
@@ -420,7 +407,7 @@
       barra.addEventListener("click", function (evento) {
         const boton = evento.target.closest(".tab-btn");
         if (!boton) return;
-        activarPestana(tema, boton.dataset.tab, String(tema) === "1");
+        activarPestana(tema, boton.dataset.tab, false);
         history.replaceState(null, "", "#tema-" + tema + "-" + boton.dataset.tab);
       });
 
@@ -432,7 +419,7 @@
         const paso = evento.key === "ArrowRight" ? 1 : -1;
         const siguiente = botones[(actual + paso + botones.length) % botones.length];
         siguiente.focus();
-        activarPestana(tema, siguiente.dataset.tab, String(tema) === "1");
+        activarPestana(tema, siguiente.dataset.tab, false);
         history.replaceState(null, "", "#tema-" + tema + "-" + siguiente.dataset.tab);
       });
     });
