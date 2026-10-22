@@ -288,6 +288,22 @@
     });
 
     const matchTema = idSeccion.match(/^tema-([1-4])$/);
+    const numTemaActivo = matchTema ? matchTema[1] : null;
+
+    ["1", "2", "3", "4"].forEach(function (n) {
+      const grupo = document.getElementById("grupo-tema-" + n);
+      const btn = document.querySelector('[data-bs-target="#grupo-tema-' + n + '"]');
+      const abrir = n === numTemaActivo;
+      if (grupo) {
+        grupo.classList.remove("collapsing");
+        grupo.classList.toggle("show", abrir);
+      }
+      if (btn) {
+        btn.classList.toggle("collapsed", !abrir);
+        btn.setAttribute("aria-expanded", abrir ? "true" : "false");
+      }
+    });
+
     if (matchTema) {
       const numTema = matchTema[1];
       const contenedor = document.querySelector('[data-pestanas="' + numTema + '"]');
