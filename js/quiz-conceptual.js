@@ -106,7 +106,7 @@
 
     2: {
       titulo: "Tema 2 · Aritmética, conteo y casos",
-      intro: "Responde las 8 preguntas de opción múltiple y pulsa Calificar para conocer tu puntaje y revisar la explicación de cada respuesta. Se aprueba con 6 o más aciertos.",
+      intro: "Responde las 12 preguntas de opción múltiple y pulsa Calificar para conocer tu puntaje y revisar la explicación de cada respuesta. Se aprueba con 6 o más aciertos.",
       preguntas: [
         {
           subtema: "Subtema 5 · Paridad y divisibilidad",
@@ -200,14 +200,66 @@
             "(D) $0$"
           ],
           c: 0,
-          e: "<strong>Respuesta correcta: (A).</strong> Si $A \\cap B = \\emptyset$, entonces $|A \\cap B| = 0$ y $|A \\cup B| = |A| + |B| - 0 = |A| + |B|$, lo que coincide con la regla de la suma para eventos excluyentes. (B), (C) y (D) no corresponden a la fórmula."
+          e: "<strong>Respuesta correcta: (A).</strong> Si $A \cap B = \emptyset$, entonces $|A \cap B| = 0$ y $|A \cup B| = |A| + |B| - 0 = |A| + |B|$, lo que coincide con la regla de la suma para eventos excluyentes. (B), (C) y (D) no corresponden a la fórmula."
+        },
+        {
+          subtema: "Ampliación del subtema 5 · Divisibilidad, mcd y mcm",
+          titulo: "",
+          q: "Si aplicamos el Algoritmo de Euclides para calcular $\\text{mcd}(a, b)$, ¿en qué principio se apoya para reducir los números en cada paso?",
+          o: [
+            "(A) $\\text{mcd}(a, b) = \\text{mcd}(b, a \\bmod b)$",
+            "(B) $\\text{mcd}(a, b) = \\text{mcd}(a - b, a + b)$",
+            "(C) $\\text{mcd}(a, b) = \\text{mcd}(a \\cdot b, a / b)$",
+            "(D) $\\text{mcd}(a, b) = \\text{mcd}(a + b, a \\bmod b)$"
+          ],
+          c: 0,
+          e: "<strong>Respuesta correcta: (A).</strong> El Algoritmo de Euclides se apoya en la identidad $\\text{mcd}(a, b) = \\text{mcd}(b, a \\bmod b)$. (B) y (C) no son identidades válidas, y (D) cambia $a$ por $a + b$ sin justificación."
+        },
+        {
+          subtema: "Ampliación del subtema 5 · Divisibilidad, mcd y mcm",
+          titulo: "",
+          q: "Se sabe que $\\text{mcd}(a, b) = 6$ y que $a \\cdot b = 432$. ¿Cuál es el valor de $\\text{mcm}(a, b)$?",
+          o: [
+            "(A) $36$",
+            "(B) $2592$",
+            "(C) $108$",
+            "(D) $72$"
+          ],
+          c: 3,
+          e: "<strong>Respuesta correcta: (D).</strong> Con $\\text{mcd}(a, b) \\cdot \\text{mcm}(a, b) = a \\cdot b$ tenemos $6 \\cdot \\text{mcm}(a, b) = 432$, así que $\\text{mcm}(a, b) = 72$. (A) es $432 / 12$; (B) es $432 \\cdot 6$; (C) es $432 / 4$, y no corresponde a la relación."
+        },
+        {
+          subtema: "Subtema 9 · Aritmética modular",
+          titulo: "",
+          q: "¿Cuál de las siguientes afirmaciones sobre la congruencia $a \\equiv b \\pmod m$ es correcta?",
+          o: [
+            "(A) La diferencia $a - b$ es un múltiplo entero exacto de $m$.",
+            "(B) Significa que $a$ y $b$, al dividirse entre $m$, dan el mismo cociente entero.",
+            "(C) Implica que el residuo de la división siempre es igual a $m$.",
+            "(D) Permite dividir ambos lados sin ninguna restricción."
+          ],
+          c: 0,
+          e: "<strong>Respuesta correcta: (A).</strong> $a \\equiv b \\pmod m$ significa que $m$ divide a $a - b$. (B) confunde el residuo con el cociente; (C) es falsa porque el residuo debe ser menor que $m$; (D) es un error frecuente, porque la división no preserva la congruencia."
+        },
+        {
+          subtema: "Subtema 9 · Aritmética modular",
+          titulo: "",
+          q: "¿Cuál es la última cifra del resultado de $2^9$?",
+          o: [
+            "(A) $4$",
+            "(B) $8$",
+            "(C) $6$",
+            "(D) $2$"
+          ],
+          c: 3,
+          e: "<strong>Respuesta correcta: (D).</strong> La última cifra es $2^9 \\bmod 10$. Las potencias de 2 terminan en el ciclo 2, 4, 8, 6, que se repite cada 4 pasos. Como $9 \\bmod 4 = 1$, la última cifra es la de $2^1$, es decir, 2. (A) y (B) corresponden a $2^2$ y $2^3$; (C) es la última cifra de $2^4$."
         }
       ]
     },
 
     3: {
       titulo: "Tema 3 · Geometría, trigonometría y patrones",
-      intro: "Responde las 8 preguntas de opción múltiple y pulsa Calificar para conocer tu puntaje y revisar la explicación de cada respuesta. Se aprueba con 6 o más aciertos.",
+      intro: "Responde las 10 preguntas de opción múltiple y pulsa Calificar para conocer tu puntaje y revisar la explicación de cada respuesta. Se aprueba con 6 o más aciertos.",
       preguntas: [
         {
           subtema: "Subtema 9 · Ángulos y triángulos",
@@ -277,6 +329,169 @@
           o: ["(A) 200", "(B) 380", "(C) 420", "(D) 400"],
           c: 3,
           e: "<strong>Respuesta correcta: (D).</strong> La suma de los primeros $n$ impares es $n^2$. Con $n = 20$, $S_{20} = 20^2 = 400$. La opción (C) es un error de cálculo."
+        },
+        {
+          subtema: "Subtema 13 · Proporcionalidad y teorema de Tales",
+          titulo: "",
+          q: "En un triángulo $ABC$ se traza $DE$ paralelo a $BC$, con $D$ en $AB$ y $E$ en $AC$. Si $AD = 3$ cm y $DB = 9$ cm, ¿cuál es la razón de semejanza entre el triángulo menor $ADE$ y el triángulo mayor $ABC$?",
+          o: [
+            "(A) $1:4$",
+            "(B) $1:3$",
+            "(C) $3:4$",
+            "(D) $1:2$"
+          ],
+          c: 0,
+          e: "<strong>Respuesta correcta: (A).</strong> $AB = AD + DB = 3 + 9 = 12$ cm. Los lados homólogos dan $\\dfrac{AD}{AB} = \\dfrac{3}{12} = \\dfrac{1}{4}$, es decir, $1:4$. (B) compara $AD$ con $DB$ ($1:3$) en lugar de los lados homólogos; (C) y (D) no corresponden a los datos."
+        },
+        {
+          subtema: "Subtema 13 · Proporcionalidad y teorema de Tales",
+          titulo: "",
+          q: "¿Por qué las razones trigonométricas de un ángulo agudo permanecen iguales sin importar el tamaño del triángulo rectángulo?",
+          o: [
+            "(A) Porque la suma de los lados del triángulo permanece constante.",
+            "(B) Porque se aplica directamente el recíproco del teorema de Tales.",
+            "(C) Porque el área del triángulo crece en proporción directa a la base.",
+            "(D) Porque todos los triángulos rectángulos con ese ángulo agudo son semejantes por el criterio AA."
+          ],
+          c: 3,
+          e: "<strong>Respuesta correcta: (D).</strong> Al compartir el ángulo recto y el ángulo agudo, los triángulos rectángulos tienen dos ángulos iguales y son semejantes por el criterio AA, así que sus razones se mantienen. (A) y (C) son afirmaciones falsas; (B) menciona el recíproco del teorema de Tales, que no es el fundamento de esta invariancia."
+        }
+      ]
+    },
+
+    4: {
+      titulo: "Tema 4 · Redes y conexiones",
+      intro: "Responde las 10 preguntas de opción múltiple y pulsa Calificar para conocer tu puntaje y revisar la explicación de cada respuesta. Se aprueba con 6 o más aciertos.",
+      preguntas: [
+        {
+          subtema: "Subtema 14 · Redes y conexiones",
+          titulo: "",
+          q: "¿Qué propiedad caracteriza de manera exacta a un árbol de $n$ puntos?",
+          o: [
+            "(A) Tiene siempre un ciclo que conecta todos los puntos.",
+            "(B) Es una red conectada sin ciclos, con exactamente $n - 1$ conexiones.",
+            "(C) Tiene $n$ conexiones de dos sentidos y no está conectada.",
+            "(D) Es una red en la que todas las conexiones son de un solo sentido."
+          ],
+          c: 1,
+          e: "<strong>Respuesta correcta: (B).</strong> Un árbol es una red conectada sin ciclos y tiene exactamente $n - 1$ conexiones. La opción (A) describe un ciclo, que un árbol no puede tener."
+        },
+        {
+          subtema: "Subtema 14 · Redes y conexiones",
+          titulo: "",
+          q: "¿Qué implica que una red tenga conexiones de un solo sentido?",
+          o: [
+            "(A) Que todos sus puntos tienen el mismo grado.",
+            "(B) Que la red se convierte en un árbol con $n - 1$ conexiones.",
+            "(C) Que ir de A a B no garantiza poder regresar de B a A.",
+            "(D) Que los ciclos desaparecen de la red."
+          ],
+          c: 2,
+          e: "<strong>Respuesta correcta: (C).</strong> En una red de un solo sentido, un camino de ida no garantiza el de regreso. La opción (D) confunde la dirección con los ciclos."
+        },
+        {
+          subtema: "Subtema 14 · Redes y conexiones",
+          titulo: "",
+          q: "¿Cuántas conexiones tiene un árbol de 7 puntos?",
+          o: [
+            "(A) 6",
+            "(B) 7",
+            "(C) 8",
+            "(D) 14"
+          ],
+          c: 0,
+          e: "<strong>Respuesta correcta: (A).</strong> $e = n - 1 = 7 - 1 = 6$. La opción (B) olvida restar 1."
+        },
+        {
+          subtema: "Subtema 14 · Redes y conexiones",
+          titulo: "",
+          q: "Un punto está conectado directamente con 4 puntos distintos. ¿Cuál es su grado?",
+          o: [
+            "(A) 4",
+            "(B) 8",
+            "(C) 2",
+            "(D) 0"
+          ],
+          c: 0,
+          e: "<strong>Respuesta correcta: (A).</strong> El grado cuenta las conexiones del punto. Son 4 conexiones, así que el grado es 4."
+        },
+        {
+          subtema: "Subtema 14 · Redes y conexiones",
+          titulo: "",
+          q: "¿Qué es un ciclo en una red?",
+          o: [
+            "(A) Un camino que empieza y termina en el mismo punto, sin repetir conexiones.",
+            "(B) Una red en la que todos los puntos tienen grado 1.",
+            "(C) Un camino formado por una sola conexión.",
+            "(D) Una red que no tiene ninguna conexión."
+          ],
+          c: 0,
+          e: "<strong>Respuesta correcta: (A).</strong> Un ciclo es un camino cerrado que no repite conexiones. Las demás opciones describen otros conceptos."
+        },
+        {
+          subtema: "Subtema 14 · Redes y conexiones",
+          titulo: "",
+          q: "Una red de 4 puntos (A–B, B–C, C–D) está conectada. ¿Es un árbol?",
+          o: [
+            "(A) No, porque tiene menos de 4 conexiones.",
+            "(B) Sí, porque está conectada, no tiene ciclos y tiene $4 - 1 = 3$ conexiones.",
+            "(C) No, porque sus puntos tienen grados distintos.",
+            "(D) Solo si todas sus conexiones son de dos sentidos."
+          ],
+          c: 1,
+          e: "<strong>Respuesta correcta: (B).</strong> La red está conectada, no tiene ciclos y cumple $e = n - 1 = 3$. Por eso es un árbol."
+        },
+        {
+          subtema: "Subtema 14 · Redes y conexiones",
+          titulo: "",
+          q: "Hay 2 conexiones de A a B y 3 conexiones de B a C. ¿Cuántas rutas distintas hay de A a C pasando por B?",
+          o: [
+            "(A) 5",
+            "(B) 6",
+            "(C) 1",
+            "(D) 9"
+          ],
+          c: 1,
+          e: "<strong>Respuesta correcta: (B).</strong> Por etapas, $2 \\cdot 3 = 6$ rutas. La opción (A) suma en lugar de multiplicar."
+        },
+        {
+          subtema: "Subtema 14 · Redes y conexiones",
+          titulo: "",
+          q: "¿Por qué conviene llevar una lista de los puntos ya visitados al recorrer una red?",
+          o: [
+            "(A) Para aumentar el número de conexiones.",
+            "(B) Para cambiar la dirección de las conexiones.",
+            "(C) Para convertir la red en un árbol.",
+            "(D) Para no regresar a puntos ya visitados y no perderse."
+          ],
+          c: 3,
+          e: "<strong>Respuesta correcta: (D).</strong> La lista evita perderse y regresar a puntos ya visitados sin necesidad."
+        },
+        {
+          subtema: "Subtema 14 · Redes y conexiones",
+          titulo: "",
+          q: "Una red conectada de 5 puntos tiene 5 conexiones. ¿Qué afirmación es correcta?",
+          o: [
+            "(A) Es un árbol.",
+            "(B) Tiene exactamente 4 conexiones.",
+            "(C) No es un árbol, porque tiene un ciclo: un árbol de 5 puntos tiene 4 conexiones.",
+            "(D) Todas sus conexiones son de un solo sentido."
+          ],
+          c: 2,
+          e: "<strong>Respuesta correcta: (C).</strong> Un árbol de 5 puntos tiene $5 - 1 = 4$ conexiones. Con 5 conexiones aparece al menos un ciclo."
+        },
+        {
+          subtema: "Subtema 14 · Redes y conexiones",
+          titulo: "",
+          q: "¿Cuántos cables mínimos se necesitan para unir 8 computadoras sin formar ciclos?",
+          o: [
+            "(A) 8",
+            "(B) 9",
+            "(C) 16",
+            "(D) 7"
+          ],
+          c: 3,
+          e: "<strong>Respuesta correcta: (D).</strong> Se necesitan $8 - 1 = 7$ cables."
         }
       ]
     }
@@ -306,7 +521,7 @@
   function actualizarAvance() {
     if (!avanceTexto) return;
     const n = Object.values(aprobados).filter(Boolean).length;
-    avanceTexto.textContent = n + " de 3";
+    avanceTexto.textContent = n + " de 4";
   }
 
   /* Dibuja el quiz de un tema dentro de su contenedor. */

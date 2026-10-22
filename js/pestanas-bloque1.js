@@ -11,9 +11,9 @@
 
 (function () {
 
-  const PESTANA_HASH = /^tema-([1-3])-(aprender|practicar|quiz)$/;
-  const TEMA_HASH = /^(tema-[1-3]|tareas-pdf|pendientes)$/;
-  const SECCIONES_VALIDAS = ["tema-1", "tema-2", "tema-3", "tareas-pdf", "pendientes"];
+  const PESTANA_HASH = /^tema-([1-4])-(aprender|practicar|quiz)$/;
+  const TEMA_HASH = /^(tema-[1-4]|tareas-pdf|pendientes)$/;
+  const SECCIONES_VALIDAS = ["tema-1", "tema-2", "tema-3", "tema-4", "tareas-pdf", "pendientes"];
 
   // Estado en memoria mientras la página permanece abierta
   let memoriaLectura = {};
@@ -287,19 +287,9 @@
       chip.classList.toggle("activo", chip.getAttribute("data-seccion") === idSeccion);
     });
 
-    const matchTema = idSeccion.match(/^tema-([1-3])$/);
+    const matchTema = idSeccion.match(/^tema-([1-4])$/);
     if (matchTema) {
       const numTema = matchTema[1];
-      ["1", "2", "3"].forEach(function (n) {
-        const grupo = document.getElementById("grupo-tema-" + n);
-        const btn = document.querySelector('[data-bs-target="#grupo-tema-' + n + '"]');
-        const abrir = n === numTema;
-        if (grupo) grupo.classList.toggle("show", abrir);
-        if (btn) {
-          btn.classList.toggle("collapsed", !abrir);
-          btn.setAttribute("aria-expanded", abrir ? "true" : "false");
-        }
-      });
       const contenedor = document.querySelector('[data-pestanas="' + numTema + '"]');
       const btnActivo = contenedor && contenedor.querySelector(".tab-btn.activa");
       const tabActiva = btnActivo ? btnActivo.dataset.tab : "aprender";
@@ -308,15 +298,6 @@
         enlace.classList.toggle("activo", enlace.getAttribute("href") === hashSub);
       });
     } else {
-      ["1", "2", "3"].forEach(function (n) {
-        const grupo = document.getElementById("grupo-tema-" + n);
-        const btn = document.querySelector('[data-bs-target="#grupo-tema-' + n + '"]');
-        if (grupo) grupo.classList.remove("show");
-        if (btn) {
-          btn.classList.add("collapsed");
-          btn.setAttribute("aria-expanded", "false");
-        }
-      });
       document.querySelectorAll(".indice-lista a").forEach(function (enlace) {
         enlace.classList.remove("activo");
       });

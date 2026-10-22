@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redes y conexiones · Tema 4 · BugSquad 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <style>
+    body { background-color: #F4F6F9; color: #334155; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between select-none">
+  <header class="w-full border-b border-slate-200/90 bg-white/85 backdrop-blur-md sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-teal-100 border border-teal-200 flex items-center justify-center shadow-sm">
+          <i class="fa-solid fa-diagram-project text-teal-700 text-lg"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold tracking-tight text-slate-800 text-sm sm:text-base">BugSquad 2026</span>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200 font-mono font-medium">Tema 4 · Bloque 1</span>
+          </div>
+          <p class="text-xs text-slate-500 hidden sm:block">Club de Programación Competitiva · Redes y conexiones</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span id="slide-counter-badge" class="font-mono text-xs bg-slate-100 px-3 py-1.5 rounded-xl text-teal-700 border border-slate-200 font-semibold">1 / 19</span>
+      </div>
+    </div>
+    <div class="w-full h-1.5 bg-slate-100">
+      <div id="progress-bar" class="h-full bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500 transition-all duration-300" style="width: 5.26%"></div>
+    </div>
+  </header>
+
+  <main class="flex-1 flex items-center justify-center p-3 sm:p-6 md:p-8">
+    <div class="w-full max-w-5xl bg-white border border-slate-200/90 rounded-3xl shadow-xl shadow-slate-200/60 p-6 sm:p-10 min-h-[520px] flex flex-col justify-between relative overflow-hidden">
+      <div id="slide-stage" class="flex-1 flex flex-col justify-center z-10"></div>
+      <div class="mt-8 pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2 z-10">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-diagram-project text-teal-600"></i>
+          <span class="font-medium">Club de programación Competitiva - BugSquad 2026</span>
+        </div>
+        <div class="font-mono text-[11px] text-slate-500">Usa ← → para cambiar de diapositiva</div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="w-full py-3 px-4 bg-white/90 border-t border-slate-200/80">
+    <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+      <button id="btn-prev" onclick="prevSlide()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 disabled:opacity-40 text-slate-700 font-medium text-sm flex items-center gap-2 border border-slate-200">
+        <i class="fa-solid fa-arrow-left text-slate-500"></i><span>Anterior</span>
+      </button>
+      <div id="dots-container" class="hidden sm:flex items-center gap-1.5 flex-wrap justify-center"></div>
+      <button id="btn-next" onclick="nextSlide()" class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 disabled:opacity-40 text-white font-semibold text-sm flex items-center gap-2 shadow-sm">
+        <span>Siguiente</span><i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </footer>
+
+  <script>
+    const slides = [
+      { title: "Redes y conexiones", subtitle: "Tema 4 · Bloque 1 · Puntos, conexiones, caminos y conteo", body: "<p class='text-lg text-slate-600'>Modelar mapas de transporte, redes de computadoras y relaciones entre personas mediante puntos unidos por conexiones.</p>" },
+      { title: "Mapas de conexiones", subtitle: "Quitar detalles y observar solo quién se conecta con quién", body: "<div class='grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4'><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><h4 class='font-bold text-slate-800'>Puntos (nodos o vértices)</h4><p class='text-sm text-slate-600 mt-1'>Ciudades, computadoras o personas.</p></div><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><h4 class='font-bold text-slate-800'>Conexiones (aristas o enlaces)</h4><p class='text-sm text-slate-600 mt-1'>Rutas, cables o lazos de amistad.</p></div><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><h4 class='font-bold text-slate-800'>Caminos</h4><p class='text-sm text-slate-600 mt-1'>Trayectos que llevan de un punto a otro.</p></div><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><h4 class='font-bold text-slate-800'>Conteo</h4><p class='text-sm text-slate-600 mt-1'>Cuántas rutas o conexiones hay.</p></div></div>" },
+      { title: "Conexiones de dos sentidos y de un sentido", subtitle: "La dirección decide por dónde se puede viajar", body: "<div class='grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4'><div class='p-5 rounded-2xl bg-teal-50/70 border border-teal-200'><h4 class='font-bold text-teal-900'>Dos sentidos</h4><p class='text-sm text-slate-700 mt-2'>Si hay ruta de A a B, también la hay de B a A. Ejemplo: una calle de doble circulación.</p></div><div class='p-5 rounded-2xl bg-amber-50/70 border border-amber-200'><h4 class='font-bold text-amber-900'>Un solo sentido</h4><p class='text-sm text-slate-700 mt-2'>Ir de A a B no garantiza regresar de B a A. Ejemplo: una calle de sentido único.</p></div></div>" },
+      { title: "Grado de un punto", subtitle: "Es la cantidad de conexiones que llegan o salen de él", body: "<div class='overflow-x-auto mt-4'><table class='w-full text-sm border border-slate-200 rounded-xl overflow-hidden'><thead class='bg-slate-100 text-slate-700'><tr><th class='p-3'>Ciudad</th><th class='p-3'>Conexiones</th><th class='p-3'>Grado</th></tr></thead><tbody class='divide-y divide-slate-200 text-center'><tr><td class='p-2.5 font-bold'>A</td><td>con B y con C</td><td class='font-mono font-bold text-teal-700'>2</td></tr><tr><td class='p-2.5 font-bold'>B</td><td>solo con A</td><td class='font-mono font-bold text-teal-700'>1</td></tr><tr><td class='p-2.5 font-bold'>C</td><td>con A y con D</td><td class='font-mono font-bold text-teal-700'>2</td></tr><tr><td class='p-2.5 font-bold'>D</td><td>solo con C</td><td class='font-mono font-bold text-teal-700'>1</td></tr></tbody></table></div><p class='text-sm text-slate-600 mt-3'>Un punto con grado alto es un centro de conexiones importante.</p>" },
+      { title: "Caminos y ciclos", subtitle: "Un camino lleva de un punto a otro; un ciclo regresa al punto de partida", body: "<div class='space-y-3 mt-4'><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><strong>Camino:</strong> secuencia de conexiones consecutivas: <span class='font-mono'>A → B → C → D</span>.</div><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><strong>Ciclo:</strong> camino cerrado que empieza y termina en el mismo punto sin repetir conexiones.</div></div>" },
+      { title: "Red conectada", subtitle: "Se puede llegar de cualquier punto a cualquier otro", body: "<div class='space-y-3 mt-4'><div class='p-4 rounded-2xl bg-teal-50 border border-teal-200'>Ejemplo: A–B, B–C, C–D y D–E. Se puede ir de A a E por <span class='font-mono'>A → B → C → D → E</span>, así que la red está conectada.</div><div class='p-4 rounded-2xl bg-rose-50 border border-rose-200'>Si una red no está conectada, se divide en partes aisladas que no se comunican.</div></div>" },
+      { title: "Árboles: la red mínima", subtitle: "Conectada y sin ciclos", body: "<div class='p-6 rounded-2xl bg-teal-50 border border-teal-200 text-center my-4'><div class='text-3xl font-mono font-extrabold text-teal-800'>e = n − 1</div><p class='text-sm text-slate-700 mt-2'>n = número de puntos · e = número de conexiones</p></div><p class='text-sm text-slate-600'>Con 4 puntos se necesitan 3 conexiones. Si quitas una, la red se rompe. Si agregas una, aparece un ciclo.</p>" },
+      { title: "Conectar 6 computadoras", subtitle: "El mínimo de cables sin formar ciclos", body: "<div class='p-5 rounded-2xl bg-slate-50 border border-slate-200 my-3'><div class='text-2xl font-mono font-bold text-teal-700'>e = 6 − 1 = 5 cables</div><p class='text-sm text-slate-600 mt-2'>Cada cable une dos computadoras y no debe cerrar un ciclo. Con 5 cables las 6 computadoras quedan conectadas, y cada par tiene una única ruta.</p></div>" },
+      { title: "Recorrer una red", subtitle: "Visitar todos los puntos sin perder ninguno", body: "<ul class='list-disc pl-6 space-y-2 text-slate-700 mt-3'><li>Parte de un punto origen y anota los vecinos directos. Después, visita los vecinos de cada vecino.</li><li>Orden de visita de ejemplo: <span class='font-mono'>A → B → C → D</span>.</li><li>Lleva una lista de los puntos ya visitados para no regresar a los mismos.</li></ul>" },
+      { title: "Ruta más corta en un mapa pequeño", subtitle: "Red de A–B, A–C y C–D: ¿cómo llegar de A a D?", body: "<div class='grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4'><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><h4 class='font-bold'>Ruta posible</h4><p class='text-sm text-slate-600 mt-1'><span class='font-mono'>A → C → D</span>: 2 conexiones. Es la única ruta de A a D en esta red.</p></div><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><h4 class='font-bold'>Cómo decidir</h4><p class='text-sm text-slate-600 mt-1'>Si hay varias rutas, compara cuántas conexiones tiene cada una y elige la más corta.</p></div></div>" },
+      { title: "Conteo de rutas por etapas", subtitle: "Multiplica las opciones de cada etapa", body: "<div class='p-5 rounded-2xl bg-teal-50 border border-teal-200 my-3'><div class='text-2xl font-mono font-bold text-teal-800'>k₁ · k₂ = 3 · 2 = 6</div><p class='text-sm text-slate-700 mt-2'>De A a B hay 3 conexiones (k₁ = 3). De B a C hay 2 conexiones (k₂ = 2). En una red sin ciclos hay exactamente 1 camino entre cualquier par de puntos.</p></div>" },
+      { title: "Errores frecuentes", subtitle: "Revísalos antes de la tarea", body: "<ol class='list-decimal pl-6 space-y-2 text-slate-700 mt-3'><li><strong>Confundir redes de un sentido con redes de dos sentidos:</strong> revisa la dirección de cada conexión.</li><li><strong>Usar e = n − 1 en una red con ciclos:</strong> la fórmula solo aplica a árboles.</li><li><strong>Creer que con ciclos solo hay un camino:</strong> los ciclos crean rutas alternativas.</li></ol>" },
+      { title: "Resumen", subtitle: "Lo esencial del tema", body: "<div class='overflow-x-auto mt-3'><table class='w-full text-sm border border-slate-200 rounded-xl overflow-hidden'><thead class='bg-slate-100'><tr><th class='p-2.5 text-left'>Concepto</th><th class='p-2.5 text-left'>Idea clave</th></tr></thead><tbody class='divide-y divide-slate-200'><tr><td class='p-2 font-semibold'>Puntos y conexiones</td><td class='p-2'>Los puntos son entidades y las conexiones unen pares de puntos.</td></tr><tr><td class='p-2 font-semibold'>Grado</td><td class='p-2'>Número de conexiones que llegan o salen de un punto.</td></tr><tr><td class='p-2 font-semibold'>Camino y ciclo</td><td class='p-2'>Camino: secuencia de conexiones. Ciclo: camino cerrado.</td></tr><tr><td class='p-2 font-semibold'>Red conectada</td><td class='p-2'>Existe un camino entre cualquier par de puntos.</td></tr><tr><td class='p-2 font-semibold'>Árbol</td><td class='p-2'>Red conectada sin ciclos: e = n − 1.</td></tr></tbody></table></div>" },
+      { title: "Práctica guiada 1 · Grado y conexidad", subtitle: "Mapa de 5 ciudades: A–B, B–C, C–D, D–E", body: "<div class='space-y-2 mt-3 text-slate-700'><p><strong>Grados:</strong> A = 1, B = 2, C = 2, D = 2, E = 1.</p><p><strong>Conexidad:</strong> sí, de A a E por <span class='font-mono'>A → B → C → D → E</span>. La red está conectada.</p></div>" },
+      { title: "Práctica guiada 2 · Cables mínimos", subtitle: "¿Cuántos cables para 6 computadoras sin ciclos?", body: "<div class='space-y-2 mt-3 text-slate-700'><p>Una red conectada sin ciclos es un árbol: <span class='font-mono'>e = n − 1</span>.</p><p>Con n = 6: <span class='font-mono font-bold text-teal-700'>e = 6 − 1 = 5 cables</span>.</p></div>" },
+      { title: "Práctica independiente", subtitle: "Resuélvela en tu cuaderno y compara con la respuesta", body: "<div class='space-y-3 mt-3 text-sm text-slate-700'><div class='p-3.5 rounded-xl bg-slate-50 border border-slate-200'><strong>Ejercicio 1 · Árbol de 4 puntos:</strong> ¿Cuántos caminos distintos hay entre dos puntos cualesquiera? Respuesta: 1, porque en un árbol la ruta es única.</div><div class='p-3.5 rounded-xl bg-slate-50 border border-slate-200'><strong>Ejercicio 2 · ¿Árbol o ciclo?:</strong> 4 puntos conectados con 4 conexiones. Respuesta: no es un árbol, porque tiene un ciclo (un árbol con 4 puntos tiene 3 conexiones).</div></div>" },
+      { title: "Práctica guiada 3 a 7", subtitle: "Respuestas de comprobación", body: "<ul class='list-disc pl-6 space-y-1.5 text-sm text-slate-700 mt-3'><li>3. Rutas de A a D: 2 caminos; el más corto tiene 1 conexión.</li><li>4. Grado de B en la cadena: 2.</li><li>5. ¿Camino de C a A en una red de un solo sentido? No.</li><li>6. Cinco casas: mínimo 4 cables; con 6 cables sobran 2.</li><li>7. Rutas por etapas: 4 · 3 · 2 = 24.</li></ul>" },
+      { title: "Práctica independiente 8 a 14", subtitle: "Resuélvela en tu cuaderno antes de revisar", body: "<ul class='list-disc pl-6 space-y-1.5 text-sm text-slate-700 mt-3'><li>8. Árbol con 9 conexiones: 10 puntos.</li><li>9. Red de 4 puntos con 4 conexiones: no es árbol.</li><li>10. 8 puntos y 7 conexiones conectados: sí es árbol.</li><li>11. Nueve escuelas sin ciclos: 8 caminos.</li><li>12. A → B → C → A: sí es un ciclo.</li><li>13. Con A → B → C → A se puede ir de B a A: sí.</li><li>14. Viaje por etapas: 5 · 2 = 10 formas.</li></ul>" },
+      { title: "Quiz de repaso", subtitle: "Responde en la pestaña Quiz del sitio", body: "<div class='space-y-3 mt-3 text-sm text-slate-700'><div class='p-3.5 rounded-xl bg-teal-50 border border-teal-200'><strong>1. ¿Qué caracteriza a un árbol de n puntos?</strong> Respuesta: B. Es conectado, sin ciclos y tiene n − 1 conexiones.</div><div class='p-3.5 rounded-xl bg-teal-50 border border-teal-200'><strong>2. ¿Qué implica una red de un solo sentido?</strong> Respuesta: C. Ir de A a B no garantiza regresar de B a A.</div></div>" }
+    ];
+
+    let currentSlide = 0;
+    function updateView() {
+      const s = slides[currentSlide];
+      document.getElementById("slide-stage").innerHTML =
+        `<div><span class="text-xs font-mono uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-200">Diapositiva ${currentSlide + 1} de ${slides.length}</span>` +
+        `<h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mt-3">${s.title}</h2>` +
+        `<p class="text-sm sm:text-base text-slate-500 mt-1">${s.subtitle}</p>` +
+        `<div class="mt-4">${s.body}</div></div>`;
+      document.getElementById("slide-counter-badge").textContent = `${currentSlide + 1} / ${slides.length}`;
+      document.getElementById("progress-bar").style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+      document.getElementById("btn-prev").disabled = currentSlide === 0;
+      document.getElementById("btn-next").disabled = currentSlide === slides.length - 1;
+    }
+    function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateView(); } }
+    function prevSlide() { if (currentSlide > 0) { currentSlide--; updateView(); } }
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") nextSlide();
+      if (e.key === "ArrowLeft") prevSlide();
+    });
+    window.onload = updateView;
+  </script>
+</body>
+</html>

@@ -77,7 +77,7 @@
       .replace(/°|\\circ|\bgrados?\b/g, "");
 
     // Quitar unidades comunes al final cuando acompañan a un número
-    s = s.replace(/\b(pesos?|libros?|kilogramos?|kg|cajas?|estudiantes?|parejas?|jueces|juez|rejas?\s*llenas?|rejas?|refrescos?\s*sueltos?|refrescos?|atletas?|d[íi]as?|errores?|error|metros?|unidades?|luces|camiones?|impares?|p[íi]xeles?|puntos?|elementos?)\b/g, "");
+    s = s.replace(/\b(pesos?|libros?|kilogramos?|kg|cajas?|estudiantes?|parejas?|jueces|juez|rejas?\s*llenas?|rejas?|refrescos?\s*sueltos?|refrescos?|atletas?|d[íi]as?|errores?|error|metros?|unidades?|luces|camiones?|impares?|p[íi]xeles?|puntos?|elementos?|paquetes?|segundos?|horas?|cent[íi]metros?|cables?|rutas?|caminos?|formas?|conexiones?|conexi[óo]n)\b/g, "");
 
     // Si es un número seguido de "m" o "cm" como unidad de longitud (ej. "15 m", "20 m")
     s = s.replace(/^([+-]?\d+(?:\.\d+)?)\s*(?:m|cm)$/, "$1");
@@ -335,28 +335,44 @@
   });
 
 
-  /* Dibuja los 15 ejercicios de la Tarea del Bloque 1 con su botón "Ver clave" oculto al inicio. */
+  /* Dibuja los 20 ejercicios del Problemario del Bloque 1 con su botón "Ver clave" oculto al inicio. */
   function dibujarTarea(contenedor) {
     if (typeof TAREA_BLOQUE1 === "undefined" || !contenedor) return;
+    const intros = (typeof PROBLEMARIO_INTRO_TEMAS !== "undefined") ? PROBLEMARIO_INTRO_TEMAS : {};
     let html =
       '<div class="bloque-pestana mb-4">' +
-        '<h3><span class="icono-bloque sky"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></span> Ejercicios</h3>' +
-        '<p class="mb-2">¡Bienvenido al primer bloque de entrenamiento! Antes de resolver cualquier problema, lo más importante es aprender a traducir una situación del entorno real a un modelo matemático claro. Lee con atención cada problema, identifica los datos y construye tu procedimiento con lenguaje matemático exacto.</p>' +
-        '<p class="mb-0 texto-suave">Revisa cada planteamiento y cada operación. Respalda cada paso con su justificación antes de comparar tu resultado con la clave.</p>' +
+        '<h3><span class="icono-bloque sky"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></span> Introducción del problemario</h3>' +
+        '<p class="mb-2">¡Bienvenido al inicio de tu entrenamiento en competencias de razonamiento! Como tu profesor y entrenador, quiero dejarte algo muy claro desde el primer día: resolver problemas matemáticos abstractos no es un adorno teórico ni un trámite escolar; es el verdadero motor que impulsa tu capacidad para razonar con orden. Antes de resolver cualquier problema, tu mente debe aprender a descomponerlo, estructurar sus relaciones cuantitativas y formalizar la lógica que guía la solución. Una buena solución no nace de la prueba y error, sino en la hoja de papel donde construyes y validas un modelo matemático riguroso. Este problemario está diseñado para ejercitar esa capacidad analítica, permitiéndote razonar con precisión sobre patrones, estructuras discretas y condiciones formales de validez.</p>' +
+        '<p class="mb-2">Para abordar con éxito cada uno de los ejercicios de este material, debes aplicar de manera sistemática el siguiente marco de trabajo analítico:</p>' +
+        '<ul class="mb-2">' +
+          '<li><strong>Análisis del problema:</strong> Lee minuciosamente el enunciado, separa la información conocida (datos de entrada) del objetivo explícito (resultado solicitado) y comprende la naturaleza del escenario propuesto.</li>' +
+          '<li><strong>Identificación de variables:</strong> Asigna símbolos matemáticos claros a las cantidades involucradas, especificando sus dominios ($n \in \mathbb{N}, x \in \mathbb{R}$, etc.) y sus unidades físicas o discretas.</li>' +
+          '<li><strong>Modelación matemática:</strong> Traduce las relaciones verbales a ecuaciones, proposiciones lógicas, progresiones o redes de conexiones.</li>' +
+          '<li><strong>Verificación de casos límite:</strong> Somete tu modelo a prueba evaluando situaciones extremas (valores cero, conjuntos vacíos, bordes del dominio o máximos y mínimos teóricos).</li>' +
+        '</ul>' +
+        '<p class="mb-2">Ten presente que durante todo este primer bloque no utilizarás lenguajes de programación. Cada actividad debe resolverse en papel, fundamentando cada paso en el razonamiento lógico-matemático.</p>' +
+        '<p class="mb-0 texto-suave">Con esta actitud crítica y metódica, estamos listos para adentrarnos en nuestro primer bloque fundamental: el álgebra formal y la lógica proposicional.</p>' +
       '</div>';
 
     let temaActual = null;
     TAREA_BLOQUE1.forEach(function (item) {
       if (item.tema !== temaActual) {
         temaActual = item.tema;
-        html += '<h3 class="subtitulo-grupo-practica">' + item.tema + '</h3>';
+        html += '<h3 class="subtitulo-grupo-practica mt-4">' + item.tema + '</h3>';
+        if (intros[item.tema]) {
+          html += '<p class="texto-suave mb-3">' + intros[item.tema] + '</p>';
+        }
       }
       const claveId = "tarea-b1-clave-" + item.n;
+      const badgeDif = item.dificultad
+        ? '<span class="badge rounded-pill bg-secondary-subtle text-secondary ms-2">' + item.dificultad + '</span>'
+        : '';
       html +=
         '<div class="tarjeta-pregunta" id="tarea-b1-' + item.n + '">' +
-          '<div class="mb-3"><span class="numero">' + item.n + '</span><strong>' + item.titulo + '</strong> ' + item.enunciado + '</div>' +
+          '<div class="mb-2"><span class="numero">' + item.n + '</span><strong>' + item.titulo + '</strong>' + badgeDif + '</div>' +
+          '<div class="mb-3">' + item.enunciado + '</div>' +
           '<div class="d-flex flex-wrap gap-2 align-items-center mt-2">' +
-            '<button type="button" class="btn btn-sm btn-ver-solucion btn-ver-clave" data-toggle-solucion="' + claveId + '" aria-expanded="false" aria-controls="' + claveId + '" aria-label="Ver clave del ejercicio ' + item.n + ' de la tarea">' +
+            '<button type="button" class="btn btn-sm btn-ver-solucion btn-ver-clave" data-toggle-solucion="' + claveId + '" aria-expanded="false" aria-controls="' + claveId + '" aria-label="Ver clave del ejercicio ' + item.n + ' del problemario">' +
               '<i class="fa-solid fa-key" aria-hidden="true"></i> Ver clave' +
             '</button>' +
           '</div>' +
@@ -364,7 +380,7 @@
             '<div class="solucion-cabecera"><i class="fa-solid fa-check-double me-1" aria-hidden="true"></i> Clave de respuesta · Ejercicio ' + item.n + '</div>' +
             '<div class="solucion-cuerpo">' +
               '<p class="mb-2"><strong>Respuesta final:</strong> ' + item.respuestaFinal + '</p>' +
-              '<p class="mb-1"><strong>Procedimiento breve:</strong></p>' +
+              '<p class="mb-1"><strong>Procedimiento:</strong></p>' +
               item.procedimiento +
             '</div>' +
           '</div>' +

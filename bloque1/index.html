@@ -78,11 +78,11 @@
                   <span class="grupo-numero">2</span>
                   <span>Aritmética y conteo</span>
                 </a>
-                <button class="grupo-toggle collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-2" aria-expanded="false" aria-controls="grupo-tema-2" aria-label="Mostrar u ocultar Tema 2">
+                <button class="grupo-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-2" aria-expanded="true" aria-controls="grupo-tema-2" aria-label="Mostrar u ocultar Tema 2">
                   <i class="fa-solid fa-chevron-down"></i>
                 </button>
               </div>
-              <div class="collapse" id="grupo-tema-2">
+              <div class="collapse show" id="grupo-tema-2">
                 <ul class="indice-lista">
                   <li><a href="#tema-2-aprender">Aprender</a></li>
                   <li><a href="#tema-2-practicar">Practicar</a></li>
@@ -97,11 +97,11 @@
                   <span class="grupo-numero">3</span>
                   <span>Geometría y patrones</span>
                 </a>
-                <button class="grupo-toggle collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-3" aria-expanded="false" aria-controls="grupo-tema-3" aria-label="Mostrar u ocultar Tema 3">
+                <button class="grupo-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-3" aria-expanded="true" aria-controls="grupo-tema-3" aria-label="Mostrar u ocultar Tema 3">
                   <i class="fa-solid fa-chevron-down"></i>
                 </button>
               </div>
-              <div class="collapse" id="grupo-tema-3">
+              <div class="collapse show" id="grupo-tema-3">
                 <ul class="indice-lista">
                   <li><a href="#tema-3-aprender">Aprender</a></li>
                   <li><a href="#tema-3-practicar">Practicar</a></li>
@@ -112,9 +112,28 @@
 
             <div class="grupo">
               <div class="grupo-cabecera">
+                <a class="grupo-enlace" href="#tema-4" data-seccion="tema-4">
+                  <span class="grupo-numero">4</span>
+                  <span>Redes y conexiones</span>
+                </a>
+                <button class="grupo-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-4" aria-expanded="true" aria-controls="grupo-tema-4" aria-label="Mostrar u ocultar Tema 4">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+              </div>
+              <div class="collapse show" id="grupo-tema-4">
+                <ul class="indice-lista">
+                  <li><a href="#tema-4-aprender">Aprender</a></li>
+                  <li><a href="#tema-4-practicar">Practicar</a></li>
+                  <li><a href="#tema-4-quiz">Quiz</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="grupo">
+              <div class="grupo-cabecera">
                 <a class="grupo-enlace" href="#tareas-pdf" data-seccion="tareas-pdf">
                   <span class="grupo-numero"><i class="fa-solid fa-file-pdf"></i></span>
-                  <span>Tareas en PDF</span>
+                  <span>Problemario del Bloque 1</span>
                 </a>
               </div>
             </div>
@@ -126,12 +145,12 @@
 
           <div class="avance mb-3">
             <p class="etiqueta-avance mb-1">Quizzes aprobados</p>
-            <p class="fw-semibold mb-3" id="avance-quiz-texto">0 de 3</p>
+            <p class="fw-semibold mb-3" id="avance-quiz-texto">0 de 4</p>
             <p class="etiqueta-avance mb-2">Ejercicios respondidos</p>
             <div class="progress mb-2" role="progressbar" aria-label="Ejercicios respondidos" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
               <div class="progress-bar" id="avance-ejercicios-barra" style="width: 0%"></div>
             </div>
-            <p class="small text-secondary mb-0 font-monospace" id="avance-ejercicios-texto">0 de 35</p>
+            <p class="small text-secondary mb-0 font-monospace" id="avance-ejercicios-texto">0 de 61</p>
           </div>
 
           <div class="asistente-sidebar">
@@ -150,12 +169,13 @@
         <header class="banner banner-compacto px-4 px-lg-5">
           <div class="container-fluid p-0">
             <h1 class="mb-2">Lógica, álgebra, aritmética y geometría básica</h1>
-            <p class="subtitulo mb-0">Tres temas para aprender a razonar con reglas claras. Cada uno tiene una lectura, ejercicios de práctica y un quiz conceptual con retroalimentación inmediata.</p>
+            <p class="subtitulo mb-0">Cuatro temas para aprender a razonar con reglas claras. Cada uno tiene una lectura, ejercicios de práctica y un quiz conceptual con retroalimentación inmediata.</p>
             <div class="chips-banner" role="tablist" aria-label="Selector rápido de temas del bloque">
               <a class="chip activo" href="#tema-1" data-seccion="tema-1"><i class="fa-solid fa-scale-balanced"></i> Tema 1 · Álgebra y lógica</a>
               <a class="chip" href="#tema-2" data-seccion="tema-2"><i class="fa-solid fa-calculator"></i> Tema 2 · Aritmética y conteo</a>
               <a class="chip" href="#tema-3" data-seccion="tema-3"><i class="fa-solid fa-draw-polygon"></i> Tema 3 · Geometría y patrones</a>
-              <a class="chip" href="#tareas-pdf" data-seccion="tareas-pdf"><i class="fa-solid fa-file-pdf"></i> Cierre · Tareas en PDF</a>
+              <a class="chip" href="#tema-4" data-seccion="tema-4"><i class="fa-solid fa-diagram-project"></i> Tema 4 · Redes y conexiones</a>
+              <a class="chip" href="#tareas-pdf" data-seccion="tareas-pdf"><i class="fa-solid fa-file-pdf"></i> Problemario del Bloque 1</a>
               <a class="chip chip-notebook" href="https://notebook.google.com/notebook/96292e5d-c336-4242-b978-d758b5de839b" target="_blank" rel="noopener"><i class="fa-solid fa-wand-magic-sparkles"></i> Chat NotebookLM</a>
             </div>
             <span class="credito d-inline-block"><span>Diseñado y organizado por: <strong>Prof. Rigoberto Santiago Garzón</strong></span></span>
@@ -219,10 +239,10 @@
                 <i class="fa-solid fa-book-open"></i> Aprender
               </button>
               <button class="tab-btn" type="button" role="tab" data-tab="practicar" id="tab-2-practicar" aria-controls="tema-2-practicar" aria-selected="false" tabindex="-1">
-                <i class="fa-solid fa-list-check"></i> Practicar <span class="tab-contador">11</span>
+                <i class="fa-solid fa-list-check"></i> Practicar <span class="tab-contador">19</span>
               </button>
               <button class="tab-btn" type="button" role="tab" data-tab="quiz" id="tab-2-quiz" aria-controls="tema-2-quiz" aria-selected="false" tabindex="-1">
-                <i class="fa-solid fa-trophy"></i> Quiz <span class="tab-contador">8</span>
+                <i class="fa-solid fa-trophy"></i> Quiz <span class="tab-contador">12</span>
               </button>
             </div>
 
@@ -264,10 +284,10 @@
                 <i class="fa-solid fa-book-open"></i> Aprender
               </button>
               <button class="tab-btn" type="button" role="tab" data-tab="practicar" id="tab-3-practicar" aria-controls="tema-3-practicar" aria-selected="false" tabindex="-1">
-                <i class="fa-solid fa-list-check"></i> Practicar <span class="tab-contador">10</span>
+                <i class="fa-solid fa-list-check"></i> Practicar <span class="tab-contador">14</span>
               </button>
               <button class="tab-btn" type="button" role="tab" data-tab="quiz" id="tab-3-quiz" aria-controls="tema-3-quiz" aria-selected="false" tabindex="-1">
-                <i class="fa-solid fa-trophy"></i> Quiz <span class="tab-contador">8</span>
+                <i class="fa-solid fa-trophy"></i> Quiz <span class="tab-contador">10</span>
               </button>
             </div>
 
@@ -293,28 +313,75 @@
 
           <div class="navegacion-seccion">
             <a href="#tema-2" data-seccion="tema-2"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 2</a>
-            <a href="#tareas-pdf" data-seccion="tareas-pdf">Siguiente: Tareas en PDF <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#tema-4" data-seccion="tema-4">Siguiente: Tema 4 <i class="fa-solid fa-arrow-right"></i></a>
           </div>
         </section>
 
-        <!-- CIERRE DEL BLOQUE: TAREAS EN PDF -->
-        <section class="seccion" id="tareas-pdf" data-vista-seccion="tareas-pdf" hidden>
-          <div class="numero-seccion" aria-hidden="true"><i class="fa-solid fa-file-pdf"></i></div>
-          <h2>Tareas en PDF · Cierre del Bloque 1</h2>
-          <p class="lead-tema">Compendio de ejercicios de los tres temas del bloque para reforzar lo aprendido en cuaderno, imprimir o trabajar sin conexión.</p>
+        <!-- TEMA 4 -->
+        <section class="seccion" id="tema-4" data-vista-seccion="tema-4" hidden>
+          <div class="numero-seccion" aria-hidden="true">4</div>
+          <h2>Redes y conexiones</h2>
+          <p class="lead-tema">Puntos y conexiones, grado, redes de uno y dos sentidos, caminos, ciclos, árboles y conteo de rutas por etapas.</p>
 
-          <div class="bloque-pestana" id="tema-3-tareas">
-            <h3><span class="icono-bloque amber"><i class="fa-solid fa-file-pdf"></i></span> Cuadernillo de ejercicios del Bloque 1</h3>
-            <p class="texto-suave mb-3">Incluye 15 ejercicios seleccionados de Álgebra y lógica, Aritmética, conteo y casos, y Geometría, trigonometría y patrones para reforzar los temas del bloque.</p>
-            <div class="d-flex flex-wrap gap-2 align-items-center">
-              <a class="btn btn-tide" href="../assets/docs/Ejercicios_Bloque1_sin_respuestas.pdf" target="_blank" rel="noopener">
-                <i class="fa-solid fa-file-arrow-down me-1"></i> Descargar Ejercicios del Bloque 1 (PDF)
-              </a>
+          <div class="pestanas" data-pestanas="4">
+            <div class="tab-barra" role="tablist" aria-label="Contenido del Tema 4">
+              <button class="tab-btn activa" type="button" role="tab" data-tab="aprender" id="tab-4-aprender" aria-controls="tema-4-aprender" aria-selected="true">
+                <i class="fa-solid fa-book-open"></i> Aprender
+              </button>
+              <button class="tab-btn" type="button" role="tab" data-tab="practicar" id="tab-4-practicar" aria-controls="tema-4-practicar" aria-selected="false" tabindex="-1">
+                <i class="fa-solid fa-list-check"></i> Practicar <span class="tab-contador">14</span>
+              </button>
+              <button class="tab-btn" type="button" role="tab" data-tab="quiz" id="tab-4-quiz" aria-controls="tema-4-quiz" aria-selected="false" tabindex="-1">
+                <i class="fa-solid fa-trophy"></i> Quiz <span class="tab-contador">10</span>
+              </button>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-4-aprender" aria-labelledby="tab-4-aprender">
+              <div data-lectura="4"></div>
+              <div class="recursos-tema">
+                <button type="button" class="btn btn-tide" data-bs-toggle="modal" data-bs-target="#modalPresentacion" data-src="presentacion-tema4.html" data-titulo="Presentación · Tema 4 · Redes y conexiones">
+                  <i class="fa-solid fa-display"></i> Ver presentación
+                </button>
+                <a class="enlace-recurso" href="../assets/docs/Tema4_Redes_y_conexiones.pptx"><i class="fa-solid fa-file-powerpoint"></i> Descargar PPTX original</a>
+                <a class="enlace-recurso" href="https://notebook.google.com/notebook/96292e5d-c336-4242-b978-d758b5de839b" target="_blank" rel="noopener"><i class="fa-solid fa-wand-magic-sparkles"></i> Consultar dudas en NotebookLM</a>
+              </div>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-4-practicar" aria-labelledby="tab-4-practicar" hidden>
+              <div data-ejercicios="4"></div>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-4-quiz" aria-labelledby="tab-4-quiz" hidden>
+              <div data-quiz="4"></div>
             </div>
           </div>
 
           <div class="navegacion-seccion">
             <a href="#tema-3" data-seccion="tema-3"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 3</a>
+            <a href="#tareas-pdf" data-seccion="tareas-pdf">Siguiente: Problemario del Bloque 1 <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </section>
+
+        <!-- CIERRE DEL BLOQUE: PROBLEMARIO DEL BLOQUE 1 -->
+        <section class="seccion" id="tareas-pdf" data-vista-seccion="tareas-pdf" hidden>
+          <div class="numero-seccion" aria-hidden="true"><i class="fa-solid fa-file-pdf"></i></div>
+          <h2>Problemario del Bloque 1</h2>
+          <p class="lead-tema">Compendio de 20 problemas de entrenamiento de Álgebra y lógica, Aritmética, conteo y casos, Geometría, trigonometría y patrones, y Redes y conexiones.</p>
+
+          <div class="bloque-pestana mb-4" id="tema-3-tareas">
+            <h3><span class="icono-bloque amber"><i class="fa-solid fa-file-pdf"></i></span> Cuadernillo de ejercicios y tareas del Bloque 1 (PDF)</h3>
+            <p class="texto-suave mb-3">Puedes resolver los 20 ejercicios del problemario directamente aquí abajo y consultar cada clave, o descargar el cuadernillo en PDF para imprimir o trabajar sin conexión.</p>
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+              <a class="btn btn-tide" href="../assets/docs/Ejercicios_y_tareas_Bloque1.pdf" target="_blank" rel="noopener">
+                <i class="fa-solid fa-file-arrow-down me-1"></i> Descargar Ejercicios y tareas (PDF)
+              </a>
+            </div>
+          </div>
+
+          <div data-tarea-bloque1="1"></div>
+
+          <div class="navegacion-seccion">
+            <a href="#tema-4" data-seccion="tema-4"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 4</a>
             <a href="#pendientes" data-seccion="pendientes">Siguiente: Próximamente <i class="fa-solid fa-arrow-right"></i></a>
           </div>
         </section>
