@@ -1,112 +1,865 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redes y conexiones · Tema 4 · BugSquad 2026</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" href="../favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
-  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
-  <style>
-    body { background-color: #F4F6F9; color: #334155; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-    .font-mono { font-family: 'JetBrains Mono', monospace; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redes y conexiones (Introducción a Grafos) · BugSquad 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F4F6F9;
+            color: #334155;
+            overflow-x: hidden;
+        }
+        .slide-enter {
+            animation: slideFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.995);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+    </style>
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+    <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
 </head>
 <body class="min-h-screen flex flex-col justify-between select-none">
-  <header class="w-full border-b border-slate-200/90 bg-white/85 backdrop-blur-md sticky top-0 z-30">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-teal-100 border border-teal-200 flex items-center justify-center shadow-sm">
-          <i class="fa-solid fa-diagram-project text-teal-700 text-lg"></i>
+
+    <!-- Barra de navegación superior -->
+    <header class="w-full border-b border-slate-200/90 bg-white/85 backdrop-blur-md sticky top-0 z-30">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-100 border border-indigo-200 flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-diagram-project text-indigo-700 text-lg"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold tracking-tight text-slate-800 text-sm sm:text-base">BugSquad 2026</span>
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 font-mono font-medium">Tema 4 · Bloque 1</span>
+                    </div>
+                    <p class="text-xs text-slate-500 hidden sm:block">Club de Programación Competitiva · Redes y conexiones (Introducción a Grafos)</p>
+                </div>
+            </div>
+
+            <!-- Controles de "Para saber más...", Índice y Pantalla Completa -->
+            <div class="flex items-center gap-2 sm:gap-2.5">
+                <button onclick="toggleDeepNotes()" id="btn-deep-toggle" class="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs sm:text-sm font-medium flex items-center gap-2 border border-amber-200 transition">
+                    <i class="fa-solid fa-book-open-reader text-amber-600"></i>
+                    <span class="hidden lg:inline" id="deep-toggle-label">Para saber más...: Visible</span>
+                </button>
+                <button onclick="toggleIndexModal()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-700 text-xs sm:text-sm font-medium flex items-center gap-2 border border-slate-200 transition">
+                    <i class="fa-solid fa-table-cells-large text-indigo-600"></i>
+                    <span class="hidden md:inline">Índice</span>
+                    <span id="slide-counter-badge" class="font-mono text-xs bg-white px-2 py-0.5 rounded-md text-indigo-700 border border-slate-200">1 / 13</span>
+                </button>
+                <button onclick="toggleFullScreen()" title="Pantalla Completa" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-700 text-sm border border-slate-200 transition">
+                    <i class="fa-solid fa-expand" id="fullscreen-icon"></i>
+                </button>
+            </div>
         </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="font-bold tracking-tight text-slate-800 text-sm sm:text-base">BugSquad 2026</span>
-            <span class="text-xs px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200 font-mono font-medium">Tema 4 · Bloque 1</span>
-          </div>
-          <p class="text-xs text-slate-500 hidden sm:block">Club de Programación Competitiva · Redes y conexiones</p>
+        <!-- Barra de progreso suave -->
+        <div class="w-full h-1.5 bg-slate-100">
+            <div id="progress-bar" class="h-full bg-gradient-to-r from-indigo-400 via-sky-400 to-teal-400 transition-all duration-300" style="width: 7.69%"></div>
         </div>
-      </div>
-      <div class="flex items-center gap-2">
-        <span id="slide-counter-badge" class="font-mono text-xs bg-slate-100 px-3 py-1.5 rounded-xl text-teal-700 border border-slate-200 font-semibold">1 / 19</span>
-      </div>
-    </div>
-    <div class="w-full h-1.5 bg-slate-100">
-      <div id="progress-bar" class="h-full bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500 transition-all duration-300" style="width: 5.26%"></div>
-    </div>
-  </header>
+    </header>
 
-  <main class="flex-1 flex items-center justify-center p-3 sm:p-6 md:p-8">
-    <div class="w-full max-w-5xl bg-white border border-slate-200/90 rounded-3xl shadow-xl shadow-slate-200/60 p-6 sm:p-10 min-h-[520px] flex flex-col justify-between relative overflow-hidden">
-      <div id="slide-stage" class="flex-1 flex flex-col justify-center z-10"></div>
-      <div class="mt-8 pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2 z-10">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-diagram-project text-teal-600"></i>
-          <span class="font-medium">Club de programación Competitiva - BugSquad 2026</span>
+    <!-- Escenario principal de la diapositiva -->
+    <main class="flex-1 flex items-center justify-center p-3 sm:p-6 md:p-8 relative overflow-y-auto">
+        <div class="w-full max-w-5xl bg-white border border-slate-200/90 rounded-3xl shadow-xl shadow-slate-200/60 p-5 sm:p-8 md:p-10 min-h-[600px] flex flex-col justify-between relative overflow-hidden">
+
+            <!-- Luces pastel decorativas de fondo -->
+            <div class="-top-24 -right-24 w-80 h-80 bg-indigo-100/50 rounded-full blur-3xl pointer-events-none absolute"></div>
+            <div class="-bottom-24 -left-24 w-80 h-80 bg-teal-100/50 rounded-full blur-3xl pointer-events-none absolute"></div>
+
+            <!-- Contenedor dinámico de la diapositiva activa -->
+            <div id="slide-stage" class="flex-1 flex flex-col justify-between z-10">
+                <!-- Se inyecta por JS -->
+            </div>
+
+            <!-- Pie de diapositiva oficial -->
+            <div class="mt-8 pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2 z-10">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-code text-indigo-600"></i>
+                    <span class="font-medium">Club de programación Competitiva - BugSquad 2026</span>
+                </div>
+                <div class="flex items-center gap-2 font-mono text-[11px] text-slate-500">
+                    <span>Usa <kbd class="px-1.5 py-0.5 bg-slate-100 rounded border border-slate-300 text-slate-700">←</kbd> <kbd class="px-1.5 py-0.5 bg-slate-100 rounded border border-slate-300 text-slate-700">→</kbd> o desliza para cambiar de diapositiva</span>
+                </div>
+            </div>
         </div>
-        <div class="font-mono text-[11px] text-slate-500">Usa ← → para cambiar de diapositiva</div>
-      </div>
+    </main>
+
+    <!-- Controles inferiores -->
+    <footer class="w-full py-3 px-4 bg-white/90 border-t border-slate-200/80 backdrop-blur-md z-20">
+        <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+            <button id="btn-prev" onclick="prevSlide()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-medium text-sm flex items-center gap-2 border border-slate-200 transition">
+                <i class="fa-solid fa-arrow-left text-slate-500"></i>
+                <span>Anterior</span>
+            </button>
+
+            <!-- Indicadores rápidos de puntos -->
+            <div id="dots-container" class="hidden sm:flex items-center gap-1.5 flex-wrap justify-center">
+                <!-- Puntos generados dinámicamente -->
+            </div>
+
+            <button id="btn-next" onclick="nextSlide()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:pointer-events-none text-white font-semibold text-sm flex items-center gap-2 shadow-sm shadow-indigo-600/20 transition">
+                <span>Siguiente</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Modal de Índice de las 13 Diapositivas -->
+    <div id="index-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-layer-group text-indigo-600 text-lg"></i>
+                    <h3 class="font-bold text-lg text-slate-800">Índice Completo del Tema 4 (13 Diapositivas)</h3>
+                </div>
+                <button onclick="toggleIndexModal()" class="w-8 h-8 rounded-lg bg-slate-200/70 hover:bg-slate-300/70 flex items-center justify-center text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="index-grid" class="p-5 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-white">
+                <!-- Tarjetas de diapositivas -->
+            </div>
+        </div>
     </div>
-  </main>
 
-  <footer class="w-full py-3 px-4 bg-white/90 border-t border-slate-200/80">
-    <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
-      <button id="btn-prev" onclick="prevSlide()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 disabled:opacity-40 text-slate-700 font-medium text-sm flex items-center gap-2 border border-slate-200">
-        <i class="fa-solid fa-arrow-left text-slate-500"></i><span>Anterior</span>
-      </button>
-      <div id="dots-container" class="hidden sm:flex items-center gap-1.5 flex-wrap justify-center"></div>
-      <button id="btn-next" onclick="nextSlide()" class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 disabled:opacity-40 text-white font-semibold text-sm flex items-center gap-2 shadow-sm">
-        <span>Siguiente</span><i class="fa-solid fa-arrow-right"></i>
-      </button>
-    </div>
-  </footer>
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 13;
+        let showDeepNotes = true;
 
-  <script>
-    const slides = [
-      { title: "Redes y conexiones", subtitle: "Tema 4 · Bloque 1 · Puntos, conexiones, caminos y conteo", body: "<p class='text-lg text-slate-600'>Modelar mapas de transporte, redes de computadoras y relaciones entre personas mediante puntos unidos por conexiones.</p>" },
-      { title: "Mapas de conexiones", subtitle: "Quitar detalles y observar solo quién se conecta con quién", body: "<div class='grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4'><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><h4 class='font-bold text-slate-800'>Puntos (nodos o vértices)</h4><p class='text-sm text-slate-600 mt-1'>Ciudades, computadoras o personas.</p></div><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><h4 class='font-bold text-slate-800'>Conexiones (aristas o enlaces)</h4><p class='text-sm text-slate-600 mt-1'>Rutas, cables o lazos de amistad.</p></div><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><h4 class='font-bold text-slate-800'>Caminos</h4><p class='text-sm text-slate-600 mt-1'>Trayectos que llevan de un punto a otro.</p></div><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><h4 class='font-bold text-slate-800'>Conteo</h4><p class='text-sm text-slate-600 mt-1'>Cuántas rutas o conexiones hay.</p></div></div>" },
-      { title: "Conexiones de dos sentidos y de un sentido", subtitle: "La dirección decide por dónde se puede viajar", body: "<div class='grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4'><div class='p-5 rounded-2xl bg-teal-50/70 border border-teal-200'><h4 class='font-bold text-teal-900'>Dos sentidos</h4><p class='text-sm text-slate-700 mt-2'>Si hay ruta de A a B, también la hay de B a A. Ejemplo: una calle de doble circulación.</p></div><div class='p-5 rounded-2xl bg-amber-50/70 border border-amber-200'><h4 class='font-bold text-amber-900'>Un solo sentido</h4><p class='text-sm text-slate-700 mt-2'>Ir de A a B no garantiza regresar de B a A. Ejemplo: una calle de sentido único.</p></div></div>" },
-      { title: "Grado de un punto", subtitle: "Es la cantidad de conexiones que llegan o salen de él", body: "<div class='overflow-x-auto mt-4'><table class='w-full text-sm border border-slate-200 rounded-xl overflow-hidden'><thead class='bg-slate-100 text-slate-700'><tr><th class='p-3'>Ciudad</th><th class='p-3'>Conexiones</th><th class='p-3'>Grado</th></tr></thead><tbody class='divide-y divide-slate-200 text-center'><tr><td class='p-2.5 font-bold'>A</td><td>con B y con C</td><td class='font-mono font-bold text-teal-700'>2</td></tr><tr><td class='p-2.5 font-bold'>B</td><td>solo con A</td><td class='font-mono font-bold text-teal-700'>1</td></tr><tr><td class='p-2.5 font-bold'>C</td><td>con A y con D</td><td class='font-mono font-bold text-teal-700'>2</td></tr><tr><td class='p-2.5 font-bold'>D</td><td>solo con C</td><td class='font-mono font-bold text-teal-700'>1</td></tr></tbody></table></div><p class='text-sm text-slate-600 mt-3'>Un punto con grado alto es un centro de conexiones importante.</p>" },
-      { title: "Caminos y ciclos", subtitle: "Un camino lleva de un punto a otro; un ciclo regresa al punto de partida", body: "<div class='space-y-3 mt-4'><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><strong>Camino:</strong> secuencia de conexiones consecutivas: <span class='font-mono'>A → B → C → D</span>.</div><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><strong>Ciclo:</strong> camino cerrado que empieza y termina en el mismo punto sin repetir conexiones.</div></div>" },
-      { title: "Red conectada", subtitle: "Se puede llegar de cualquier punto a cualquier otro", body: "<div class='space-y-3 mt-4'><div class='p-4 rounded-2xl bg-teal-50 border border-teal-200'>Ejemplo: A–B, B–C, C–D y D–E. Se puede ir de A a E por <span class='font-mono'>A → B → C → D → E</span>, así que la red está conectada.</div><div class='p-4 rounded-2xl bg-rose-50 border border-rose-200'>Si una red no está conectada, se divide en partes aisladas que no se comunican.</div></div>" },
-      { title: "Árboles: la red mínima", subtitle: "Conectada y sin ciclos", body: "<div class='p-6 rounded-2xl bg-teal-50 border border-teal-200 text-center my-4'><div class='text-3xl font-mono font-extrabold text-teal-800'>e = n − 1</div><p class='text-sm text-slate-700 mt-2'>n = número de puntos · e = número de conexiones</p></div><p class='text-sm text-slate-600'>Con 4 puntos se necesitan 3 conexiones. Si quitas una, la red se rompe. Si agregas una, aparece un ciclo.</p>" },
-      { title: "Conectar 6 computadoras", subtitle: "El mínimo de cables sin formar ciclos", body: "<div class='p-5 rounded-2xl bg-slate-50 border border-slate-200 my-3'><div class='text-2xl font-mono font-bold text-teal-700'>e = 6 − 1 = 5 cables</div><p class='text-sm text-slate-600 mt-2'>Cada cable une dos computadoras y no debe cerrar un ciclo. Con 5 cables las 6 computadoras quedan conectadas, y cada par tiene una única ruta.</p></div>" },
-      { title: "Recorrer una red", subtitle: "Visitar todos los puntos sin perder ninguno", body: "<ul class='list-disc pl-6 space-y-2 text-slate-700 mt-3'><li>Parte de un punto origen y anota los vecinos directos. Después, visita los vecinos de cada vecino.</li><li>Orden de visita de ejemplo: <span class='font-mono'>A → B → C → D</span>.</li><li>Lleva una lista de los puntos ya visitados para no regresar a los mismos.</li></ul>" },
-      { title: "Ruta más corta en un mapa pequeño", subtitle: "Red de A–B, A–C y C–D: ¿cómo llegar de A a D?", body: "<div class='grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4'><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><h4 class='font-bold'>Ruta posible</h4><p class='text-sm text-slate-600 mt-1'><span class='font-mono'>A → C → D</span>: 2 conexiones. Es la única ruta de A a D en esta red.</p></div><div class='p-4 rounded-2xl bg-slate-50 border border-slate-200'><h4 class='font-bold'>Cómo decidir</h4><p class='text-sm text-slate-600 mt-1'>Si hay varias rutas, compara cuántas conexiones tiene cada una y elige la más corta.</p></div></div>" },
-      { title: "Conteo de rutas por etapas", subtitle: "Multiplica las opciones de cada etapa", body: "<div class='p-5 rounded-2xl bg-teal-50 border border-teal-200 my-3'><div class='text-2xl font-mono font-bold text-teal-800'>k₁ · k₂ = 3 · 2 = 6</div><p class='text-sm text-slate-700 mt-2'>De A a B hay 3 conexiones (k₁ = 3). De B a C hay 2 conexiones (k₂ = 2). En una red sin ciclos hay exactamente 1 camino entre cualquier par de puntos.</p></div>" },
-      { title: "Errores frecuentes", subtitle: "Revísalos antes de la tarea", body: "<ol class='list-decimal pl-6 space-y-2 text-slate-700 mt-3'><li><strong>Confundir redes de un sentido con redes de dos sentidos:</strong> revisa la dirección de cada conexión.</li><li><strong>Usar e = n − 1 en una red con ciclos:</strong> la fórmula solo aplica a árboles.</li><li><strong>Creer que con ciclos solo hay un camino:</strong> los ciclos crean rutas alternativas.</li></ol>" },
-      { title: "Resumen", subtitle: "Lo esencial del tema", body: "<div class='overflow-x-auto mt-3'><table class='w-full text-sm border border-slate-200 rounded-xl overflow-hidden'><thead class='bg-slate-100'><tr><th class='p-2.5 text-left'>Concepto</th><th class='p-2.5 text-left'>Idea clave</th></tr></thead><tbody class='divide-y divide-slate-200'><tr><td class='p-2 font-semibold'>Puntos y conexiones</td><td class='p-2'>Los puntos son entidades y las conexiones unen pares de puntos.</td></tr><tr><td class='p-2 font-semibold'>Grado</td><td class='p-2'>Número de conexiones que llegan o salen de un punto.</td></tr><tr><td class='p-2 font-semibold'>Camino y ciclo</td><td class='p-2'>Camino: secuencia de conexiones. Ciclo: camino cerrado.</td></tr><tr><td class='p-2 font-semibold'>Red conectada</td><td class='p-2'>Existe un camino entre cualquier par de puntos.</td></tr><tr><td class='p-2 font-semibold'>Árbol</td><td class='p-2'>Red conectada sin ciclos: e = n − 1.</td></tr></tbody></table></div>" },
-      { title: "Práctica guiada 1 · Grado y conexidad", subtitle: "Mapa de 5 ciudades: A–B, B–C, C–D, D–E", body: "<div class='space-y-2 mt-3 text-slate-700'><p><strong>Grados:</strong> A = 1, B = 2, C = 2, D = 2, E = 1.</p><p><strong>Conexidad:</strong> sí, de A a E por <span class='font-mono'>A → B → C → D → E</span>. La red está conectada.</p></div>" },
-      { title: "Práctica guiada 2 · Cables mínimos", subtitle: "¿Cuántos cables para 6 computadoras sin ciclos?", body: "<div class='space-y-2 mt-3 text-slate-700'><p>Una red conectada sin ciclos es un árbol: <span class='font-mono'>e = n − 1</span>.</p><p>Con n = 6: <span class='font-mono font-bold text-teal-700'>e = 6 − 1 = 5 cables</span>.</p></div>" },
-      { title: "Práctica independiente", subtitle: "Resuélvela en tu cuaderno y compara con la respuesta", body: "<div class='space-y-3 mt-3 text-sm text-slate-700'><div class='p-3.5 rounded-xl bg-slate-50 border border-slate-200'><strong>Ejercicio 1 · Árbol de 4 puntos:</strong> ¿Cuántos caminos distintos hay entre dos puntos cualesquiera? Respuesta: 1, porque en un árbol la ruta es única.</div><div class='p-3.5 rounded-xl bg-slate-50 border border-slate-200'><strong>Ejercicio 2 · ¿Árbol o ciclo?:</strong> 4 puntos conectados con 4 conexiones. Respuesta: no es un árbol, porque tiene un ciclo (un árbol con 4 puntos tiene 3 conexiones).</div></div>" },
-      { title: "Práctica guiada 3 a 7", subtitle: "Respuestas de comprobación", body: "<ul class='list-disc pl-6 space-y-1.5 text-sm text-slate-700 mt-3'><li>3. Rutas de A a D: 2 caminos; el más corto tiene 1 conexión.</li><li>4. Grado de B en la cadena: 2.</li><li>5. ¿Camino de C a A en una red de un solo sentido? No.</li><li>6. Cinco casas: mínimo 4 cables; con 6 cables sobran 2.</li><li>7. Rutas por etapas: 4 · 3 · 2 = 24.</li></ul>" },
-      { title: "Práctica independiente 8 a 14", subtitle: "Resuélvela en tu cuaderno antes de revisar", body: "<ul class='list-disc pl-6 space-y-1.5 text-sm text-slate-700 mt-3'><li>8. Árbol con 9 conexiones: 10 puntos.</li><li>9. Red de 4 puntos con 4 conexiones: no es árbol.</li><li>10. 8 puntos y 7 conexiones conectados: sí es árbol.</li><li>11. Nueve escuelas sin ciclos: 8 caminos.</li><li>12. A → B → C → A: sí es un ciclo.</li><li>13. Con A → B → C → A se puede ir de B a A: sí.</li><li>14. Viaje por etapas: 5 · 2 = 10 formas.</li></ul>" },
-      { title: "Quiz de repaso", subtitle: "Responde en la pestaña Quiz del sitio", body: "<div class='space-y-3 mt-3 text-sm text-slate-700'><div class='p-3.5 rounded-xl bg-teal-50 border border-teal-200'><strong>1. ¿Qué caracteriza a un árbol de n puntos?</strong> Respuesta: B. Es conectado, sin ciclos y tiene n − 1 conexiones.</div><div class='p-3.5 rounded-xl bg-teal-50 border border-teal-200'><strong>2. ¿Qué implica una red de un solo sentido?</strong> Respuesta: C. Ir de A a B no garantiza regresar de B a A.</div></div>" }
-    ];
+        const state = {
+            slide2Node: 'A',
+            slide3Dir: 'ida',
+            slide4City: 'A',
+            slide5Mode: 'camino',
+            slide6Cut: false,
+            slide7Edges: 3,
+            slide8Topology: 'cadena',
+            slide9Step: 3,
+            slide10Route: 'optima',
+            slide11K1: 3,
+            slide11K2: 2,
+            slide12Checked: { 0: false, 1: false, 2: false }
+        };
 
-    let currentSlide = 0;
-    function updateView() {
-      const s = slides[currentSlide];
-      document.getElementById("slide-stage").innerHTML =
-        `<div><span class="text-xs font-mono uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-200">Diapositiva ${currentSlide + 1} de ${slides.length}</span>` +
-        `<h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mt-3">${s.title}</h2>` +
-        `<p class="text-sm sm:text-base text-slate-500 mt-1">${s.subtitle}</p>` +
-        `<div class="mt-4">${s.body}</div></div>`;
-      document.getElementById("slide-counter-badge").textContent = `${currentSlide + 1} / ${slides.length}`;
-      document.getElementById("progress-bar").style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
-      document.getElementById("btn-prev").disabled = currentSlide === 0;
-      document.getElementById("btn-next").disabled = currentSlide === slides.length - 1;
-    }
-    function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateView(); } }
-    function prevSlide() { if (currentSlide > 0) { currentSlide--; updateView(); } }
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowRight") nextSlide();
-      if (e.key === "ArrowLeft") prevSlide();
-    });
-    window.onload = updateView;
-  </script>
+        const slidesMeta = [
+            { num: 1, title: "Redes y conexiones", subtitle: "Tema 4 · Bloque 1 · Puntos, conexiones, caminos y conteo", icon: "fa-diagram-project" },
+            { num: 2, title: "Mapas de conexiones", subtitle: "Quitar detalles y observar solo quién se conecta con quién", icon: "fa-Location-dot" },
+            { num: 3, title: "Conexiones de dos sentidos y de un sentido", subtitle: "La dirección decide por dónde se puede viajar", icon: "fa-arrows-left-right" },
+            { num: 4, title: "Grado de un punto", subtitle: "Es la cantidad de conexiones que llegan o salen de él", icon: "fa-share-nodes" },
+            { num: 5, title: "Caminos y ciclos", subtitle: "Un camino lleva de un punto a otro; un ciclo regresa al punto de partida", icon: "fa-route" },
+            { num: 6, title: "Red conectada", subtitle: "Se puede llegar de cualquier punto a cualquier otro", icon: "fa-network-wired" },
+            { num: 7, title: "Árboles: la red mínima", subtitle: "Conectada y sin ciclos (e = n − 1)", icon: "fa-sitemap" },
+            { num: 8, title: "Conectar 6 computadoras", subtitle: "El mínimo de cables sin formar ciclos", icon: "fa-computer" },
+            { num: 9, title: "Recorrer una red", subtitle: "Visitar todos los puntos sin perder ninguno", icon: "fa-list-check" },
+            { num: 10, title: "Ruta más corta en un mapa pequeño", subtitle: "Red de A–B, A–C y C–D: ¿cómo llegar de A a D?", icon: "fa-compass" },
+            { num: 11, title: "Conteo de rutas por etapas", subtitle: "Multiplica las opciones de cada etapa", icon: "fa-calculator" },
+            { num: 12, title: "Errores frecuentes", subtitle: "Revísalos antes de la tarea", icon: "fa-triangle-exclamation" },
+            { num: 13, title: "Resumen", subtitle: "Lo esencial del tema", icon: "fa-table" }
+        ];
+
+        function renderDeepExplanation(title, mathExplanation, cppConnection) {
+            if (!showDeepNotes) return '';
+            return `
+                <div class="mt-4 p-4 sm:p-5 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-slate-700 shadow-sm transition-all">
+                    <div class="flex items-center gap-2 text-amber-800 font-bold text-xs sm:text-sm tracking-wide mb-2">
+                        <i class="fa-solid fa-graduation-cap text-amber-600 text-base"></i>
+                        <span>Para saber más... · ${title}</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm leading-relaxed">
+                        <div class="bg-white/80 p-3.5 rounded-xl border border-amber-100">
+                            <span class="font-bold text-slate-800 block mb-1"><i class="fa-solid fa-square-root-variable text-indigo-600 mr-1.5"></i>¿Por qué funciona así en Matemáticas?</span>
+                            <p class="text-slate-600">${mathExplanation}</p>
+                        </div>
+                        <div class="bg-white/80 p-3.5 rounded-xl border border-amber-100">
+                            <span class="font-bold text-slate-800 block mb-1"><i class="fa-solid fa-terminal text-teal-600 mr-1.5"></i>Conexión con Programación Competitiva (C++)</span>
+                            <p class="text-slate-600">${cppConnection}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSlideContent(index) {
+            switch (index) {
+                case 0:
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col items-center justify-center text-center py-4">
+                            <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-indigo-100 via-sky-50 to-teal-100 border border-indigo-200 flex items-center justify-center mb-5 shadow-md shadow-indigo-100">
+                                <i class="fa-solid fa-diagram-project text-4xl sm:text-5xl text-indigo-700"></i>
+                            </div>
+                            <span class="px-3.5 py-1 rounded-full text-xs font-mono uppercase tracking-widest bg-indigo-50 text-indigo-700 border border-indigo-200 mb-3 font-semibold">
+                                Club de programación Competitiva - BugSquad 2026
+                            </span>
+                            <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-800 mb-3">
+                                Redes y conexiones
+                            </h1>
+                            <p class="text-base sm:text-xl text-slate-600 max-w-3xl font-medium mb-6">
+                                Tema 4 · Bloque 1 · Puntos, conexiones, caminos y conteo
+                            </p>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-3xl mb-6 text-left">
+                                <button onclick="goToSlide(1)" class="p-3.5 rounded-2xl bg-indigo-50/70 hover:bg-indigo-100/80 border border-indigo-200/80 flex flex-col gap-1.5 transition">
+                                    <div class="flex items-center justify-between">
+                                        <i class="fa-solid fa-share-nodes text-indigo-600 text-lg"></i>
+                                        <span class="text-[11px] font-mono text-indigo-700">Diap. 2-4</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">Puntos y Grado</span>
+                                    <span class="text-[11px] text-slate-500">Nodos, dirección y número de enlaces</span>
+                                </button>
+                                <button onclick="goToSlide(4)" class="p-3.5 rounded-2xl bg-sky-50/70 hover:bg-sky-100/80 border border-sky-200/80 flex flex-col gap-1.5 transition">
+                                    <div class="flex items-center justify-between">
+                                        <i class="fa-solid fa-route text-sky-600 text-lg"></i>
+                                        <span class="text-[11px] font-mono text-sky-700">Diap. 5-6</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">Caminos y Conexidad</span>
+                                    <span class="text-[11px] text-slate-500">Trayectos, ciclos y redes conectadas</span>
+                                </button>
+                                <button onclick="goToSlide(6)" class="p-3.5 rounded-2xl bg-teal-50/70 hover:bg-teal-100/80 border border-teal-200/80 flex flex-col gap-1.5 transition">
+                                    <div class="flex items-center justify-between">
+                                        <i class="fa-solid fa-sitemap text-teal-600 text-lg"></i>
+                                        <span class="text-[11px] font-mono text-teal-700">Diap. 7-8</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">Árboles (e = n − 1)</span>
+                                    <span class="text-[11px] text-slate-500">La red mínima sin ciclos</span>
+                                </button>
+                                <button onclick="goToSlide(8)" class="p-3.5 rounded-2xl bg-purple-50/70 hover:bg-purple-100/80 border border-purple-200/80 flex flex-col gap-1.5 transition">
+                                    <div class="flex items-center justify-between">
+                                        <i class="fa-solid fa-compass text-purple-600 text-lg"></i>
+                                        <span class="text-[11px] font-mono text-purple-700">Diap. 9-13</span>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-800">Recorridos y Conteo</span>
+                                    <span class="text-[11px] text-slate-500">Ruta más corta y rutas por etapas</span>
+                                </button>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Introducción a la Teoría de Grafos',
+                                'En matemáticas discretas, una red se modela como un grafo <span class="font-mono">G = (V, E)</span> formado por un conjunto de puntos (vértices) y conexiones (aristas).',
+                                'En OMI, ICPC e IOI, modelar mapas, carreteras o dependencias como grafos permite aplicar algoritmos clásicos de búsqueda y caminos mínimos.'
+                            )}
+                        </div>
+                    `;
+
+                case 1: {
+                    const sel = state.slide2Node;
+                    const infoNodos = {
+                        A: 'Punto A: conectado directamente con B y con C (2 conexiones).',
+                        B: 'Punto B: conectado con A y con D (2 conexiones).',
+                        C: 'Punto C: conectado con A y con D (2 conexiones).',
+                        D: 'Punto D: conectado con B y con C (2 conexiones).'
+                    };
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">Diapositiva 2 de 13</span>
+                                    <span class="text-xs text-slate-500 font-medium">Abstracción Geométrica</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Mapas de conexiones</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Quitar detalles y observar solo quién se conecta con quién</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200">
+                                        <i class="fa-solid fa-location-dot text-indigo-600 text-xl mb-1"></i>
+                                        <h4 class="font-bold text-slate-800 text-sm">Puntos</h4>
+                                        <p class="text-xs text-slate-600 mt-1">Ciudades, computadoras o personas (vértices/nodos).</p>
+                                    </div>
+                                    <div class="p-4 rounded-2xl bg-sky-50/80 border border-sky-200">
+                                        <i class="fa-solid fa-route text-sky-600 text-xl mb-1"></i>
+                                        <h4 class="font-bold text-slate-800 text-sm">Conexiones</h4>
+                                        <p class="text-xs text-slate-600 mt-1">Rutas, cables o lazos de amistad (aristas).</p>
+                                    </div>
+                                    <div class="p-4 rounded-2xl bg-teal-50/80 border border-teal-200">
+                                        <i class="fa-solid fa-road text-teal-600 text-xl mb-1"></i>
+                                        <h4 class="font-bold text-slate-800 text-sm">Caminos</h4>
+                                        <p class="text-xs text-slate-600 mt-1">Trayectos que llevan de un punto a otro.</p>
+                                    </div>
+                                    <div class="p-4 rounded-2xl bg-purple-50/80 border border-purple-200">
+                                        <i class="fa-solid fa-calculator text-purple-600 text-xl mb-1"></i>
+                                        <h4 class="font-bold text-slate-800 text-sm">Conteo</h4>
+                                        <p class="text-xs text-slate-600 mt-1">Cuántas rutas o conexiones hay.</p>
+                                    </div>
+                                </div>
+
+                                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col items-center justify-center">
+                                    <span class="text-xs font-mono text-slate-500 mb-2">Haz clic en un punto del diamante (A, B, C, D):</span>
+                                    <div class="flex items-center gap-3 my-2">
+                                        ${['A', 'B', 'C', 'D'].map(n => `
+                                            <button onclick="state.slide2Node='${n}'; updateView();" class="w-12 h-12 rounded-2xl font-mono font-bold text-base border-2 transition ${sel === n ? 'bg-indigo-600 text-white border-indigo-700 shadow-md' : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'}">${n}</button>
+                                        `).join('')}
+                                    </div>
+                                    <p class="text-xs text-indigo-800 bg-indigo-50 border border-indigo-200 rounded-xl px-3 py-2 mt-2 text-center font-medium">${infoNodos[sel]}</p>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Modelo de Grafo',
+                                'No importa la longitud física ni las curvas del camino en el papel; solo importa qué pares de puntos tienen conexión directa.',
+                                'En memoria representamos cada punto con un número entero <span class="font-mono">1..N</span> y guardamos únicamente sus conexiones.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                case 2: {
+                    const dir = state.slide3Dir;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">Diapositiva 3 de 13</span>
+                                    <span class="text-xs text-slate-500 font-medium">Simetría vs. Asimetría</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Conexiones de dos sentidos y de un sentido</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">La dirección decide por dónde se puede viajar</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                                <div class="p-5 rounded-2xl bg-teal-50/80 border-2 border-teal-200">
+                                    <span class="text-xs font-mono uppercase text-teal-700 font-bold">Dos sentidos (No dirigido)</span>
+                                    <div class="text-2xl font-mono font-extrabold text-teal-900 my-2">A ↔ B</div>
+                                    <p class="text-sm text-slate-700">Si hay ruta de A a B, también la hay de B a A. Ejemplo: una calle de doble circulación.</p>
+                                    <div class="mt-3 text-xs font-mono px-3 py-2 rounded-xl bg-white border border-teal-200 text-teal-800">
+                                        ${dir === 'ida' ? '✔ Ir A → B: Permitido' : '✔ Regresar B → A: Permitido'}
+                                    </div>
+                                </div>
+
+                                <div class="p-5 rounded-2xl bg-amber-50/80 border-2 border-amber-200">
+                                    <span class="text-xs font-mono uppercase text-amber-800 font-bold">Un solo sentido (Dirigido)</span>
+                                    <div class="text-2xl font-mono font-extrabold text-amber-900 my-2">A → B</div>
+                                    <p class="text-sm text-slate-700">Ir de A a B no garantiza regresar de B a A. Ejemplo: una calle de sentido único.</p>
+                                    <div class="mt-3 text-xs font-mono px-3 py-2 rounded-xl bg-white border border-amber-200 ${dir === 'ida' ? 'text-teal-800' : 'text-rose-700 font-bold'}">
+                                        ${dir === 'ida' ? '✔ Ir A → B: Permitido' : '✘ Regresar B → A: Bloqueado (no hay flecha de regreso)'}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap items-center justify-center gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+                                <button onclick="state.slide3Dir='ida'; updateView();" class="px-4 py-2 rounded-xl text-xs font-semibold transition ${dir === 'ida' ? 'bg-indigo-600 text-white' : 'bg-white text-slate-700 border border-slate-300'}">Probar ir A → B</button>
+                                <button onclick="state.slide3Dir='vuelta'; updateView();" class="px-4 py-2 rounded-xl text-xs font-semibold transition ${dir === 'vuelta' ? 'bg-indigo-600 text-white' : 'bg-white text-slate-700 border border-slate-300'}">Probar regresar B → A</button>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Listas de Adyacencia',
+                                'En una red de dos sentidos la relación es simétrica; en una red de un solo sentido cada conexión es un par ordenado <span class="font-mono">(u, v)</span>.',
+                                'En C++, una conexión de dos sentidos se guarda en ambos sentidos: <span class="font-mono">adj[u].push_back(v); adj[v].push_back(u);</span>.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                case 3:
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">Diapositiva 4 de 13</span>
+                                    <span class="text-xs text-slate-500 font-medium">Conectividad Local</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Grado de un punto</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Es la cantidad de conexiones que llegan o salen de él</p>
+                            </div>
+
+                            <div class="overflow-x-auto my-4">
+                                <table class="w-full text-sm border border-slate-200 rounded-2xl overflow-hidden">
+                                    <thead class="bg-slate-100 text-slate-700">
+                                        <tr><th class="p-3 text-center">Ciudad</th><th class="p-3 text-center">Conexiones</th><th class="p-3 text-center">Grado</th></tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200 text-center bg-white">
+                                        <tr><td class="p-3 font-bold">A</td><td>con B y con C</td><td class="font-mono font-bold text-indigo-700">2</td></tr>
+                                        <tr><td class="p-3 font-bold">B</td><td>solo con A</td><td class="font-mono font-bold text-indigo-700">1</td></tr>
+                                        <tr><td class="p-3 font-bold">C</td><td>con A y con D</td><td class="font-mono font-bold text-indigo-700">2</td></tr>
+                                        <tr><td class="p-3 font-bold">D</td><td>solo con C</td><td class="font-mono font-bold text-indigo-700">1</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <p class="text-sm text-slate-600 text-center">Un punto con grado alto es un centro de conexiones importante.</p>
+
+                            ${renderDeepExplanation(
+                                'Lema del Apretón de Manos',
+                                'Como cada conexión une dos extremos, la suma de los grados de todos los puntos es exactamente el doble del número de conexiones: <span class="font-mono">∑ grado(v) = 2 · e</span>.',
+                                'En C++, el grado de un nodo <span class="font-mono">u</span> equivale directamente a <span class="font-mono">adj[u].size()</span>.'
+                            )}
+                        </div>
+                    `;
+
+                case 4:
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">Diapositiva 5 de 13</span>
+                                    <span class="text-xs text-slate-500 font-medium">Trayectorias en la Red</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Caminos y ciclos</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Un camino lleva de un punto a otro; un ciclo regresa al punto de partida</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                                <div class="p-5 rounded-2xl bg-sky-50/80 border-2 border-sky-200">
+                                    <span class="text-xs font-mono uppercase text-sky-700 font-bold">Camino (Trayecto Abierto)</span>
+                                    <div class="text-2xl font-mono font-extrabold text-sky-900 my-2">A → B → C → D</div>
+                                    <p class="text-sm text-slate-700">Secuencia de conexiones consecutivas donde el inicio es distinto del final.</p>
+                                </div>
+                                <div class="p-5 rounded-2xl bg-purple-50/80 border-2 border-purple-200">
+                                    <span class="text-xs font-mono uppercase text-purple-700 font-bold">Ciclo (Trayecto Cerrado)</span>
+                                    <div class="text-2xl font-mono font-extrabold text-purple-900 my-2">A → B → C → A</div>
+                                    <p class="text-sm text-slate-700">Camino cerrado: empieza y termina en el mismo punto sin repetir conexiones.</p>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Longitud de un Camino',
+                                'La longitud de un camino se mide por la cantidad de conexiones (saltos) que recorre, no por el número de puntos. Por ejemplo, <span class="font-mono">A → B → C → D</span> tiene longitud 3.',
+                                'Detectar si existe un ciclo en una red es clave para saber si hay rutas redundantes o posibles bucles infinitos.'
+                            )}
+                        </div>
+                    `;
+
+                case 5: {
+                    const cut = state.slide6Cut;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">Diapositiva 6 de 13</span>
+                                    <span class="text-xs text-slate-500 font-medium">Componentes Conexas</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Red conectada</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Se puede llegar de cualquier punto a cualquier otro</p>
+                            </div>
+
+                            <div class="p-5 rounded-2xl ${cut ? 'bg-rose-50 border-rose-200' : 'bg-teal-50 border-teal-200'} border-2 my-4 text-center">
+                                <div class="text-xl sm:text-2xl font-mono font-bold ${cut ? 'text-rose-800' : 'text-teal-900'} mb-2">
+                                    ${cut ? 'A — B — C &nbsp;&nbsp;✂&nbsp;&nbsp; D — E' : 'A — B — C — D — E'}
+                                </div>
+                                <p class="text-sm text-slate-700">
+                                    ${cut
+                                        ? 'Red NO conectada: dividida en 2 partes aisladas ({A, B, C} y {D, E}) que no pueden comunicarse.'
+                                        : 'Red conectada (1 sola componente): se puede ir de A a E por A → B → C → D → E.'}
+                                </p>
+                                <button onclick="state.slide6Cut = !state.slide6Cut; updateView();" class="mt-4 px-4 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold text-slate-800 hover:bg-slate-100 transition">
+                                    ${cut ? 'Restaurar conexión C–D' : 'Simular corte en conexión C–D'}
+                                </button>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Componentes Conexas',
+                                'Cuando una red no está conectada, se particiona en componentes conexas: dentro de cada parte sí hay camino, pero entre dos partes distintas no hay ninguno.',
+                                'Contar cuántas partes aisladas tiene una red es uno de los problemas clásicos de recorrido de grafos.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                case 6: {
+                    const e = state.slide7Edges;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">Diapositiva 7 de 13</span>
+                                    <span class="text-xs text-slate-500 font-medium">Estructura Acíclica Mínima</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Árboles: la red mínima</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Conectada y sin ciclos</p>
+                            </div>
+
+                            <div class="p-6 rounded-2xl bg-indigo-50/80 border-2 border-indigo-200 text-center my-3">
+                                <div class="text-3xl sm:text-5xl font-mono font-extrabold text-indigo-800">e = n − 1</div>
+                                <p class="text-xs sm:text-sm text-slate-600 mt-2">n = número de puntos · e = número de conexiones</p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+                                <div class="flex flex-wrap justify-center gap-2 mb-3">
+                                    <button onclick="state.slide7Edges=2; updateView();" class="px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold ${e===2 ? 'bg-rose-600 text-white' : 'bg-white border border-slate-300'}">Probar e = 2 (n=4)</button>
+                                    <button onclick="state.slide7Edges=3; updateView();" class="px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold ${e===3 ? 'bg-teal-600 text-white' : 'bg-white border border-slate-300'}">Probar e = 3 (Árbol)</button>
+                                    <button onclick="state.slide7Edges=4; updateView();" class="px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold ${e===4 ? 'bg-amber-600 text-white' : 'bg-white border border-slate-300'}">Probar e = 4 (Ciclo)</button>
+                                </div>
+                                <p class="text-xs sm:text-sm font-medium text-slate-700">
+                                    ${e === 2 ? 'Con 4 puntos y 2 conexiones: la red se rompe y queda desconectada.' : (e === 3 ? 'Con 4 puntos y 3 conexiones (e = 4 − 1): árbol válido, conectado y sin ciclos.' : 'Con 4 puntos y 4 conexiones: aparece inevitablemente al menos un ciclo.')}
+                                </p>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Propiedad de los Árboles',
+                                'En un árbol de <span class="font-mono">n</span> puntos siempre hay exactamente <span class="font-mono">n − 1</span> conexiones y existe un único camino simple entre cualquier par de puntos.',
+                                'Si un problema dice que una red de <span class="font-mono">N</span> ciudades está conectada y tiene <span class="font-mono">N − 1</span> carreteras, sabes de inmediato que es un árbol.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                case 7: {
+                    const top = state.slide8Topology;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">Diapositiva 8 de 13</span>
+                                    <span class="text-xs text-slate-500 font-medium">Ejemplo Práctico de Árbol</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Conectar 6 computadoras</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">El mínimo de cables sin formar ciclos</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                                <div class="p-5 rounded-2xl bg-teal-50/80 border-2 border-teal-200 flex flex-col justify-center">
+                                    <div class="text-3xl font-mono font-extrabold text-teal-800 mb-2">e = 6 − 1 = 5 cables</div>
+                                    <p class="text-sm text-slate-700">Cada cable une dos computadoras y no debe cerrar un ciclo. Con 5 cables las 6 computadoras quedan conectadas y cada par tiene una única ruta.</p>
+                                </div>
+                                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                                    <div class="flex gap-2 mb-3">
+                                        <button onclick="state.slide8Topology='cadena'; updateView();" class="px-3 py-1.5 rounded-xl text-xs font-semibold ${top==='cadena' ? 'bg-indigo-600 text-white' : 'bg-white border border-slate-300'}">En Cadena</button>
+                                        <button onclick="state.slide8Topology='estrella'; updateView();" class="px-3 py-1.5 rounded-xl text-xs font-semibold ${top==='estrella' ? 'bg-indigo-600 text-white' : 'bg-white border border-slate-300'}">En Estrella (Switch)</button>
+                                    </div>
+                                    <div class="font-mono text-sm text-indigo-900 bg-white p-3 rounded-xl border border-slate-200 text-center">
+                                        ${top === 'cadena' ? 'PC1 — PC2 — PC3 — PC4 — PC5 — PC6 (5 cables)' : 'PC1 centrada conectada a PC2, PC3, PC4, PC5 y PC6 (5 cables)'}
+                                    </div>
+                                    <p class="text-xs text-slate-500 mt-2">Ambas topologías son árboles válidos con n = 6 nodos y e = 5 cables.</p>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Invariante en Árboles',
+                                'Sin importar si acomodas los puntos en línea recta (cadena) o alrededor de un punto central (estrella), mientras sea conexo y sin ciclos siempre usará exactamente <span class="font-mono">n − 1</span> enlaces.',
+                                'La cadena y la estrella son los dos casos extremos que siempre debes probar al verificar tus soluciones en árboles.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                case 8:
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">Diapositiva 9 de 13</span>
+                                    <span class="text-xs text-slate-500 font-medium">Exploración Ordenada</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Recorrer una red</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Visitar todos los puntos sin perder ninguno</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                                <div class="p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200">
+                                    <span class="font-mono text-xs font-bold text-indigo-700">Paso 1</span>
+                                    <h4 class="font-bold text-slate-800 mt-1">Origen y vecinos</h4>
+                                    <p class="text-xs text-slate-600 mt-1">Parte de un punto origen y anota sus vecinos directos. Después visita los vecinos de cada vecino.</p>
+                                </div>
+                                <div class="p-4 rounded-2xl bg-sky-50/80 border border-sky-200">
+                                    <span class="font-mono text-xs font-bold text-sky-700">Paso 2</span>
+                                    <h4 class="font-bold text-slate-800 mt-1">Orden de visita</h4>
+                                    <p class="text-xs text-slate-600 mt-1">Registra la secuencia en orden, por ejemplo: <span class="font-mono font-bold">A → B → C → D</span>.</p>
+                                </div>
+                                <div class="p-4 rounded-2xl bg-teal-50/80 border border-teal-200">
+                                    <span class="font-mono text-xs font-bold text-teal-700">Paso 3</span>
+                                    <h4 class="font-bold text-slate-800 mt-1">Lista de visitados</h4>
+                                    <p class="text-xs text-slate-600 mt-1">Lleva una lista de los puntos ya visitados para no regresar a los mismos sin necesidad.</p>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Control de Visitados',
+                                'En cualquier red con ciclos o conexiones de dos sentidos, si no marcas qué puntos ya visitaste podrías caminar en círculos indefinidamente.',
+                                'En C++, los algoritmos DFS y BFS usan un arreglo booleano <span class="font-mono">visitado[u] = true</span> para procesar cada nodo una sola vez.'
+                            )}
+                        </div>
+                    `;
+
+                case 9:
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">Diapositiva 10 de 13</span>
+                                    <span class="text-xs text-slate-500 font-medium">Distancia Mínima en Saltos</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Ruta más corta en un mapa pequeño</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Red de A–B, A–C y C–D: ¿cómo llegar de A a D?</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                                <div class="p-5 rounded-2xl bg-teal-50/80 border-2 border-teal-200">
+                                    <span class="text-xs font-mono uppercase text-teal-700 font-bold">Ruta posible</span>
+                                    <div class="text-2xl font-mono font-extrabold text-teal-900 my-2">A → C → D</div>
+                                    <p class="text-sm text-slate-700">Tiene <strong>2 conexiones</strong>. Es la única ruta directa de A a D en esta red (B es un callejón sin salida hacia D).</p>
+                                </div>
+                                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                                    <span class="text-xs font-mono uppercase text-slate-600 font-bold">Cómo decidir</span>
+                                    <p class="text-sm text-slate-700 mt-2">Si hay varias rutas entre el origen y el destino, lista las rutas posibles, cuenta cuántas conexiones tiene cada una y elige la de menor cantidad.</p>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Búsqueda en Anchura (BFS)',
+                                'Explorar por capas (primero a 1 conexión de distancia, luego a 2, luego a 3) garantiza encontrar siempre la ruta con menos conexiones.',
+                                'Ese método por capas es el fundamento del algoritmo <span class="font-mono">BFS (Breadth-First Search)</span>.'
+                            )}
+                        </div>
+                    `;
+
+                case 10: {
+                    const k1 = state.slide11K1;
+                    const k2 = state.slide11K2;
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-800 font-mono text-xs font-bold">Diapositiva 11 de 13</span>
+                                    <span class="text-xs text-slate-500 font-medium">Principio del Producto en Redes</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Conteo de rutas por etapas</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Multiplica las opciones de cada etapa</p>
+                            </div>
+
+                            <div class="p-5 rounded-2xl bg-indigo-50/80 border-2 border-indigo-200 text-center my-4">
+                                <div class="text-3xl sm:text-4xl font-mono font-extrabold text-indigo-900">k₁ · k₂ = ${k1} · ${k2} = ${k1 * k2} rutas</div>
+                                <p class="text-sm text-slate-700 mt-2">De A a B hay ${k1} conexiones (k₁ = ${k1}) y de B a C hay ${k2} conexiones (k₂ = ${k2}).</p>
+                                <div class="flex flex-wrap justify-center gap-2 mt-4">
+                                    <button onclick="state.slide11K1=3; state.slide11K2=2; updateView();" class="px-3 py-1.5 rounded-xl text-xs font-mono bg-white border border-slate-300">Ejemplo base (3 · 2 = 6)</button>
+                                    <button onclick="state.slide11K1=4; state.slide11K2=3; updateView();" class="px-3 py-1.5 rounded-xl text-xs font-mono bg-white border border-slate-300">Probar 4 · 3 = 12</button>
+                                    <button onclick="state.slide11K1=1; state.slide11K2=1; updateView();" class="px-3 py-1.5 rounded-xl text-xs font-mono bg-white border border-slate-300">En un árbol (1 · 1 = 1)</button>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Combinatoria en Grafos',
+                                'Como la elección del tramo de A a B es independiente del tramo de B a C, el principio del producto multiplica las opciones de cada etapa.',
+                                'En un árbol no hay rutas paralelas (<span class="font-mono">k₁ = 1, k₂ = 1</span>), por lo que existe exactamente <span class="font-mono">1 · 1 = 1</span> camino.'
+                            )}
+                        </div>
+                    `;
+                }
+
+                case 11:
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800 font-mono text-xs font-bold">Diapositiva 12 de 13</span>
+                                    <span class="text-xs text-slate-500 font-medium">Lista de Verificación</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Errores frecuentes</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Revísalos antes de la tarea</p>
+                            </div>
+
+                            <div class="space-y-3 my-4">
+                                <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-200">
+                                    <h4 class="font-bold text-rose-900 text-sm">1. Confundir redes de un sentido con redes de dos sentidos</h4>
+                                    <p class="text-xs text-slate-700 mt-1">Que exista un camino de A a B no garantiza un camino de B a A en una red dirigida.</p>
+                                </div>
+                                <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200">
+                                    <h4 class="font-bold text-amber-900 text-sm">2. Usar e = n − 1 en una red con ciclos</h4>
+                                    <p class="text-xs text-slate-700 mt-1">La fórmula <span class="font-mono">e = n − 1</span> solo aplica a árboles. Si la red tiene ciclos, tiene más de <span class="font-mono">n − 1</span> conexiones.</p>
+                                </div>
+                                <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200">
+                                    <h4 class="font-bold text-indigo-900 text-sm">3. Creer que con ciclos solo hay un camino</h4>
+                                    <p class="text-xs text-slate-700 mt-1">Los ciclos crean rutas alternativas; en un árbol, en cambio, cada par de puntos tiene una única ruta.</p>
+                                </div>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Verificación de Hipótesis',
+                                'Antes de aplicar <span class="font-mono">e = n − 1</span>, verifica siempre dos condiciones: que la red esté conectada y que no tenga ciclos.',
+                                'Leer con cuidado si las conexiones del problema son bidireccionales o unidireccionales evita la mayoría de los errores de modelado.'
+                            )}
+                        </div>
+                    `;
+
+                case 12:
+                    return `
+                        <div class="slide-enter flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 rounded-lg bg-teal-100 text-teal-800 font-mono text-xs font-bold">Diapositiva 13 de 13</span>
+                                    <span class="text-xs text-slate-500 font-medium">Síntesis del Tema 4</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-800">Resumen</h2>
+                                <p class="text-slate-600 text-base sm:text-lg mt-1">Lo esencial del tema</p>
+                            </div>
+
+                            <div class="overflow-x-auto my-4">
+                                <table class="w-full text-sm border border-slate-200 rounded-2xl overflow-hidden">
+                                    <thead class="bg-slate-100 text-slate-700">
+                                        <tr><th class="p-3 text-left">Concepto</th><th class="p-3 text-left">Idea clave</th></tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200 bg-white">
+                                        <tr><td class="p-3 font-bold">Puntos y conexiones</td><td class="p-3">Los puntos son entidades y las conexiones unen pares de puntos.</td></tr>
+                                        <tr><td class="p-3 font-bold">Grado</td><td class="p-3">Número de conexiones que llegan o salen de un punto.</td></tr>
+                                        <tr><td class="p-3 font-bold">Camino y ciclo</td><td class="p-3">Camino: secuencia de conexiones. Ciclo: camino cerrado.</td></tr>
+                                        <tr><td class="p-3 font-bold">Red conectada</td><td class="p-3">Existe un camino entre cualquier par de puntos.</td></tr>
+                                        <tr><td class="p-3 font-bold">Árbol</td><td class="p-3">Red conectada sin ciclos: <span class="font-mono font-bold text-indigo-700">e = n − 1</span>.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            ${renderDeepExplanation(
+                                'Listo para Practicar y el Quiz',
+                                'Con estas cinco ideas puedes analizar conectividad, grados, árboles y conteo de rutas en cualquier red.',
+                                'Resuelve ahora los 14 ejercicios en la pestaña Practicar y las 10 preguntas del Quiz del Tema 4.'
+                            )}
+                        </div>
+                    `;
+            }
+        }
+
+        function toggleDeepNotes() {
+            showDeepNotes = !showDeepNotes;
+            const label = document.getElementById('deep-toggle-label');
+            if (label) {
+                label.textContent = showDeepNotes ? 'Para saber más...: Visible' : 'Para saber más...: Oculto';
+            }
+            updateView();
+        }
+
+        function updateView() {
+            const stage = document.getElementById('slide-stage');
+            stage.innerHTML = renderSlideContent(currentSlide);
+
+            document.getElementById('slide-counter-badge').textContent = `${currentSlide + 1} / ${totalSlides}`;
+            const progressPercent = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            document.getElementById('btn-prev').disabled = (currentSlide === 0);
+            document.getElementById('btn-next').disabled = (currentSlide === totalSlides - 1);
+
+            renderDots();
+            renderIndexCards();
+        }
+
+        function renderDots() {
+            const container = document.getElementById('dots-container');
+            container.innerHTML = slidesMeta.map((s, idx) => `
+                <button onclick="goToSlide(${idx})" title="${s.num}. ${s.title}" class="h-2.5 rounded-full transition-all ${idx === currentSlide ? 'w-7 bg-indigo-600' : 'w-2.5 bg-slate-300 hover:bg-slate-400'}"></button>
+            `).join('');
+        }
+
+        function renderIndexCards() {
+            const grid = document.getElementById('index-grid');
+            grid.innerHTML = slidesMeta.map((s, idx) => `
+                <button onclick="goToSlide(${idx}); toggleIndexModal();" class="text-left p-4 rounded-2xl border transition flex items-start gap-3 ${idx === currentSlide ? 'bg-indigo-50 border-indigo-400 shadow-sm' : 'bg-slate-50/70 border-slate-200 hover:bg-slate-100'}">
+                    <div class="w-9 h-9 rounded-xl bg-white text-indigo-700 flex items-center justify-center shrink-0 font-mono text-xs font-bold border border-slate-200 shadow-sm">
+                        ${s.num}
+                    </div>
+                    <div class="overflow-hidden">
+                        <h4 class="font-bold text-slate-800 text-sm truncate">${s.title}</h4>
+                        <p class="text-xs text-slate-500 line-clamp-2 mt-0.5">${s.subtitle}</p>
+                    </div>
+                </button>
+            `).join('');
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateView();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateView();
+            }
+        }
+
+        function goToSlide(index) {
+            if (index >= 0 && index < totalSlides) {
+                currentSlide = index;
+                updateView();
+            }
+        }
+
+        function toggleIndexModal() {
+            const modal = document.getElementById('index-modal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+
+        function toggleFullScreen() {
+            const icon = document.getElementById('fullscreen-icon');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+                icon.classList.replace('fa-expand', 'fa-compress');
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    icon.classList.replace('fa-compress', 'fa-expand');
+                }
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('index-modal');
+                if (!modal.classList.contains('hidden')) toggleIndexModal();
+            }
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+        window.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        window.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 60) {
+                if (diff > 0) nextSlide();
+                else prevSlide();
+            }
+        }, { passive: true });
+
+        window.onload = function () {
+            updateView();
+        };
+    </script>
 </body>
 </html>
