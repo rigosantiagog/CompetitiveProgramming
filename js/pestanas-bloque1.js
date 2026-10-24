@@ -11,9 +11,9 @@
 
 (function () {
 
-  const PESTANA_HASH = /^tema-([1-4])-(aprender|practicar|quiz)$/;
-  const TEMA_HASH = /^(tema-[1-4]|tareas-pdf|pendientes)$/;
-  const SECCIONES_VALIDAS = ["tema-1", "tema-2", "tema-3", "tema-4", "tareas-pdf", "pendientes"];
+  const PESTANA_HASH = /^tema-([1-3])-(aprender|practicar|quiz)$/;
+  const TEMA_HASH = /^(tema-[1-3]|tareas-pdf|pendientes)$/;
+  const SECCIONES_VALIDAS = ["tema-1", "tema-2", "tema-3", "tareas-pdf", "pendientes"];
 
   // Estado en memoria mientras la página permanece abierta
   let memoriaLectura = {};

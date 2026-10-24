@@ -587,198 +587,17 @@ const EJERCICIOS_BLOQUE1 = [
     aceptadas: ["6", "6 cm"],
     solucion: "<p class=\"mb-2\"><strong>Procedimiento breve:</strong> por el teorema de Tales, $\\dfrac{PM}{MQ} = \\dfrac{PN}{NR}$. Sustituimos: $\\dfrac{4}{6} = \\dfrac{PN}{9}$. Despejamos: $PN = \\dfrac{4 \\cdot 9}{6} = 6$ cm.</p><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> 6, 6 cm</p>"
   }
-,
-
-  /* ================ TEMA 4 · Redes y conexiones (14 ejercicios) ================ */
-
-  {
-    clase: 4,
-    grupo: "Ejercicios guiados",
-    n: 1,
-    titulo: "Ejercicio 1 · Grado y conexidad (Subtema 14).",
-    enunciado: "Un mapa logístico conecta cinco ciudades: A, B, C, D y E. Las rutas son de dos sentidos: A con B, B con C, C con D y D con E. (a) ¿Cuál es el grado de la ciudad C? (b) ¿La red está conectada? El ejercicio tiene dos recuadros: grado y conexidad.",
-    tipo: "multi-texto",
-    campos: [
-      { etiqueta: "(a) Grado de C", aceptadas: ["2", "dos"] },
-      { etiqueta: "(b) ¿Conectada?", aceptadas: ["sí", "si", "yes"] }
-    ],
-    solucion: "<ol class=\"mb-2\"><li>Contamos las rutas que llegan a C: se conecta con B y con D, así que su grado es $2$.</li><li>Verificamos la conexidad: de A a E podemos ir por $A \\to B \\to C \\to D \\to E$. Como se puede llegar de cualquier ciudad a cualquier otra, la red está conectada.</li></ol><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> Recuadro 1 (grado de C): 2 · Recuadro 2 (¿conectada?): sí, si, yes</p>"
-  },
-
-  {
-    clase: 4,
-    grupo: "Ejercicios guiados",
-    n: 2,
-    titulo: "Ejercicio 2 · Cables mínimos (Subtema 14).",
-    enunciado: "Una red local de 6 computadoras debe quedar conectada, sin formar ningún ciclo de datos. ¿Cuántos cables se necesitan exactamente?",
-    tipo: "texto",
-    placeholder: "Escribe tu respuesta (ej. 5)",
-    aceptadas: ["5", "5 cables", "cinco"],
-    solucion: "<ol class=\"mb-2\"><li>Una red conectada sin ciclos es un árbol.</li><li>Con $n = 6$ puntos: $e = n - 1 = 6 - 1 = 5$.</li><li>Se necesitan 5 cables.</li></ol><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> 5, 5 cables</p>"
-  },
-
-  {
-    clase: 4,
-    grupo: "Ejercicios guiados",
-    n: 3,
-    titulo: "Ejercicio 3 · Rutas de A a D (Subtema 14).",
-    enunciado: "En una red hay conexiones de dos sentidos entre A y B, entre B y C, entre C y D, y entre A y D. Un camino no debe repetir puntos. (a) ¿Cuántos caminos distintos hay de A a D? (b) ¿Cuántas conexiones tiene el camino más corto? El ejercicio tiene dos recuadros.",
-    tipo: "multi-texto",
-    campos: [
-      { etiqueta: "(a) Caminos de A a D", aceptadas: ["2", "dos"] },
-      { etiqueta: "(b) Conexiones del más corto", aceptadas: ["1", "uno"] }
-    ],
-    solucion: "<ol class=\"mb-2\"><li>El primer camino es directo: A → D, con 1 conexión.</li><li>El segundo camino da la vuelta: A → B → C → D, con 3 conexiones.</li><li>Hay 2 caminos, y el más corto tiene 1 conexión.</li></ol><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> Recuadro 1 (caminos de A a D): 2, dos · Recuadro 2 (conexiones del más corto): 1, uno</p>"
-  },
-
-  {
-    clase: 4,
-    grupo: "Ejercicios guiados",
-    n: 4,
-    titulo: "Ejercicio 4 · Grado en una cadena (Subtema 14).",
-    enunciado: "Cuatro ciudades forman una cadena: A está conectada solo con B, B con A y C, C con B y D, y D solo con C. ¿Cuál es el grado de la ciudad B?",
-    tipo: "texto",
-    placeholder: "Escribe tu respuesta (ej. 2)",
-    aceptadas: ["2", "dos"],
-    solucion: "<ol class=\"mb-2\"><li>Contamos las conexiones que llegan a B o salen de B.</li><li>B se conecta con A y con C.</li><li>Su grado es $2$.</li></ol><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> 2, dos</p>"
-  },
-
-  {
-    clase: 4,
-    grupo: "Ejercicios guiados",
-    n: 5,
-    titulo: "Ejercicio 5 · Conexiones de un solo sentido (Subtema 14).",
-    enunciado: "En una red de un solo sentido hay una conexión de A a B y otra de B a C. No hay ninguna otra conexión. ¿Existe un camino para ir de C a A? Responde sí o no.",
-    tipo: "texto",
-    placeholder: "Responde sí o no",
-    aceptadas: ["no", "n"],
-    solucion: "<ol class=\"mb-2\"><li>Las conexiones solo permiten ir de A a B y de B a C.</li><li>Desde C no sale ninguna conexión.</li><li>No hay camino de C a A.</li></ol><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> no, n</p>"
-  },
-
-  {
-    clase: 4,
-    grupo: "Ejercicios guiados",
-    n: 6,
-    titulo: "Ejercicio 6 · Cables de más (Subtema 14).",
-    enunciado: "Cinco casas deben quedar conectadas con cables sin formar ciclos. Se instalaron 6 cables. El ejercicio tiene dos recuadros: (a) ¿cuántos cables son el mínimo necesario? (b) ¿cuántos cables sobran respecto de ese mínimo?",
-    tipo: "multi-texto",
-    campos: [
-      { etiqueta: "(a) Mínimo necesario", aceptadas: ["4", "cuatro", "4 cables"] },
-      { etiqueta: "(b) Cables sobrantes", aceptadas: ["2", "dos", "2 cables"] }
-    ],
-    solucion: "<ol class=\"mb-2\"><li>Para $n = 5$ puntos, el mínimo sin ciclos es $e = n - 1 = 4$ cables.</li><li>Se instalaron 6 cables.</li><li>Sobran $6 - 4 = 2$ cables, que crean ciclos.</li></ol><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> Recuadro 1 (mínimo): 4, cuatro · Recuadro 2 (sobrantes): 2, dos</p>"
-  },
-
-  {
-    clase: 4,
-    grupo: "Ejercicios guiados",
-    n: 7,
-    titulo: "Ejercicio 7 · Conteo por etapas (Subtema 14).",
-    enunciado: "Entre A y B hay 4 conexiones, entre B y C hay 3, y entre C y D hay 2. ¿Cuántas rutas distintas hay de A a D que pasen por B y por C, en ese orden?",
-    tipo: "texto",
-    placeholder: "Escribe tu respuesta (ej. 24)",
-    aceptadas: ["24", "24 rutas"],
-    solucion: "<ol class=\"mb-2\"><li>Por etapas, multiplicamos las opciones: $4 \\cdot 3 \\cdot 2$.</li><li>$4 \\cdot 3 = 12$, y $12 \\cdot 2 = 24$.</li><li>Hay 24 rutas distintas.</li></ol><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> 24, 24 rutas</p>"
-  },
-
-  /* --- Ejercicios independientes (Tema 4) --- */
-
-  {
-    clase: 4,
-    grupo: "Ejercicios independientes",
-    n: 8,
-    titulo: "Ejercicio 8 · Puntos de un árbol (Subtema 14).",
-    enunciado: "Un árbol tiene 9 conexiones. ¿Cuántos puntos tiene?",
-    tipo: "texto",
-    placeholder: "Escribe tu respuesta (ej. 10)",
-    aceptadas: ["10", "10 puntos"],
-    solucion: "<p class=\"mb-2\"><strong>Procedimiento breve:</strong> como $e = n - 1$, tenemos $9 = n - 1$, así que $n = 10$.</p><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> 10, 10 puntos</p>"
-  },
-
-  {
-    clase: 4,
-    grupo: "Ejercicios independientes",
-    n: 9,
-    titulo: "Ejercicio 9 · ¿Árbol o ciclo? (Subtema 14).",
-    enunciado: "Una red de 4 puntos, conectada, tiene 4 conexiones de dos sentidos. ¿Es un árbol? Responde sí o no.",
-    tipo: "texto",
-    placeholder: "Responde sí o no",
-    aceptadas: ["no", "n"],
-    solucion: "<p class=\"mb-2\"><strong>Procedimiento breve:</strong> un árbol de 4 puntos tiene $4 - 1 = 3$ conexiones. Como esta red tiene 4, contiene al menos un ciclo y no es un árbol.</p><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> no, n</p>"
-  },
-
-  {
-    clase: 4,
-    grupo: "Ejercicios independientes",
-    n: 10,
-    titulo: "Ejercicio 10 · Árbol con 8 puntos (Subtema 14).",
-    enunciado: "Una red tiene 8 puntos y 7 conexiones, y está conectada. ¿Es un árbol? Responde sí o no.",
-    tipo: "texto",
-    placeholder: "Responde sí o no",
-    aceptadas: ["sí", "si", "yes"],
-    solucion: "<p class=\"mb-2\"><strong>Procedimiento breve:</strong> la red está conectada y $7 = 8 - 1$. Una red conectada con $n - 1$ conexiones no puede tener ciclos, así que es un árbol.</p><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> sí, si, yes</p>"
-  },
-
-  {
-    clase: 4,
-    grupo: "Ejercicios independientes",
-    n: 11,
-    titulo: "Ejercicio 11 · Caminos para unir nueve escuelas (Subtema 14).",
-    enunciado: "Se quieren unir nueve escuelas de una zona con caminos de dos sentidos, de modo que todas se comuniquen y no haya ciclos. ¿Cuántos caminos se necesitan?",
-    tipo: "texto",
-    placeholder: "Escribe tu respuesta (ej. 8)",
-    aceptadas: ["8", "8 caminos", "ocho"],
-    solucion: "<p class=\"mb-2\"><strong>Procedimiento breve:</strong> con $n = 9$ puntos, $e = 9 - 1 = 8$.</p><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> 8, 8 caminos</p>"
-  },
-
-  {
-    clase: 4,
-    grupo: "Ejercicios independientes",
-    n: 12,
-    titulo: "Ejercicio 12 · ¿Es un ciclo? (Subtema 14).",
-    enunciado: "En una red de un solo sentido hay conexiones de A a B, de B a C y de C a A. ¿Este recorrido forma un ciclo? Responde sí o no.",
-    tipo: "texto",
-    placeholder: "Responde sí o no",
-    aceptadas: ["sí", "si", "yes"],
-    solucion: "<p class=\"mb-2\"><strong>Procedimiento breve:</strong> el recorrido A → B → C → A empieza y termina en el mismo punto y no repite conexiones. Por definición, es un ciclo.</p><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> sí, si, yes</p>"
-  },
-
-  {
-    clase: 4,
-    grupo: "Ejercicios independientes",
-    n: 13,
-    titulo: "Ejercicio 13 · ¿Se puede regresar? (Subtema 14).",
-    enunciado: "En una red de un solo sentido hay conexiones A → B, B → C y C → A. ¿Se puede ir de B a A? Responde sí o no.",
-    tipo: "texto",
-    placeholder: "Responde sí o no",
-    aceptadas: ["sí", "si", "yes"],
-    solucion: "<p class=\"mb-2\"><strong>Procedimiento breve:</strong> de B se puede ir a C, y de C se puede ir a A. Por lo tanto, existe el camino $B \\to C \\to A$.</p><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> sí, si, yes</p>"
-  },
-
-  {
-    clase: 4,
-    grupo: "Ejercicios independientes",
-    n: 14,
-    titulo: "Ejercicio 14 · Viaje por etapas (Subtema 14).",
-    enunciado: "Un viajero tiene 5 rutas distintas de A a B y 2 rutas distintas de B a C. Debe pasar por B. ¿Cuántas formas distintas hay de ir de A a C?",
-    tipo: "texto",
-    placeholder: "Escribe tu respuesta (ej. 10)",
-    aceptadas: ["10", "10 formas"],
-    solucion: "<p class=\"mb-2\"><strong>Procedimiento breve:</strong> por etapas, $5 \\cdot 2 = 10$.</p><p class=\"mb-0\"><strong>Respuestas aceptadas:</strong> 10, 10 formas</p>"
-  }
-
 ];
 
 
 /* ==========================================================
-   Problemario del Bloque 1 · 20 ejercicios con clave desplegable
+   Problemario del Bloque 1 · 15 ejercicios (sin clave)
    ========================================================== */
 
 const PROBLEMARIO_INTRO_TEMAS = {
-  "Tema 1 · Álgebra y Lógica": "La lógica proposicional y las ecuaciones algebraicas son la base para razonar con condiciones, tomar decisiones correctas y revisar que una respuesta cumpla todas las reglas. Una condición mal planteada o una ecuación mal simplificada conduce a resultados incorrectos. Modelar en papel mediante tablas de verdad, implicaciones y cuantificadores te permite revisar que tu razonamiento cubra el 100% de los casos posibles.",
-  "Tema 2 · Aritmética, Conteo y Casos": "La aritmética modular, la divisibilidad y los principios de conteo son herramientas clave para resolver problemas sin revisar caso por caso. En lugar de contar uno por uno todas las posibilidades, el Máximo Común Divisor ($\\text{MCD}$), el Mínimo Común Múltiplo ($\\text{MCM}$), el Principio de Inclusión-Exclusión y las permutaciones permiten calcular cantidades y periodos de forma directa. Comprender el comportamiento de los residuos y las agrupaciones te permitirá transformar conteos largos en operaciones aritméticas sencillas.",
-  "Tema 3 · Geometría, Trigonometría y Patrones": "La identificación de progresiones algebraicas y la modelación geométrica permiten sintetizar comportamientos acumulativos o espaciales en expresiones cerradas de tiempo constante. Un problema que a primera vista parece requerir contar paso a paso miles de eventos se resuelve con una sola fórmula cuando descubres que sigue una progresión aritmética, una progresión geométrica o una propiedad geométrica fundamental (como el Teorema de Pitágoras o las relaciones de semejanza). Esta sección entrena tu ojo analítico para abstraer patrones numéricos y espaciales a partir de observaciones concretas.",
-  "Tema 4 · Redes y Conexiones": "Las redes de comunicación, los mapas de transporte y las relaciones entre personas se pueden representar como puntos unidos por conexiones (en matemáticas, a este modelo se le llama grafo). Analizar cuántos caminos existen entre dos puntos, verificar si una red está conectada o dividida en partes aisladas, y calcular la cantidad mínima de conexiones necesarias para unir todo sin ciclos ($n - 1$ conexiones en un árbol) son habilidades imprescindibles. Dominar esta idea en papel te permite razonar sobre cualquier red antes de dibujarla con detalle."
+  "Tema 1 · Álgebra y Lógica": "¡Bienvenido al primer bloque de tu entrenamiento de razonamiento! Antes de resolver cualquier problema, necesitas afinar el motor principal de todo buen razonador: la capacidad de pensar de manera formal y estructurada. La matemática nos permite abstraer la realidad separando los objetos de sus magnitudes; en nuestro contexto distinguimos las cantidades discretas o discontinuas (elementos contables y finitos como variables booleanas, permisos o paquetes de insumos) para construir modelos formales rigurosos. La lógica formal y el modelado lineal son los cimientos sobre los cuales construirás estructuras de decisión impecables y condiciones precisas. Cuando te enfrentas a un problema, tu primer desafío consiste en abstraer las reglas del mundo real, como las restricciones de un horario escolar, los permisos de acceso a un sistema o las condiciones de clasificación en un torneo, y traducirlas a proposiciones matemáticas evaluables mediante tablas de verdad.</p><p class=\"texto-suave mb-3\">¿Por qué es fundamental dominar esto? Porque en un concurso, una falla en la evaluación de una condición lógica lleva a tomar un camino equivocado o a dar respuestas incorrectas ante casos límite. Evaluar cómo se transforman proposiciones simples mediante los operadores de negación ($\\neg$), conjunción ($\\wedge$), disyunción ($\\vee$), implicación ($\\Rightarrow$) y equivalencia ($\\Leftrightarrow$) te permite garantizar la solidez de cualquier sistema de reglas antes de usarlo para tomar una decisión.",
+  "Tema 2 · Aritmética, Conteo y Casos": "El dominio de la aritmética discreta, la divisibilidad y las técnicas combinatorias es indispensable para analizar sistemas con un número finito de estados, ciclos modulares y búsquedas exhaustivas sin necesidad de revisar cada caso uno por uno. Distinguimos las cantidades discretas (pluralidades discontinuas como el número de alumnos, sillas o turnos) de las cantidades continuas (como distancias o masas); los problemas de concursos trabajan casi siempre con cantidades discretas. Comprender cómo operan los números enteros $\\mathbb{Z}$, sus residuos y la forma en que se combinan los elementos de un conjunto permite diseñar razonamientos matemáticos sólidos y predecir el comportamiento de los procesos que se repiten.</p><p class=\"texto-suave mb-3\">Los principios fundamentales del conteo (suma y multiplicación) y la aritmética modular ($a \\pmod b$) te permiten calcular la escala de un problema, determinar la periodicidad de eventos recurrentes y manejar restricciones superpuestas en escenarios de organización cotidiana. Al aprender a contar de manera estructurada y a descomponer problemas en casos disjuntos, desarrollas la intuición necesaria para evaluar la eficiencia de tus razonamientos.",
+  "Tema 3 · Geometría, Trigonometría y Patrones": "El razonamiento espacial, la geometría plana y las progresiones numéricas proporcionan la base para comprender distancias, distribuciones en cuadrículas y patrones de crecimiento. En este dominio pasamos del estudio de cantidades discretas al de cantidades continuas (longitudes, superficies, ángulos y trayectorias directas), que frecuentemente deben aproximarse con valores enteros al contar o medir. Interpretar la estructura espacial de un problema y abstraerla mediante expresiones algebraicas o sucesiones recurrentes resulta vital cuando se analizan mapas, planos o secuencias que crecen de forma constante o exponencial.</p><p class=\"texto-suave mb-3\">A través del modelado de planos, terrenos y tablas de crecimiento numérico, puedes transformar disposiciones físicas en ecuaciones precisas. La aplicación formal de progresiones aritméticas, progresiones geométricas, el Teorema de Pitágoras y las razones trigonométricas te permite resolver problemas sobre trayectos mínimos, relaciones de proporcionalidad y escalabilidad espacial de manera rigurosa."
 };
 
 const TAREA_BLOQUE1 = [
@@ -786,180 +605,105 @@ const TAREA_BLOQUE1 = [
     tema: "Tema 1 · Álgebra y Lógica",
     n: 1,
     dificultad: "Básico",
-    titulo: "Ejercicio 1 · Reparto de Libretas Escolares",
-    enunciado: "La mesa directiva de la preparatoria compró un lote de 240 cuadernos para distribuirlos equitativamente entre los alumnos del club de matemáticas. Si se inscribieran 4 alumnos más al club, a cada integrante le corresponderían 3 cuadernos menos. Modela la ecuación de reparto para determinar cuántos alumnos $n$ forman parte actualmente del club de matemáticas.",
-    respuestaFinal: "16 alumnos",
-    procedimiento: "<p class=\"mb-0\">Sea $n$ el número actual de alumnos. La cuota inicial por alumno es $\\frac{240}{n}$. Con 4 alumnos más, la nueva cuota es $\\frac{240}{n+4}$. Planteamos la ecuación $\\frac{240}{n} - \\frac{240}{n+4} = 3$, que equivale a $240(n+4) - 240n = 3n(n+4)$, es decir, $960 = 3n^2 + 12n$. Dividiendo entre 3: $n^2 + 4n - 320 = 0$, o bien $(n+20)(n-16) = 0$. Como $n > 0$, concluimos que actualmente hay $n = 16$ alumnos.</p>"
+    titulo: "Ejercicio 1 · Compra de libretas y lápices",
+    enunciado: "<p>En la papelería del colegio, un estudiante adquiere paquetes de libretas y lápices para el club de matemáticas. El costo total en pesos de comprar $x$ libretas de costo unitario fijo y $y$ lápices a un precio de cinco pesos cada uno, más un costo fijo de envío de doce pesos, está dado por la relación lineal $C(x, y) = 25x + 5y + 12$. Si el presupuesto total asignado para la compra es de 312 pesos, modela la ecuación lineal que representa el consumo exacto de dicho presupuesto y determina la expresión algebraica para la cantidad de lápices $y$ que se pueden adquirir en función del número de libretas $x$, asegurando que $x, y \\in \\mathbb{N}$.</p>"
   },
   {
     tema: "Tema 1 · Álgebra y Lógica",
     n: 2,
     dificultad: "Básico",
-    titulo: "Ejercicio 2 · Criterio Lógico de Aprobación del Curso",
-    enunciado: "Para aprobar la asignatura de pensamiento computacional se evalúan dos condiciones lógicas: $P$ representa \"El alumno entregó más del $80\\%$ de las tareas\" y $Q$ representa \"El alumno obtuvo una calificación mayor o igual a 70 en el examen final\". El reglamento establece que un alumno aprueba si cumple $(P \\wedge Q)$ o si obtiene una mención honorífica representada por $R$, resultando en la expresión $(P \\wedge Q) \\vee R$. Si un alumno entregó el $85\\%$ de sus tareas $(P = 1)$, obtuvo 65 en el examen final $(Q = 0)$ y no tiene mención honorífica $(R = 0)$, evalúa el valor de verdad final de su estado de aprobación.",
-    respuestaFinal: "Falso (0) / No aprueba",
-    procedimiento: "<p class=\"mb-0\">Sustituimos los valores dados $P = 1$, $Q = 0$ y $R = 0$ en la expresión condicional $(P \\wedge Q) \\vee R$: $(1 \\wedge 0) \\vee 0 = 0 \\vee 0 = 0$. El valor de verdad es 0, por lo que el alumno no cumple el criterio de aprobación.</p>"
+    titulo: "Ejercicio 2 · Negación de proposiciones de acceso",
+    enunciado: "<p>Considera las siguientes proposiciones simples sobre el acceso a la biblioteca del plantel:</p><ul><li>$A$: \"El estudiante está inscrito en el club de informática.\"</li><li>$B$: \"El estudiante tiene credencial vigente.\"</li></ul><p>Determina el valor de verdad ($1$ o $0$) de las proposiciones simples y de sus negaciones en el escenario donde un alumno no está inscrito en el club de informática ($A = 0$), pero sí posee credencial vigente ($B = 1$). Escribe formalmente la negación de cada proposición con el operador $\\neg$ ($\\neg A$ y $\\neg B$) e indica el valor numérico de verdad resultante para cada una.</p>"
   },
   {
     tema: "Tema 1 · Álgebra y Lógica",
     n: 3,
     dificultad: "Medio",
-    titulo: "Ejercicio 3 · Evaluación del Reglamento Escolar",
-    enunciado: "Analiza la regla escolar representada por la implicación lógica $A \\Rightarrow B$, donde $A$ es \"El estudiante porta el uniforme completo\" y $B$ es \"El estudiante tiene permitido el ingreso al aula\". Construye la tabla de verdad completa para la proposición $A \\Rightarrow B$ utilizando los valores de verdad 1 (verdadero) y 0 (falso), y determina en qué único escenario la regla del reglamento se considera violada.",
-    respuestaFinal: "Violada/Falsa $(0)$ únicamente cuando $A = 1$ y $B = 0$",
-    procedimiento: "<p class=\"mb-2\">Completamos la tabla de verdad para la implicación $A \\Rightarrow B$:</p><div class=\"table-responsive my-2\"><table class=\"table table-sm table-bordered text-center align-middle mb-2\"><thead><tr><th>$A$</th><th>$B$</th><th>$A \\Rightarrow B$</th></tr></thead><tbody><tr><td>0</td><td>0</td><td>1</td></tr><tr><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>0</td><td>0</td></tr><tr><td>1</td><td>1</td><td>1</td></tr></tbody></table></div><p class=\"mb-0\">La regla se rompe exclusivamente en el caso $A = 1$ (porta uniforme) y $B = 0$ (se le niega la entrada).</p>"
+    titulo: "Ejercicio 3 · Criterios de clasificación para la final",
+    enunciado: "<p>Para que un competidor califique a la fase final del torneo escolar, la comisión organizadora ha establecido dos condiciones representadas por las proposiciones:</p><ul><li>$P$: \"El alumno obtuvo un puntaje mayor a 80 en el examen preliminar.\"</li><li>$Q$: \"El alumno entregó todos los ejercicios del problemario.\"</li></ul><p>Analiza las reglas de clasificación bajo dos esquemas:</p><ol><li>El esquema estricto requiere que se cumplan ambas condiciones simultáneamente ($P \\wedge Q$).</li><li>El esquema flexible requiere que se cumpla al menos una de las dos condiciones ($P \\vee Q$).</li></ol><p>Calcula el valor de verdad ($1$ o $0$) de cada esquema en los cuatro casos posibles:</p><ul><li>Competidor 1: $P = 1$, $Q = 1$</li><li>Competidor 2: $P = 1$, $Q = 0$</li><li>Competidor 3: $P = 0$, $Q = 1$</li><li>Competidor 4: $P = 0$, $Q = 0$</li></ul>"
   },
   {
     tema: "Tema 1 · Álgebra y Lógica",
     n: 4,
     dificultad: "Medio",
-    titulo: "Ejercicio 4 · Control de Acceso al Laboratorio de Cómputo",
-    enunciado: "El acceso al laboratorio de cómputo está regulado por tres proposiciones: $A$ (\"Tiene credencial vigente\"), $B$ (\"Tiene reserva de equipo\") y $C$ (\"Tiene un reporte de sanción\"). El sistema autoriza el acceso si el alumno cuenta con credencial o reserva, y además no tiene un reporte de sanción. Expresa esta regla mediante la fórmula condicional $(A \\vee B) \\wedge \\neg C$. Posteriormente, evalúa el valor de verdad del acceso para el caso en que el estudiante tiene credencial $(A = 1)$, no tiene reserva $(B = 0)$ y tiene un reporte de sanción $(C = 1)$.",
-    respuestaFinal: "Falso (0) / El acceso es denegado",
-    procedimiento: "<p class=\"mb-0\">Evaluamos la expresión $(A \\vee B) \\wedge \\neg C$ con los valores $A = 1$, $B = 0$ y $C = 1$: $\\neg C = \\neg(1) = 0$, así que $(1 \\vee 0) \\wedge 0 = 1 \\wedge 0 = 0$. Dado que $C = 1$ (tiene sanción), la negación invalida la conjunción y el acceso resulta denegado $(0)$.</p>"
+    titulo: "Ejercicio 4 · Reglamento del laboratorio de cómputo",
+    enunciado: "<p>El reglamento del laboratorio establece la siguiente norma condicional: \"Si el estudiante realiza una modificación no autorizada en la configuración del equipo ($A$), entonces se le suspende el acceso al laboratorio ($B$)\", expresada formalmente como la implicación $A \\Rightarrow B$.</p><p>Completa la tabla de verdad para las proposiciones $A$, $B$, sus negaciones $\\neg A$, $\\neg B$ y la condicional $A \\Rightarrow B$. Con base en la tabla terminada, determina bajo qué combinaciones de valores de verdad de las premisas la regla del laboratorio resulta verdadera ($1$) o falsa ($0$).</p><table class=\"table table-sm\"><thead><tr><th>$A$</th><th>$B$</th><th>$\\neg A$</th><th>$\\neg B$</th><th>$A \\Rightarrow B$</th></tr></thead><tbody><tr><td>$0$</td><td>$0$</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>$0$</td><td>$1$</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>$1$</td><td>$0$</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>$1$</td><td>$1$</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>"
   },
   {
     tema: "Tema 1 · Álgebra y Lógica",
     n: 5,
     dificultad: "Avanzado",
-    titulo: "Ejercicio 5 · Asignación Formal de Partidas en Torneos",
-    enunciado: "Para organizar un torneo de ajedrez escolar, se define el predicado $T(x, y)$, que indica que el alumno $x$ se enfrenta al alumno $y$. La regla de organización exige que, para todo participante $x$ del conjunto de jugadores $J$, exista al menos un rival $y \\in J$ con $x \\neq y$ tal que $T(x, y)$ sea verdadero. Esta regla se escribe así:<p class=\"my-2\">$$\\forall x \\in J \\; \\big(\\exists y \\in J \\; (x \\neq y \\wedge T(x, y))\\big)$$</p>Si el total de partidas jugadas en la primera ronda es $P$ y se sabe que cada jugador dispute exactamente 3 partidas con rivales distintos dentro del grupo, establece la ecuación de restricción lineal que relaciona el número total de jugadores $N = |J|$ con el total de partidas $P$, y calcula el valor de $N$ si en total se coordinaron 36 partidas.",
-    respuestaFinal: "$N = 24$ jugadores",
-    procedimiento: "<p class=\"mb-0\">Cada partida conecta a 2 jugadores. Si cada uno de los $N$ participantes disputa 3 partidas, la suma de grados es $3N$. Por el principio de conteo doble, $2P = 3N$, así que $N = \\frac{2P}{3}$. Sustituyendo $P = 36$: $N = \\frac{2(36)}{3} = \\frac{72}{3} = 24$ jugadores.</p>"
+    titulo: "Ejercicio 5 · Acceso multinivel del administrador",
+    enunciado: "<p>El administrador de la red del vecindario escolar requiere validar una regla de acceso multinivel basada en tres proposiciones:</p><ul><li>$A$: \"El usuario es administrador.\"</li><li>$B$: \"El usuario tiene autorización especial.\"</li><li>$C$: \"El sistema está en modo de mantenimiento.\"</li></ul><p>La condición formal de acceso $E$ está definida por la expresión lógica compuesta $E = (A \\vee B) \\wedge \\neg (C \\Leftrightarrow A)$.</p><p>Determina el valor de verdad final ($1$ o $0$) del acceso $E$ para las $2^3 = 8$ combinaciones posibles de los valores de $A$, $B$ y $C$. Analiza el comportamiento de la subexpresión bicondicional $(C \\Leftrightarrow A)$ e indica de qué manera el estado de mantenimiento activo ($C = 1$) condiciona el permiso final del administrador ($A = 1$).</p>"
   },
   {
     tema: "Tema 2 · Aritmética, Conteo y Casos",
     n: 6,
     dificultad: "Básico",
-    titulo: "Ejercicio 6 · Coincidencia Periódica de Rutas de Autobús",
-    enunciado: "Tres rutas de transporte escolar $(R_1, R_2, R_3)$ salen simultáneamente de la parada principal a las 6:00 a.m. La ruta $R_1$ regresa a la estación cada 12 minutos, la ruta $R_2$ cada 15 minutos y la ruta $R_3$ cada 20 minutos. Utiliza el Mínimo Común Múltiplo $(\\text{MCM})$ para determinar a qué hora exacta volverán a coincidir las tres rutas por primera vez en la estación principal.",
-    respuestaFinal: "7:00 a.m. (coincidencia a los 60 minutos)",
-    procedimiento: "<p class=\"mb-0\">Descomponemos en factores primos: $12 = 2^2 \\cdot 3$, $15 = 3 \\cdot 5$, $20 = 2^2 \\cdot 5$. Entonces $\\text{MCM}(12, 15, 20) = 2^2 \\cdot 3 \\cdot 5 = 60$ minutos. Sumando 60 minutos a la hora de salida (6:00 a.m.), las tres rutas coinciden a las 7:00 a.m.</p>"
+    titulo: "Ejercicio 6 · Rutas periódicas de transporte",
+    enunciado: "<p>Tres rutas de transporte escolar salen de la estación central del plantel a intervalos periódicos. La ruta A sale cada 12 minutos, la ruta B cada 18 minutos y la ruta C cada 30 minutos. Si las tres rutas coinciden en su salida a las 7:00 a. m., utiliza el Máximo Común Divisor (MCD) y el Mínimo Común Múltiplo (MCM) para determinar cuántos minutos transcurrirán para que las tres rutas vuelvan a salir simultáneamente por primera vez, y calcula el MCD de los tres intervalos para determinar la mayor unidad de tiempo común en que se pueden dividir sus frecuencias.</p>"
   },
   {
     tema: "Tema 2 · Aritmética, Conteo y Casos",
     n: 7,
     dificultad: "Básico",
-    titulo: "Ejercicio 7 · Rotación de Turnos de Limpieza en Talleres",
-    enunciado: "El sistema de guardia del laboratorio de cómputo opera en un ciclo rotativo de 7 días (días 0 a 6, donde 0 corresponde al Lunes). Si el día de hoy es Lunes $(0)$ y el sistema programa el mantenimiento preventivo para dentro de 100 días, utiliza la aritmética modular (cálculo del residuo $100 \\pmod 7$) para determinar qué día de la semana se ejecutará dicho mantenimiento.",
-    respuestaFinal: "Miércoles (día 2)",
-    procedimiento: "<p class=\"mb-0\">Calculamos el residuo de la división modular de 100 entre 7: $100 = 7 \\times 14 + 2 \\implies 100 \\equiv 2 \\pmod 7$. Avanzando 2 días en el ciclo a partir del Lunes (día 0): $0 \\rightarrow \\text{Lunes}, 1 \\rightarrow \\text{Martes}, 2 \\rightarrow \\text{Miércoles}$.</p>"
+    titulo: "Ejercicio 7 · Turno de vigilancia en el internado",
+    enunciado: "<p>En el internado escolar, los turnos de vigilancia se asignan mediante un ciclo repetitivo de 7 días, numerados de $0$ a $6$, donde $0$ corresponde al domingo. Si hoy es martes ($2$) y a un estudiante le toca cumplir su turno dentro de $100$ días, aplica la aritmética modular $a \\equiv b \\pmod{m}$ para determinar el día exacto de la semana en que le tocará su guardia. Expresa formalmente la congruencia e indica el número y el nombre del día resultante.</p>"
   },
   {
     tema: "Tema 2 · Aritmética, Conteo y Casos",
     n: 8,
     dificultad: "Medio",
-    titulo: "Ejercicio 8 · Elección del Comité Estudiantil",
-    enunciado: "Se desea formar un comité escolar integrado por 1 presidente, 1 secretario y 1 vocal. Hay 6 candidatos de sexto semestre y 4 candidatos de cuarto semestre. Por reglamento, el cargo de presidente debe ser ocupado por un alumno de sexto semestre, mientras que la secretaría y la vocalía pueden ser asignadas a cualquier alumno restante de cualquier semestre. Aplica el principio fundamental del conteo para calcular el número total de maneras distintas en las que se puede integrar este comité ordenado.",
-    respuestaFinal: "432 maneras distintas",
-    procedimiento: "<p class=\"mb-0\">Para el cargo de Presidente hay 6 opciones (alumnos de sexto semestre). Para el cargo de Secretario quedan 9 candidatos disponibles (5 de sexto semestre y 4 de cuarto semestre). Para el cargo de Vocal quedan 8 candidatos disponibles. Aplicando el principio multiplicativo para roles distintos: $6 \\times 9 \\times 8 = 432$ maneras.</p>"
+    titulo: "Ejercicio 8 · Caminos entre campus y menú de la cafetería",
+    enunciado: "<p>Un estudiante debe planear su trayecto entre tres campus escolares ($X$, $Y$, $Z$) y la elección de su almuerzo. Para viajar del campus $X$ al campus $Y$ existen 4 caminos diferentes, y para ir del campus $Y$ al campus $Z$ existen 3 caminos distintos. Alternativamente, existe un trayecto directo del campus $X$ al campus $Z$ mediante 2 rutas expresas. Por otro lado, la cafetería del campus $Z$ ofrece 5 opciones de platillo principal y 3 tipos de bebida. Utilizando los principios de la suma y de la multiplicación, calcula:</p><ol><li>El número total de formas distintas de viajar del campus $X$ al campus $Z$.</li><li>El número total de combinaciones de almuerzo (un platillo y una bebida) disponibles.</li></ol>"
   },
   {
     tema: "Tema 2 · Aritmética, Conteo y Casos",
     n: 9,
     dificultad: "Medio",
-    titulo: "Ejercicio 9 · Distribución de Deportistas en el Club Escolar",
-    enunciado: "En un club deportivo escolar compuesto por 100 estudiantes, se determinó que 55 alumnos juegan fútbol, 45 juegan básquetbol y 20 practican ambos deportes. Aplica el Principio de Inclusión-Exclusión para calcular cuántos alumnos practican al menos uno de estos dos deportes y cuántos no practican ninguno.",
-    respuestaFinal: "80 practican al menos uno; 20 no practican ninguno",
-    procedimiento: "<p class=\"mb-0\">Aplicamos el Principio de Inclusión-Exclusión para la unión de conjuntos: $|F \\cup B| = |F| + |B| - |F \\cap B| = 55 + 45 - 20 = 80 \\text{ alumnos}$. La cantidad de alumnos que no practican ningún deporte es $100 - 80 = 20$.</p>"
+    titulo: "Ejercicio 9 · Orden de las sillas en la premiación",
+    enunciado: "<p>En la ceremonia de premiación de una competencia, un grupo de $n = 6$ competidores destacados debe sentarse en una fila de sillas individuales. El número de arreglos posibles sin repetición se modela con el factorial: $n! = \\prod_{x=1}^{n} x = 1 \\cdot 2 \\cdot 3 \\cdots n$.</p><p>Calcula el número total de ordenamientos en que pueden sentarse los 6 competidores. Después, calcula cuántos arreglos son posibles si el competidor con la mayor puntuación debe ocupar obligatoriamente la primera silla.</p>"
   },
   {
     tema: "Tema 2 · Aritmética, Conteo y Casos",
     n: 10,
     dificultad: "Avanzado",
-    titulo: "Ejercicio 10 · Acomodo Restringido de Equipos en el Autobús",
-    enunciado: "Un grupo de 6 estudiantes (entre los cuales están Ana y Beto) van a ocupar una fila de 6 asientos individuales contiguos en el autobús de la selección escolar. Determina el número total de permutaciones posibles para sentar a los 6 estudiantes bajo la condición estricta de que Ana y Beto siempre deben sentarse en asientos contiguos.",
-    respuestaFinal: "240 permutaciones",
-    procedimiento: "<p class=\"mb-0\">Consideramos a Ana y Beto como un solo bloque unido. Esto reduce el problema a ordenar 5 elementos (el bloque más los otros 4 alumnos), lo cual se hace de $5!$ formas. A su vez, dentro del bloque, Ana y Beto pueden intercambiar posiciones de $2!$ formas. Total: $5! \\times 2! = 120 \\times 2 = 240$ permutaciones.</p>"
+    titulo: "Ejercicio 10 · Participación en clubes académicos",
+    enunciado: "<p>En una encuesta realizada a un grupo de 100 estudiantes del vecindario escolar sobre su participación en tres clubes académicos (Matemáticas, $A$; Informática, $B$; y Robótica, $C$) se obtuvieron los siguientes datos:</p><ul><li>$|A| = 45$, $|B| = 40$, $|C| = 35$</li><li>$|A \\cap B| = 15$, $|A \\cap C| = 12$, $|B \\cap C| = 10$</li><li>$|A \\cap B \\cap C| = 5$</li></ul><p>Aplica el principio de inclusión-exclusión para conjuntos finitos: $|A \\cup B \\cup C| = |A| + |B| + |C| - |A \\cap B| - |A \\cap C| - |B \\cap C| + |A \\cap B \\cap C|$.</p><p>Determina el número exacto de estudiantes que participan en al menos uno de los tres clubes ($|A \\cup B \\cup C|$) y calcula cuántos estudiantes no participan en ninguno de los tres.</p>"
   },
   {
     tema: "Tema 3 · Geometría, Trigonometría y Patrones",
     n: 11,
     dificultad: "Básico",
-    titulo: "Ejercicio 11 · Plan Incremental de Lectura",
-    enunciado: "Un alumno establece un plan de estudio incremental para su próxima competencia de matemáticas: el primer día lee 5 páginas de un libro de teoría ($a = 5$) y cada día posterior lee 3 páginas más que el día anterior (diferencia constante $d = 3$). Calcula cuántas páginas leerá el día 15 ($b$) y aplica la fórmula de la suma de una progresión aritmética: $S_n = \\frac{n(a+b)}{2}$ para determinar el total acumulado de páginas leídas durante los 15 días.",
-    respuestaFinal: "Día 15: 47 páginas; Total acumulado: 390 páginas",
-    procedimiento: "<p class=\"mb-0\">El término 15 es $b = a + (n-1)d = 5 + (15-1) \\cdot 3 = 5 + 42 = 47$. Aplicamos la fórmula de la suma de la progresión aritmética: $S_{15} = \\frac{15(5 + 47)}{2} = \\frac{15(52)}{2} = 15 \\times 26 = 390$ páginas.</p>"
+    titulo: "Ejercicio 11 · Filas de asientos del auditorio",
+    enunciado: "<p>Las filas de asientos del auditorio del colegio están dispuestas según una progresión aritmética. La primera fila ($a$) cuenta con 15 asientos, y cada fila siguiente incrementa su capacidad en una cantidad constante $d = 4$ asientos respecto a la anterior.</p><p>Utiliza las fórmulas para progresiones aritméticas:</p><ul><li>Término general: $u_n = a + (n-1)d$</li><li>Suma de los $n$ primeros términos: $S_n = \\frac{n(a + u_n)}{2}$, donde $u_n$ es el último término y $n$ el número total de filas.</li></ul><p>Calcula el número de asientos de la fila $12$ ($u_{12}$) y determina la capacidad total del auditorio considerando las 12 filas acumuladas ($S_{12}$).</p>"
   },
   {
     tema: "Tema 3 · Geometría, Trigonometría y Patrones",
     n: 12,
     dificultad: "Básico",
-    titulo: "Ejercicio 12 · Diseño Geométrico de una Plaza Escolar",
-    enunciado: "El comité de infraestructura está diseñando una plaza interior con forma de polígono regular de 8 lados (octágono regular). Determina la suma total de los ángulos internos del polígono y calcula la medida del ángulo interno individual en cada una de sus esquinas.",
-    respuestaFinal: "Suma total: $1080^\\circ$; Ángulo interno: $135^\\circ$",
-    procedimiento: "<p class=\"mb-0\">La suma de los ángulos internos de un polígono regular de $n = 8$ lados viene dada por: $S = (n-2) \\times 180^\\circ = (8-2) \\times 180^\\circ = 6 \\times 180^\\circ = 1080^\\circ$. El ángulo interno individual mide $\\frac{1080^\\circ}{8} = 135^\\circ$.</p>"
+    titulo: "Ejercicio 12 · Propagación de un aviso en la red estudiantil",
+    enunciado: "<p>Un aviso urgente sobre el torneo de matemáticas se difunde en una red de comunicación estudiantil organizada como una progresión geométrica de razón constante $k = 2$. En el paso inicial ($n = 1$), una persona envía la notificación a $a = 3$ coordinadores. En cada paso siguiente, cada receptor retransmite la información a $k = 2$ nuevos estudiantes.</p><p>La suma acumulada de estudiantes notificados hasta el término $b$ se calcula con la fórmula $S = a + ak + ak^2 + \\dots + b = \\frac{bk - a}{k - 1}$.</p><p>Considera la siguiente tabla, que registra la propagación término a término:</p><table class=\"table table-sm\"><thead><tr><th>Paso ($n$)</th><th>Término ($u_n$)</th><th>Expresión geométrica</th></tr></thead><tbody><tr><td>$1$</td><td>$3$</td><td>$a$</td></tr><tr><td>$2$</td><td>$6$</td><td>$ak$</td></tr><tr><td>$3$</td><td>$12$</td><td>$ak^2$</td></tr><tr><td>$4$</td><td>$24$</td><td>$ak^3$</td></tr></tbody></table><p>Determina el valor del término $b$ correspondiente al paso $n = 5$ y calcula la suma total acumulada de estudiantes $S$ que habrán recibido el mensaje al finalizar dicho quinto paso.</p>"
   },
   {
     tema: "Tema 3 · Geometría, Trigonometría y Patrones",
     n: 13,
     dificultad: "Medio",
-    titulo: "Ejercicio 13 · Distancia Euclidiana en la Retícula Escolar",
-    enunciado: "El plano del campus escolar se ubica sobre un sistema de coordenadas cartesianas. La biblioteca se encuentra en las coordenadas $P_1 = (2, 3)$ y el laboratorio de física en $P_2 = (8, 11)$, donde cada unidad representa metros. Aplica el Teorema de Pitágoras para calcular la distancia recta directa (distancia euclidiana) entre ambos puntos del campus: $d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$.",
-    respuestaFinal: "10 metros",
-    procedimiento: "<p class=\"mb-0\">Calculamos las diferencias de las coordenadas: $\\Delta x = 8 - 2 = 6$ y $\\Delta y = 11 - 3 = 8$. Aplicamos la fórmula de la distancia euclidiana: $d = \\sqrt{6^2 + 8^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10$ metros.</p>"
+    titulo: "Ejercicio 13 · Diagonal del patio central",
+    enunciado: "<p>El patio central de la escuela tiene forma de rectángulo con vértices $A$, $B$, $C$, $D$. El largo está dado por el segmento $AB = 40$ m y el ancho por el segmento $BC = 30$ m.</p><p>Un estudiante desea desplazarse desde la esquina $A$ hasta la esquina opuesta $C$ siguiendo la menor distancia posible en línea recta (trayecto $AC$). Aplica el Teorema de Pitágoras $a^2 + b^2 = c^2$, donde $a = AB$, $b = BC$ y $c = AC$.</p><p>Calcula la longitud exacta del segmento $AC$. Adicionalmente, determina la suma de los ángulos internos del rectángulo $ABCD$ y verifica que la suma de los ángulos internos del triángulo $ABC$ sea $180^\\circ$.</p>"
   },
   {
     tema: "Tema 3 · Geometría, Trigonometría y Patrones",
     n: 14,
     dificultad: "Medio",
-    titulo: "Ejercicio 14 · Crecimiento de una Cadena de Mensajes",
-    enunciado: "Para difundir un aviso urgente, el director envía el mensaje a 3 profesores ($a = 3$). En la siguiente etapa, cada uno reenvía el mensaje a 2 profesores nuevos, de modo que en la segunda etapa hay 6 receptores nuevos. La secuencia de nuevos receptores en cada etapa sigue una progresión geométrica: $3, 6, 12, 24, \\dots$ con razón $k = 2$. Calcula cuántos receptores nuevos habrá en la etapa 5 ($b$) y utiliza la fórmula de la suma de una progresión geométrica: $S = \\frac{bk - a}{k - 1}$ para hallar el número total acumulado de personas que habrán recibido el mensaje tras completarse las 5 etapas.",
-    respuestaFinal: "Etapa 5: 48 receptores; Total acumulado: 93 personas",
-    procedimiento: "<p class=\"mb-0\">El término de la etapa 5 en la progresión geométrica es $b = a \\cdot k^{n-1} = 3 \\cdot 2^4 = 48$. Aplicamos la fórmula de la suma acumulada con $a = 3$, $b = 48$ y $k = 2$: $S = \\frac{bk - a}{k - 1} = \\frac{48(2) - 3}{2 - 1} = \\frac{96 - 3}{1} = 93$ personas.</p>"
+    titulo: "Ejercicio 14 · Altura de la asta bandera",
+    enunciado: "<p>Para medir la altura inaccesible de la asta bandera del plantel, un grupo de alumnos utiliza la proporcionalidad de segmentos establecida por el Teorema de Tales. A una misma hora del día, una regla vertical de longitud $h_1 = 1.5$ m proyecta una sombra en el suelo de $s_1 = 2.0$ m. Simultáneamente, la asta bandera proyecta una sombra de $s_2 = 16.0$ m.</p><p>Utilizando la relación de proporcionalidad $\\frac{h_1}{s_1} = \\frac{h_2}{s_2}$, calcula la altura $h_2$ de la asta bandera y explica cómo la conservación de razones entre lados homólogos de triángulos semejantes permite determinar dimensiones que no podemos medir directamente.</p>"
   },
   {
     tema: "Tema 3 · Geometría, Trigonometría y Patrones",
     n: 15,
     dificultad: "Avanzado",
-    titulo: "Ejercicio 15 · Patrón Fractal de Acomodo de Baldosas",
-    enunciado: "En la remodelación del patio central escolar se colocan baldosas cuadradas siguiendo una secuencia en niveles: el nivel 1 consiste en un cuadrado central con lado $L_1 = 16\\text{ m}$. En cada nivel sucesivo $n$, el lado de las baldosas se reduce a la mitad $(L_n = \\frac{L_{n-1}}{2})$ y la cantidad de baldosas colocadas en ese nivel es $4^{n-1}$. Demuestra analíticamente que el área total cubierta en el nivel $n$ dada por $A_n = 4^{n-1} \\cdot (L_n)^2$ permanece constante, calcula el área del nivel 4 y determina la suma del área acumulada considerando la adición de los niveles 1, 2, 3 y 4.",
-    respuestaFinal: "Área del nivel 4: $256\\text{ m}^2$; área total acumulada: $1024\\text{ m}^2$",
-    procedimiento: "<p class=\"mb-0\">Para cualquier nivel $n$, el lado de la baldosa es $L_n = \\frac{16}{2^{n-1}}\\text{ m}$, y su área individual es $(L_n)^2 = \\frac{256}{4^{n-1}}\\text{ m}^2$. El área total del nivel $n$ es $A_n = 4^{n-1} \\cdot \\frac{256}{4^{n-1}} = 256\\text{ m}^2$, constante para todo $n$. Por lo tanto, para el nivel 4 el área es $256\\text{ m}^2$. La suma acumulada tras 4 niveles es $4 \\times 256 = 1024\\text{ m}^2$.</p>"
-  },
-  {
-    tema: "Tema 4 · Redes y Conexiones",
-    n: 16,
-    dificultad: "Básico",
-    titulo: "Ejercicio 16 · Conteo de Rutas entre Esquinas",
-    enunciado: "La red de calles entre cuatro esquinas (A, B, C, D) de una colonia vecina a la escuela está conectada de la siguiente manera:<ul class=\"mt-2 mb-2\"><li>De A a B hay 2 caminos directos distintos.</li><li>De A a C hay 1 camino directo.</li><li>De B a D hay 3 caminos directos distintos.</li><li>De C a D hay 2 caminos directos distintos.</li><li>No hay conexión directa entre A y D.</li></ul>Calcula el número total de trayectorias distintas que se pueden seguir para ir desde la esquina A hasta la esquina D pasando exactamente por una esquina intermedia (B o C).",
-    respuestaFinal: "8 caminos posibles",
-    procedimiento: "<p class=\"mb-1\">Calculamos las rutas posibles según la esquina intermedia:</p><ul class=\"mb-2\"><li>Vía $B$: $(\\text{caminos } A \\rightarrow B) \\times (\\text{caminos } B \\rightarrow D) = 2 \\times 3 = 6$.</li><li>Vía $C$: $(\\text{caminos } A \\rightarrow C) \\times (\\text{caminos } C \\rightarrow D) = 1 \\times 2 = 2$.</li></ul><p class=\"mb-0\">Total de trayectorias $= 6 + 2 = 8$.</p>"
-  },
-  {
-    tema: "Tema 4 · Redes y Conexiones",
-    n: 17,
-    dificultad: "Básico",
-    titulo: "Ejercicio 17 · Análisis de Conectividad en una Red Social Escolar",
-    enunciado: "Se analiza una red de mensajería entre 5 alumnos $(V = \\{1, 2, 3, 4, 5\\})$. Las conexiones existentes (conexiones de dos sentidos) son las siguientes: $(1, 2), (2, 3)$ y $(4, 5)$. Determina formalmente si la red social está completamente conectada o si se encuentra dividida en partes aisladas, indicando los grupos de alumnos que forman cada parte de la red.",
-    respuestaFinal: "Red no conectada; dividida en 2 partes aisladas: $\\{1, 2, 3\\}$ y $\\{4, 5\\}$",
-    procedimiento: "<p class=\"mb-0\">Las conexiones $(1, 2)$ y $(2, 3)$ permiten la comunicación entre los puntos $1$, $2$ y $3$. La conexión $(4, 5)$ une los puntos $4$ y $5$. Al no existir ninguna conexión que vincule a un elemento del conjunto $\\{1, 2, 3\\}$ con el conjunto $\\{4, 5\\}$, la red se encuentra desconectada y dividida en dos partes independientes.</p>"
-  },
-  {
-    tema: "Tema 4 · Redes y Conexiones",
-    n: 18,
-    dificultad: "Medio",
-    titulo: "Ejercicio 18 · Red Mínima de Cableado en el Laboratorio",
-    enunciado: "Se requiere interconectar un conjunto de $V = 12$ equipos en el laboratorio escolar para que todas puedan comunicarse entre sí (directa o indirectamente). Por restricciones de presupuesto y para evitar bucles de datos, la red debe formar una estructura de árbol (una red conectada sin ciclos). Utiliza la propiedad fundamental de los árboles para determinar la cantidad exacta de cables de red $(E)$ que se deben instalar.",
-    respuestaFinal: "11 cables",
-    procedimiento: "<p class=\"mb-0\">Por definición, todo árbol con $V$ puntos tiene exactamente $E = V - 1$ conexiones. Sustituyendo $V = 12$: $E = 12 - 1 = 11$ cables de red.</p>"
-  },
-  {
-    tema: "Tema 4 · Redes y Conexiones",
-    n: 19,
-    dificultad: "Medio",
-    titulo: "Ejercicio 19 · Grados de Conexión en la Red de Agua Escolar",
-    enunciado: "Una red interna de distribución de agua posee 6 puntos de conexión. La suma de los grados de todos los puntos (donde el grado de un punto es el número de tuberías conectadas a él) es igual a 14. Utiliza la regla de la suma de grados: la suma de los grados de todos los puntos es igual al doble del número de conexiones, $\\sum \\text{grado}(v) = 2|E|$, para determinar el número total de tramos de tubería $(|E|)$ que integran dicha red.",
-    respuestaFinal: "7 tramos de tubería",
-    procedimiento: "<p class=\"mb-0\">Sustituimos en la regla de la suma de grados $\\sum \\text{grado}(v) = 2|E|$: $14 = 2|E|$, así que $|E| = \\frac{14}{2} = 7$ tramos de tubería.</p>"
-  },
-  {
-    tema: "Tema 4 · Redes y Conexiones",
-    n: 20,
-    dificultad: "Avanzado",
-    titulo: "Ejercicio 20 · Costo Mínimo de Interconexión en la Red del Vecindario",
-    enunciado: "Se planea enlazar 4 módulos de la escuela $(M_1, M_2, M_3, M_4)$ mediante fibra óptica. Los costos de instalación en miles de pesos para cada tramo posible se detallan a continuación:<div class=\"table-responsive my-2\"><table class=\"table table-sm table-bordered text-center align-middle mb-2\"><thead><tr><th>Tramo de Conexión</th><th>Costo (miles de MXN)</th></tr></thead><tbody><tr><td>$(M_1, M_2)$</td><td>4</td></tr><tr><td>$(M_1, M_3)$</td><td>2</td></tr><tr><td>$(M_2, M_3)$</td><td>1</td></tr><tr><td>$(M_2, M_4)$</td><td>5</td></tr><tr><td>$(M_3, M_4)$</td><td>3</td></tr></tbody></table></div>Identifica la combinación de tramos que permite conectar los 4 módulos sin formar ciclos y con el costo total más bajo posible, y calcula dicho costo.",
-    respuestaFinal: "Tramos $(M_2, M_3), (M_1, M_3)$ y $(M_3, M_4)$; Costo total $= 6$ mil pesos",
-    procedimiento: "<p class=\"mb-1\">Ordenamos los tramos por costo de menor a mayor: $(M_2, M_3): 1, (M_1, M_3): 2, (M_3, M_4): 3, (M_1, M_2): 4, (M_2, M_4): 5$. Seleccionamos siempre la conexión más barata que no forme ciclos, hasta completar $V - 1 = 3$ conexiones:</p><ol class=\"mb-2\"><li>Elegimos $(M_2, M_3)$ con costo 1.</li><li>Elegimos $(M_1, M_3)$ con costo 2.</li><li>Elegimos $(M_3, M_4)$ con costo 3.</li></ol><p class=\"mb-0\">Los 4 puntos quedan integrados. Costo total: $1 + 2 + 3 = 6$ (miles de MXN).</p>"
+    titulo: "Ejercicio 15 · Distancias en el vecindario",
+    enunciado: "<p>En el plano cartesiano del vecindario del colegio, la biblioteca se ubica en el punto $P_1 = (2, 3)$ y el laboratorio de robótica en el punto $P_2 = (8, 11)$, con coordenadas expresadas en kilómetros.</p><p>Analiza las dos formas de medir el recorrido entre $P_1$ y $P_2$:</p><ol><li>Distancia Manhattan ($d_M$): suma de las diferencias absolutas de las coordenadas horizontal y vertical, $d_M = |x_2 - x_1| + |y_2 - y_1|$, que corresponde al recorrido por calles perpendiculares.</li><li>Distancia euclidiana ($d_E$): longitud del segmento en línea recta que une ambos puntos, $d_E = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$.</li></ol><p>Calcula el valor numérico exacto de ambas distancias ($d_M$ y $d_E$). Adicionalmente, aplica la razón trigonométrica de la tangente, $\\tan \\theta = \\frac{y_2 - y_1}{x_2 - x_1}$, para calcular la pendiente de la trayectoria directa respecto al eje horizontal.</p><p>El dominio de estas herramientas (lógica formal, conteo discreto, aritmética modular y modelado geométrico) es la base del razonamiento matemático que sostendrá los problemas más avanzados del curso.</p>"
   }
 ];
