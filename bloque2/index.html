@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bloque 2 · Primeros pasos en C++. Estructura de un programa, plantilla de competencia, tipos, operadores y condicionales, con práctica y quiz.">
+  <title>Bloque 2 · Programación Competitiva · Bug Squad</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/estilos.css">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-curso sticky-top">
+    <div class="container-fluid px-lg-4">
+      <a class="navbar-brand" href="../index.html">
+        <img class="logo-nav" src="../assets/img/icono.png" alt="" width="34" height="34">
+        <span>Programación Competitiva <span class="marca-bug">· Bug Squad</span></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="menuPrincipal">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="../bloque1/index.html">Bloque 1</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">Bloque 2</a></li>
+          <li class="nav-item"><a class="nav-link" href="../bloque3/index.html">Bloque 3</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+
+      <!-- Barra lateral: índice colapsable y avance -->
+      <aside class="col-lg-3 col-xl-2 p-0 barra-lateral">
+        <div class="p-4">
+          <p class="titulo-curso mb-1">Bloque 2</p>
+          <p class="small text-secondary mb-4">Primeros pasos en C++</p>
+
+          <nav class="indice" aria-label="Índice del bloque">
+
+            <div class="grupo">
+              <div class="grupo-cabecera">
+                <a class="grupo-enlace activo" href="#tema-1" data-seccion="tema-1">
+                  <span class="grupo-numero">1</span>
+                  <span>Tu primer programa y la plantilla</span>
+                </a>
+                <button class="grupo-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-1" aria-expanded="true" aria-controls="grupo-tema-1" aria-label="Mostrar u ocultar Tema 1">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+              </div>
+              <div class="collapse show" id="grupo-tema-1">
+                <ul class="indice-lista">
+                  <li><a href="#tema-1-aprender" class="activo">Aprender</a></li>
+                  <li><a href="#tema-1-practicar">Practicar</a></li>
+                  <li><a href="#tema-1-quiz">Quiz</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="grupo">
+              <div class="grupo-cabecera">
+                <a class="grupo-enlace" href="#tema-2" data-seccion="tema-2">
+                  <span class="grupo-numero">2</span>
+                  <span>Variables y operadores</span>
+                </a>
+                <button class="grupo-toggle collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-2" aria-expanded="false" aria-controls="grupo-tema-2" aria-label="Mostrar u ocultar Tema 2">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+              </div>
+              <div class="collapse" id="grupo-tema-2">
+                <ul class="indice-lista">
+                  <li><a href="#tema-2-aprender">Aprender</a></li>
+                  <li><a href="#tema-2-practicar">Practicar</a></li>
+                  <li><a href="#tema-2-quiz">Quiz</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="grupo">
+              <div class="grupo-cabecera">
+                <a class="grupo-enlace" href="#tema-3" data-seccion="tema-3">
+                  <span class="grupo-numero">3</span>
+                  <span>Condicionales</span>
+                </a>
+                <button class="grupo-toggle collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#grupo-tema-3" aria-expanded="false" aria-controls="grupo-tema-3" aria-label="Mostrar u ocultar Tema 3">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+              </div>
+              <div class="collapse" id="grupo-tema-3">
+                <ul class="indice-lista">
+                  <li><a href="#tema-3-aprender">Aprender</a></li>
+                  <li><a href="#tema-3-practicar">Practicar</a></li>
+                  <li><a href="#tema-3-quiz">Quiz</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="grupo">
+              <div class="grupo-cabecera">
+                <a class="grupo-enlace" href="#plantilla" data-seccion="plantilla">
+                  <span class="grupo-numero"><i class="fa-solid fa-file-code"></i></span>
+                  <span>Plantilla del curso</span>
+                </a>
+              </div>
+            </div>
+
+            <a class="indice-enlace mt-2" href="#pendientes" data-seccion="pendientes">
+              <i class="fa-regular fa-clock" aria-hidden="true"></i> Próximamente
+            </a>
+          </nav>
+
+          <div class="avance mb-3">
+            <p class="etiqueta-avance mb-1">Quizzes aprobados</p>
+            <p class="fw-semibold mb-3" id="avance-quiz-texto">0 de 3</p>
+            <p class="etiqueta-avance mb-2">Ejercicios respondidos</p>
+            <div class="progress mb-2" role="progressbar" aria-label="Ejercicios respondidos" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar" id="avance-ejercicios-barra" style="width: 0%"></div>
+            </div>
+            <p class="small text-secondary mb-0 font-monospace" id="avance-ejercicios-texto">0 de 32</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Contenido principal -->
+      <main class="col-lg-9 col-xl-10 px-3 px-md-4 px-lg-5 py-4" id="contenido-bloque">
+
+        <header class="banner banner-compacto px-4 px-lg-5">
+          <div class="container-fluid p-0">
+            <h1 class="mb-2">Primeros pasos en C++</h1>
+            <p class="subtitulo mb-0">Tres temas para escribir tus primeros programas de competencia: la estructura de un programa y la plantilla del curso, los tipos de datos y operadores, y los condicionales. Cada tema tiene una lectura, ejercicios de práctica y un quiz con retroalimentación inmediata.</p>
+            <div class="chips-banner" role="tablist" aria-label="Selector rápido de temas del bloque">
+              <a class="chip activo" href="#tema-1" data-seccion="tema-1"><i class="fa-solid fa-terminal"></i> Tema 1 · Tu primer programa y la plantilla</a>
+              <a class="chip" href="#tema-2" data-seccion="tema-2"><i class="fa-solid fa-hashtag"></i> Tema 2 · Variables y operadores</a>
+              <a class="chip" href="#tema-3" data-seccion="tema-3"><i class="fa-solid fa-code-branch"></i> Tema 3 · Condicionales</a>
+              <a class="chip" href="#plantilla" data-seccion="plantilla"><i class="fa-solid fa-file-code"></i> Plantilla del curso</a>
+            </div>
+            <span class="credito d-inline-block"><span>Diseñado y organizado por: <strong>Prof. Rigoberto Santiago Garzón</strong></span></span>
+          </div>
+        </header>
+
+        <!-- TEMA 1 -->
+        <section class="seccion" id="tema-1" data-vista-seccion="tema-1">
+          <div class="numero-seccion" aria-hidden="true">1</div>
+          <h2>Tu primer programa y la plantilla de competencia</h2>
+          <p class="lead-tema">Preparar el entorno, escribir el primer programa, entender de dónde sale cada línea de la plantilla del curso y leer e imprimir datos exactamente como los pide el juez.</p>
+
+          <div class="pestanas" data-pestanas="1">
+            <div class="tab-barra" role="tablist" aria-label="Contenido del Tema 1">
+              <button class="tab-btn activa" type="button" role="tab" data-tab="aprender" id="tab-1-aprender" aria-controls="tema-1-aprender" aria-selected="true">
+                <i class="fa-solid fa-book-open"></i> Aprender
+              </button>
+              <button class="tab-btn" type="button" role="tab" data-tab="practicar" id="tab-1-practicar" aria-controls="tema-1-practicar" aria-selected="false" tabindex="-1">
+                <i class="fa-solid fa-list-check"></i> Practicar <span class="tab-contador">10</span>
+              </button>
+              <button class="tab-btn" type="button" role="tab" data-tab="quiz" id="tab-1-quiz" aria-controls="tema-1-quiz" aria-selected="false" tabindex="-1">
+                <i class="fa-solid fa-trophy"></i> Quiz <span class="tab-contador">8</span>
+              </button>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-1-aprender" aria-labelledby="tab-1-aprender">
+              <div data-lectura="1"></div>
+              <div class="recursos-tema">
+                <a class="btn btn-tide" href="#plantilla" data-seccion="plantilla"><i class="fa-solid fa-file-code"></i> Ver la plantilla del curso</a>
+                <a class="enlace-recurso" href="../assets/docs/Plantilla_CP.cpp" download><i class="fa-solid fa-file-arrow-down"></i> Descargar Plantilla_CP.cpp</a>
+              </div>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-1-practicar" aria-labelledby="tab-1-practicar" hidden>
+              <div data-ejercicios="1"></div>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-1-quiz" aria-labelledby="tab-1-quiz" hidden>
+              <div data-quiz="1"></div>
+            </div>
+          </div>
+
+          <div class="navegacion-seccion">
+            <span></span>
+            <a href="#tema-2" data-seccion="tema-2">Siguiente: Tema 2 <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </section>
+
+        <!-- TEMA 2 -->
+        <section class="seccion" id="tema-2" data-vista-seccion="tema-2" hidden>
+          <div class="numero-seccion" aria-hidden="true">2</div>
+          <h2>Variables, tipos y operadores</h2>
+          <p class="lead-tema">Tipos de datos, rangos y desbordamiento, conversión entre tipos, decimales con cifras fijas, división entera, residuo, redondeo hacia arriba, precedencia y operadores a nivel de bits.</p>
+
+          <div class="pestanas" data-pestanas="2">
+            <div class="tab-barra" role="tablist" aria-label="Contenido del Tema 2">
+              <button class="tab-btn activa" type="button" role="tab" data-tab="aprender" id="tab-2-aprender" aria-controls="tema-2-aprender" aria-selected="true">
+                <i class="fa-solid fa-book-open"></i> Aprender
+              </button>
+              <button class="tab-btn" type="button" role="tab" data-tab="practicar" id="tab-2-practicar" aria-controls="tema-2-practicar" aria-selected="false" tabindex="-1">
+                <i class="fa-solid fa-list-check"></i> Practicar <span class="tab-contador">12</span>
+              </button>
+              <button class="tab-btn" type="button" role="tab" data-tab="quiz" id="tab-2-quiz" aria-controls="tema-2-quiz" aria-selected="false" tabindex="-1">
+                <i class="fa-solid fa-trophy"></i> Quiz <span class="tab-contador">8</span>
+              </button>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-2-aprender" aria-labelledby="tab-2-aprender">
+              <div data-lectura="2"></div>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-2-practicar" aria-labelledby="tab-2-practicar" hidden>
+              <div data-ejercicios="2"></div>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-2-quiz" aria-labelledby="tab-2-quiz" hidden>
+              <div data-quiz="2"></div>
+            </div>
+          </div>
+
+          <div class="navegacion-seccion">
+            <a href="#tema-1" data-seccion="tema-1"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 1</a>
+            <a href="#tema-3" data-seccion="tema-3">Siguiente: Tema 3 <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </section>
+
+        <!-- TEMA 3 -->
+        <section class="seccion" id="tema-3" data-vista-seccion="tema-3" hidden>
+          <div class="numero-seccion" aria-hidden="true">3</div>
+          <h2>Condicionales</h2>
+          <p class="lead-tema">if, else if, else y switch, condiciones compuestas, leyes de De Morgan, condicionales anidados, razonamiento por casos y el operador ternario.</p>
+
+          <div class="pestanas" data-pestanas="3">
+            <div class="tab-barra" role="tablist" aria-label="Contenido del Tema 3">
+              <button class="tab-btn activa" type="button" role="tab" data-tab="aprender" id="tab-3-aprender" aria-controls="tema-3-aprender" aria-selected="true">
+                <i class="fa-solid fa-book-open"></i> Aprender
+              </button>
+              <button class="tab-btn" type="button" role="tab" data-tab="practicar" id="tab-3-practicar" aria-controls="tema-3-practicar" aria-selected="false" tabindex="-1">
+                <i class="fa-solid fa-list-check"></i> Practicar <span class="tab-contador">10</span>
+              </button>
+              <button class="tab-btn" type="button" role="tab" data-tab="quiz" id="tab-3-quiz" aria-controls="tema-3-quiz" aria-selected="false" tabindex="-1">
+                <i class="fa-solid fa-trophy"></i> Quiz <span class="tab-contador">8</span>
+              </button>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-3-aprender" aria-labelledby="tab-3-aprender">
+              <div data-lectura="3"></div>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-3-practicar" aria-labelledby="tab-3-practicar" hidden>
+              <div data-ejercicios="3"></div>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-3-quiz" aria-labelledby="tab-3-quiz" hidden>
+              <div data-quiz="3"></div>
+            </div>
+          </div>
+
+          <div class="navegacion-seccion">
+            <a href="#tema-2" data-seccion="tema-2"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 2</a>
+            <a href="#plantilla" data-seccion="plantilla">Siguiente: Plantilla del curso <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </section>
+
+        <!-- PLANTILLA DEL CURSO -->
+        <section class="seccion" id="plantilla" data-vista-seccion="plantilla" hidden>
+          <div class="numero-seccion" aria-hidden="true"><i class="fa-solid fa-file-code"></i></div>
+          <h2>Plantilla del curso</h2>
+          <p class="lead-tema">La plantilla oficial con la que empiezan todos los programas del curso a partir del subtema 14. Usa la versión limpia para practicar y concursar, y la comentada para estudiar qué hace cada línea.</p>
+
+          <div class="bloque-pestana mb-4">
+            <h3><span class="icono-bloque"><i class="fa-solid fa-code"></i></span> Versión para practicar y concursar</h3>
+            <pre><code>#include &lt;bits/stdc++.h&gt;
+#define FastIO ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+using namespace std;
+
+int main(){
+
+    FastIO;
+    
+    
+    return 0;
+}</code></pre>
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+              <a class="btn btn-tide" href="../assets/docs/Plantilla_CP.cpp" download>
+                <i class="fa-solid fa-file-arrow-down me-1"></i> Descargar Plantilla_CP.cpp
+              </a>
+            </div>
+          </div>
+
+          <div class="bloque-pestana mb-4">
+            <h3><span class="icono-bloque amber"><i class="fa-solid fa-comment-dots"></i></span> Versión comentada para estudiar</h3>
+            <pre><code>// =====================================================================
+//  Plantilla oficial · Curso de Programación Competitiva en C++
+//  Versión comentada para estudiar qué hace cada línea.
+//  Para concursar o practicar usa Plantilla_CP.cpp (la versión limpia).
+// =====================================================================
+
+#include &lt;bits/stdc++.h&gt;   // Incluye de una vez toda la biblioteca estándar: iostream, cmath, string, algorithm, vector...
+                           // No es parte del estándar de C++: es propia del compilador GCC (el que trae MinGW).
+
+// FastIO es un atajo: donde escribas FastIO, el compilador pega estas tres instrucciones.
+#define FastIO ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+//   ios_base::sync_with_stdio(false)  -&gt; separa cin/cout de scanf/printf (las funciones de C) y los hace mucho más rápidos.
+//                                        Desde ese momento no mezcles cin/cout con scanf/printf en el mismo programa.
+//   cin.tie(NULL)                     -&gt; cin deja de vaciar la salida de cout antes de cada lectura; ahorra tiempo
+//                                        cuando el programa lee e imprime muchas veces.
+//   cout.tie(NULL)                    -&gt; no cambia nada, porque cout no está atado a ningún otro flujo.
+//                                        Se deja por costumbre; no estorba ni acelera.
+
+using namespace std;       // Permite escribir cout, cin o string sin poner std:: delante cada vez.
+
+int main(){                // El programa empieza a ejecutarse aquí.
+
+    FastIO;                // Activa la entrada y salida rápida. Va antes de la primera lectura o escritura.
+
+    // Aquí va tu solución: leer los datos con cin, resolver e imprimir con cout.
+
+    return 0;              // Le avisa al sistema (y al juez) que el programa terminó sin errores.
+}
+
+// Nota para más adelante: en los problemas interactivos (al final del curso) cin ya no vacía cout por ti,
+// así que tendrás que hacerlo tú con cout &lt;&lt; flush o con endl.</code></pre>
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+              <a class="btn btn-tide" href="../assets/docs/Plantilla_CP_comentada.cpp" download>
+                <i class="fa-solid fa-file-arrow-down me-1"></i> Descargar Plantilla_CP_comentada.cpp
+              </a>
+            </div>
+          </div>
+
+          <div class="navegacion-seccion">
+            <a href="#tema-3" data-seccion="tema-3"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 3</a>
+            <a href="#pendientes" data-seccion="pendientes">Siguiente: Próximamente <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </section>
+
+        <!-- PENDIENTES -->
+        <section class="seccion" id="pendientes" data-vista-seccion="pendientes" hidden>
+          <div class="numero-seccion" aria-hidden="true"><i class="fa-regular fa-clock"></i></div>
+          <h2>Próximamente</h2>
+          <p class="lead-tema">Materiales del Bloque 2 que están en preparación.</p>
+          <div class="row g-3 mt-1">
+            <div class="col-md-6">
+              <div class="pendiente-card">
+                <span class="badge rounded-pill mb-2">En preparación</span>
+                <h3 class="h5">Guía de instalación paso a paso</h3>
+                <p class="texto-suave mb-0">VS Code con MinGW-w64 y la extensión CPH, y la alternativa con Code::Blocks.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="pendiente-card">
+                <span class="badge rounded-pill mb-2">En preparación</span>
+                <h3 class="h5">Presentaciones de los tres temas</h3>
+                <p class="texto-suave mb-0">Diapositivas para la clase de los sábados.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="pendiente-card">
+                <span class="badge rounded-pill mb-2">En preparación</span>
+                <h3 class="h5">Ejemplos resueltos en C++</h3>
+                <p class="texto-suave mb-0">Código comentado línea por línea para cada tema del bloque.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="pendiente-card">
+                <span class="badge rounded-pill mb-2">En preparación</span>
+                <h3 class="h5">Problemas tipo OMI, ICPC e IOI</h3>
+                <p class="texto-suave mb-0">Un problema de cada tipo, con solución y explicación.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="navegacion-seccion">
+            <a href="#plantilla" data-seccion="plantilla"><i class="fa-solid fa-arrow-left"></i> Anterior: Plantilla del curso</a>
+            <span></span>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <footer class="pie-curso">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+      <span>Programación Competitiva en C++ · Bug Squad · Mazatlán, Sinaloa</span>
+      <span>Diseñado y organizado por Prof. Rigoberto Santiago Garzón</span>
+    </div>
+  </footer>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/lecturas-bloque2.js"></script>
+  <script src="../js/ejercicios-bloque2.js"></script>
+  <script src="../js/quiz-bloque2.js"></script>
+  <script src="../js/practica-bloque2.js"></script>
+  <script src="../js/pestanas-bloque2.js"></script>
+</body>
+</html>

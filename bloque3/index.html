@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bloque 3 · Jueces automatizados y plataformas de entrenamiento. Qué es un juez en línea, cómo usar omegaUp y Codeforces y qué significa cada veredicto.">
+  <title>Bloque 3 · Programación Competitiva · Bug Squad</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="../css/estilos.css">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-curso sticky-top">
+    <div class="container-fluid px-lg-4">
+      <a class="navbar-brand" href="../index.html">
+        <img class="logo-nav" src="../assets/img/icono.png" alt="" width="34" height="34">
+        <span>Programación Competitiva <span class="marca-bug">· Bug Squad</span></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="menuPrincipal">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="../bloque1/index.html">Bloque 1</a></li>
+          <li class="nav-item"><a class="nav-link" href="../bloque2/index.html">Bloque 2</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">Bloque 3</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+
+      <!-- Barra lateral: índice y avance de lectura -->
+      <aside class="col-lg-3 col-xl-2 p-0 barra-lateral">
+        <div class="p-4">
+          <p class="titulo-curso mb-1">Bloque 3</p>
+          <p class="small text-secondary mb-4">Jueces automatizados y plataformas de entrenamiento</p>
+
+          <nav class="indice" aria-label="Índice del bloque">
+
+            <div class="grupo">
+              <div class="grupo-cabecera">
+                <a class="grupo-enlace activo" href="#tema-1" data-seccion="tema-1">
+                  <span class="grupo-numero">1</span>
+                  <span>¿Qué es un juez automatizado?</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="grupo">
+              <div class="grupo-cabecera">
+                <a class="grupo-enlace" href="#tema-2" data-seccion="tema-2">
+                  <span class="grupo-numero">2</span>
+                  <span>omegaUp</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="grupo">
+              <div class="grupo-cabecera">
+                <a class="grupo-enlace" href="#tema-3" data-seccion="tema-3">
+                  <span class="grupo-numero">3</span>
+                  <span>Codeforces</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="grupo">
+              <div class="grupo-cabecera">
+                <a class="grupo-enlace" href="#tema-4" data-seccion="tema-4">
+                  <span class="grupo-numero">4</span>
+                  <span>Veredictos y errores al enviar</span>
+                </a>
+              </div>
+            </div>
+
+          </nav>
+
+          <div class="avance mb-3">
+            <p class="etiqueta-avance mb-2">Subtemas leídos</p>
+            <div class="progress mb-2" role="progressbar" aria-label="Subtemas leídos" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar" id="avance-lecturas-barra" style="width: 0%"></div>
+            </div>
+            <p class="small text-secondary mb-0 font-monospace" id="avance-lecturas-texto">0 de 43</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Contenido principal -->
+      <main class="col-lg-9 col-xl-10 px-3 px-md-4 px-lg-5 py-4" id="contenido-bloque">
+
+        <header class="banner banner-compacto px-4 px-lg-5">
+          <div class="container-fluid p-0">
+            <h1 class="mb-2">Jueces automatizados y plataformas de entrenamiento</h1>
+            <p class="subtitulo mb-0">Cuatro temas para aprender a moverte en los jueces en línea: cómo califica un juez, cómo registrarte y enviar soluciones en omegaUp y en Codeforces, y qué significa cada veredicto. Este bloque es solo de lectura; la práctica la harás directamente en las plataformas.</p>
+            <div class="chips-banner" role="tablist" aria-label="Selector rápido de temas del bloque">
+              <a class="chip activo" href="#tema-1" data-seccion="tema-1"><i class="fa-solid fa-gavel"></i> Tema 1 · ¿Qué es un juez automatizado?</a>
+              <a class="chip" href="#tema-2" data-seccion="tema-2"><i class="fa-solid fa-flag"></i> Tema 2 · omegaUp</a>
+              <a class="chip" href="#tema-3" data-seccion="tema-3"><i class="fa-solid fa-ranking-star"></i> Tema 3 · Codeforces</a>
+              <a class="chip" href="#tema-4" data-seccion="tema-4"><i class="fa-solid fa-circle-check"></i> Tema 4 · Veredictos y errores</a>
+            </div>
+            <span class="credito d-inline-block"><span>Diseñado y organizado por: <strong>Prof. Rigoberto Santiago Garzón</strong></span></span>
+          </div>
+        </header>
+
+        <!-- TEMA 1 -->
+        <section class="seccion" id="tema-1" data-vista-seccion="tema-1">
+          <div class="numero-seccion" aria-hidden="true">1</div>
+          <h2>¿Qué es un juez automatizado?</h2>
+          <p class="lead-tema">Cómo califica un juez en línea, qué pasa desde que envías tu código, la entrada y salida estándar, los límites de tiempo y memoria, las partes de un enunciado y los formatos OMI, ICPC e IOI.</p>
+
+          <div class="pestanas" data-pestanas="1">
+            <div class="tab-barra" role="tablist" aria-label="Contenido del Tema 1">
+              <button class="tab-btn activa" type="button" role="tab" data-tab="aprender" id="tab-1-aprender" aria-controls="tema-1-aprender" aria-selected="true">
+                <i class="fa-solid fa-book-open"></i> Aprender
+              </button>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-1-aprender" aria-labelledby="tab-1-aprender">
+              <div data-lectura="1"></div>
+            </div>
+          </div>
+
+          <div class="navegacion-seccion">
+            <span></span>
+            <a href="#tema-2" data-seccion="tema-2">Siguiente: Tema 2 <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </section>
+
+        <!-- TEMA 2 -->
+        <section class="seccion" id="tema-2" data-vista-seccion="tema-2" hidden>
+          <div class="numero-seccion" aria-hidden="true">2</div>
+          <h2>omegaUp</h2>
+          <p class="lead-tema">Crear tu cuenta y tu perfil, recorrer la página, buscar y leer problemas, enviar soluciones, revisar tu historial y entrar a cursos y concursos.</p>
+
+          <div class="pestanas" data-pestanas="2">
+            <div class="tab-barra" role="tablist" aria-label="Contenido del Tema 2">
+              <button class="tab-btn activa" type="button" role="tab" data-tab="aprender" id="tab-2-aprender" aria-controls="tema-2-aprender" aria-selected="true">
+                <i class="fa-solid fa-book-open"></i> Aprender
+              </button>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-2-aprender" aria-labelledby="tab-2-aprender">
+              <div data-lectura="2"></div>
+              <div class="recursos-tema">
+                <a class="btn btn-tide" href="https://omegaup.com" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ir a omegaUp</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="navegacion-seccion">
+            <a href="#tema-1" data-seccion="tema-1"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 1</a>
+            <a href="#tema-3" data-seccion="tema-3">Siguiente: Tema 3 <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </section>
+
+        <!-- TEMA 3 -->
+        <section class="seccion" id="tema-3" data-vista-seccion="tema-3" hidden>
+          <div class="numero-seccion" aria-hidden="true">3</div>
+          <h2>Codeforces</h2>
+          <p class="lead-tema">Registro y handle, el Problemset, vocabulario en inglés, cómo enviar, problemas con varios casos, rondas, rating y tu primer envío con el problema 4A.</p>
+
+          <div class="pestanas" data-pestanas="3">
+            <div class="tab-barra" role="tablist" aria-label="Contenido del Tema 3">
+              <button class="tab-btn activa" type="button" role="tab" data-tab="aprender" id="tab-3-aprender" aria-controls="tema-3-aprender" aria-selected="true">
+                <i class="fa-solid fa-book-open"></i> Aprender
+              </button>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-3-aprender" aria-labelledby="tab-3-aprender">
+              <div data-lectura="3"></div>
+              <div class="recursos-tema">
+                <a class="btn btn-tide" href="https://codeforces.com" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ir a Codeforces</a>
+                <a class="enlace-recurso" href="https://codeforces.com/problemset/problem/4/A" target="_blank" rel="noopener"><i class="fa-solid fa-link"></i> Problema 4A · Watermelon</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="navegacion-seccion">
+            <a href="#tema-2" data-seccion="tema-2"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 2</a>
+            <a href="#tema-4" data-seccion="tema-4">Siguiente: Tema 4 <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </section>
+
+        <!-- TEMA 4 -->
+        <section class="seccion" id="tema-4" data-vista-seccion="tema-4" hidden>
+          <div class="numero-seccion" aria-hidden="true">4</div>
+          <h2>Veredictos y errores al enviar</h2>
+          <p class="lead-tema">Qué significa cada veredicto (AC, PA, WA, TLE, MLE, RTE y CE), un programa con error y su corrección para cada uno, cómo probar con CPH y la lista de verificación antes de enviar.</p>
+
+          <div class="pestanas" data-pestanas="4">
+            <div class="tab-barra" role="tablist" aria-label="Contenido del Tema 4">
+              <button class="tab-btn activa" type="button" role="tab" data-tab="aprender" id="tab-4-aprender" aria-controls="tema-4-aprender" aria-selected="true">
+                <i class="fa-solid fa-book-open"></i> Aprender
+              </button>
+            </div>
+
+            <div class="tab-panel" role="tabpanel" id="tema-4-aprender" aria-labelledby="tab-4-aprender">
+              <div data-lectura="4"></div>
+              <div class="recursos-tema">
+                <a class="btn btn-tide" href="../bloque2/index.html#plantilla"><i class="fa-solid fa-file-code"></i> Ver la plantilla del curso</a>
+                <a class="enlace-recurso" href="../assets/docs/Plantilla_CP.cpp" download><i class="fa-solid fa-file-arrow-down"></i> Descargar Plantilla_CP.cpp</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="navegacion-seccion">
+            <a href="#tema-3" data-seccion="tema-3"><i class="fa-solid fa-arrow-left"></i> Anterior: Tema 3</a>
+            <span></span>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <footer class="pie-curso">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+      <span>Programación Competitiva en C++ · Bug Squad · Mazatlán, Sinaloa</span>
+      <span>Diseñado y organizado por Prof. Rigoberto Santiago Garzón</span>
+    </div>
+  </footer>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <script src="../js/lecturas-bloque3.js"></script>
+  <script src="../js/pestanas-bloque3.js"></script>
+</body>
+</html>
