@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipos de Datos en C++ | BugSquad - Programación Competitiva</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        bgMain: '#F8FAFC',
+                        bgCard: '#FFFFFF',
+                        bgElevated: '#F1F5F9',
+                        pastelMint: '#059669',
+                        pastelSky: '#0284C7',
+                        pastelLavender: '#7C3AED',
+                        pastelPeach: '#D97706',
+                        pastelRose: '#E11D48',
+                        pastelYellow: '#CA8A04',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAF8F5;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(167, 243, 208, 0.45) 0px, transparent 50%),
+                radial-gradient(at 100% 15%, rgba(221, 214, 254, 0.5) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(186, 230, 253, 0.45) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: #1E293B;
+            overflow-x: hidden;
+        }
+        /* Custom soft scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(203, 213, 225, 0.75);
+            box-shadow: 0 12px 32px -8px rgba(100, 116, 139, 0.08);
+        }
+        .glow-mint {
+            box-shadow: 0 16px 40px -12px rgba(16, 185, 129, 0.18);
+        }
+        .glow-sky {
+            box-shadow: 0 16px 40px -12px rgba(14, 165, 233, 0.18);
+        }
+        .glow-lavender {
+            box-shadow: 0 16px 40px -12px rgba(139, 92, 246, 0.18);
+        }
+        .glow-peach {
+            box-shadow: 0 16px 40px -12px rgba(245, 158, 11, 0.18);
+        }
+        /* Light mode overrides for utility classes so structure remains untouched */
+        .text-white {
+            color: #0F172A !important;
+        }
+        .text-slate-200 {
+            color: #334155 !important;
+        }
+        .text-slate-300 {
+            color: #475569 !important;
+        }
+        .text-slate-400 {
+            color: #64748B !important;
+        }
+        .border-white\/10, .border-white\/15, .border-white\/5 {
+            border-color: #E2E8F0 !important;
+        }
+        .divide-white\/5 > :not([hidden]) ~ :not([hidden]) {
+            border-color: #E2E8F0 !important;
+        }
+        .bg-white\/5 {
+            background-color: #F1F5F9 !important;
+        }
+        .hover\:bg-white\/5:hover {
+            background-color: #F1F5F9 !important;
+        }
+        .hover\:bg-white\/10:hover {
+            background-color: #E2E8F0 !important;
+        }
+        .bg-black\/30, .bg-black\/35, .bg-black\/50 {
+            background-color: #F8FAFC !important;
+        }
+        .bit-cell {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bit-cell:hover {
+            transform: translateY(-2px) scale(1.06);
+        }
+        .bit-switch {
+            transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .bit-switch:active {
+            transform: scale(0.94);
+        }
+        .tab-panel {
+            animation: fadeSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Smooth range slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            height: 10px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #A7F3D0 0%, #BAE6FD 45%, #DDD6FE 75%, #FECDD3 100%);
+            border: 1px solid #CBD5E1;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 4px solid #7C3AED;
+            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.35);
+            margin-top: -8px;
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-pastelMint/20 selection:text-pastelMint flex flex-col">
+
+    <!-- Ambient Soft Pastel Background Glows -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+        <div class="absolute -top-40 -left-40 w-[32rem] h-[32rem] bg-emerald-200/45 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/4 right-0 w-[32rem] h-[32rem] bg-violet-200/45 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-1/3 w-[36rem] h-[36rem] bg-sky-200/45 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Top Navigation / Course Header -->
+    <header class="sticky top-0 z-40 border-b border-white/10 bg-white/85 backdrop-blur-xl shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-pastelMint/25 via-pastelSky/25 to-pastelLavender/25 border border-white/15 flex items-center justify-center shadow-inner">
+                        <i class="ph-fill ph-bug-beetle text-2xl text-pastelMint"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-pastelMint/15 text-pastelMint border border-pastelMint/30 font-semibold">BugSquad</span>
+                            <span class="text-xs text-slate-400 font-medium hidden sm:inline">Material Didáctico Interactivo</span>
+                        </div>
+                        <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white">
+                            Programación Competitiva en <span class="text-transparent bg-clip-text bg-gradient-to-r from-pastelMint via-pastelSky to-pastelLavender">C++</span>
+                        </h1>
+                    </div>
+                </div>
+                <span class="lg:hidden text-xs font-mono px-2.5 py-1 rounded-xl bg-white/5 text-pastelSky border border-white/10">5 Módulos</span>
+            </div>
+
+            <!-- Interactive Tab Bar -->
+            <nav class="flex items-center gap-1.5 bg-bgCard/95 p-1.5 rounded-2xl border border-white/10 overflow-x-auto" role="tablist">
+                <button onclick="switchTab('tab-binario')" id="btn-tab-binario" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center gap-2 bg-gradient-to-r from-pastelMint/20 to-pastelSky/20 text-pastelMint border border-pastelMint/40 shadow-sm">
+                    <i class="ph-fill ph-binary text-base"></i>
+                    <span>1. Lenguaje Binario</span>
+                </button>
+                <button onclick="switchTab('tab-explorador')" id="btn-tab-explorador" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2 border border-transparent">
+                    <i class="ph-fill ph-cpu text-base text-pastelSky"></i>
+                    <span>2. Tipos y Capacidades</span>
+                </button>
+                <button onclick="switchTab('tab-cotas')" id="btn-tab-cotas" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2 border border-transparent">
+                    <i class="ph-fill ph-sliders-horizontal text-base text-pastelLavender"></i>
+                    <span>3. Selector de Cotas</span>
+                </button>
+                <button onclick="switchTab('tab-overflow')" id="btn-tab-overflow" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2 border border-transparent">
+                    <i class="ph-fill ph-warning-octagon text-base text-pastelPeach"></i>
+                    <span>4. Overflow Lab</span>
+                </button>
+                <button onclick="switchTab('tab-tabla')" id="btn-tab-tabla" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2 border border-transparent">
+                    <i class="ph-fill ph-table text-base text-pastelRose"></i>
+                    <span>5. Cheat Sheet</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
+
+        <!-- =====================================================================
+             PESTAÑA 1: LENGUAJE BINARIO INTERACTIVO (NÚMEROS Y CARACTERES)
+             ===================================================================== -->
+        <section id="tab-binario" class="tab-panel space-y-8">
+            <!-- Intro Banner for Binary -->
+            <div class="rounded-3xl glass-card p-6 sm:p-8 glow-mint border border-pastelMint/20">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div class="lg:col-span-8 space-y-3">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pastelMint/15 border border-pastelMint/30 text-pastelMint text-xs font-mono">
+                            <i class="ph-fill ph-sparkle"></i> Pestaña 01 · Fundamentos de Memoria
+                        </div>
+                        <h2 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+                            ¿Cómo entiende la computadora un <span class="text-pastelMint">Número</span> o una <span class="text-pastelLavender">Letra</span>?
+                        </h2>
+                        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                            En la memoria RAM todo se guarda mediante <strong>interruptores microscópicos llamados bits</strong> que solo tienen dos estados: <code class="font-mono text-pastelMint bg-white/5 px-1.5 py-0.5 rounded">1 (Encendido)</code> o <code class="font-mono text-slate-400 bg-white/5 px-1.5 py-0.5 rounded">0 (Apagado)</code>. Un grupo de <strong>8 bits forma 1 Byte</strong>, y cada posición vale el doble que la anterior (<code class="font-mono text-pastelSky">2⁰, 2¹, 2²... 2⁷</code>). ¡Toca los interruptores de abajo para construir tus propios números y caracteres!
+                        </p>
+                    </div>
+                    <div class="lg:col-span-4 flex flex-col gap-3 bg-bgElevated/80 p-5 rounded-2xl border border-white/10">
+                        <div class="flex items-center justify-between text-xs font-mono text-pastelSky">
+                            <span>EL SECRETO DE C++</span>
+                            <i class="ph-fill ph-info text-base"></i>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                            Los mismos 8 bits <code class="font-mono text-pastelMint">01000001</code> representan el número entero <strong class="text-white">65</strong> si usas un tipo numérico, o la letra <strong class="text-pastelLavender">'A'</strong> si usas un tipo <code class="font-mono text-pastelLavender">char</code> (Código ASCII).
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive 8-Bit Byte Builder -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 space-y-8">
+                <!-- Controls Header: Mode & Quick Presets -->
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-6">
+                    <div>
+                        <span class="text-xs font-mono uppercase tracking-wider text-pastelSky">Simulador Interactivo de 1 Byte (8 Bits)</span>
+                        <h3 class="text-xl sm:text-2xl font-bold text-white mt-0.5">Haz clic en cualquier bit para cambiar entre 0 y 1</h3>
+                    </div>
+
+                    <!-- Mode Switch: Unsigned vs Signed Two's Complement -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs font-mono text-slate-400 mr-1">Modo del Bit 7:</span>
+                        <button id="mode-unsigned-btn" onclick="setBinarySignMode(false)" class="px-3.5 py-2 rounded-xl text-xs font-mono font-bold bg-pastelMint text-slate-950 transition">
+                            Sin Signo (0 a 255)
+                        </button>
+                        <button id="mode-signed-btn" onclick="setBinarySignMode(true)" class="px-3.5 py-2 rounded-xl text-xs font-mono font-semibold bg-bgElevated text-slate-300 border border-white/10 hover:border-pastelRose/40 transition">
+                            Con Signo (-128 a 127)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 8 Interactive Bit Switches Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3" id="byte-switches-container">
+                    <!-- Populated dynamically by JS -->
+                </div>
+
+                <!-- Live Mathematical Sum Formula Breakdown -->
+                <div class="p-4 sm:p-5 rounded-2xl bg-bgElevated/80 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <span class="text-[11px] font-mono uppercase tracking-wider text-pastelMint block">Desglose de Potencias Activas (Suma en Base 10)</span>
+                        <div id="binary-sum-formula" class="text-sm sm:text-lg font-mono font-bold text-white flex flex-wrap items-center gap-1.5">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button onclick="setByteValue(0)" class="px-3 py-1.5 rounded-xl text-xs font-mono bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 transition">
+                            Limpiar (0)
+                        </button>
+                        <button onclick="setByteValue(255)" class="px-3 py-1.5 rounded-xl text-xs font-mono bg-pastelMint/15 hover:bg-pastelMint/25 text-pastelMint border border-pastelMint/30 transition">
+                            Todos 1 (255)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3 Real-Time Interpretations + Direct Inputs -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    <!-- Card 1: Number Input / Output -->
+                    <div class="p-5 rounded-2xl bg-bgElevated/70 border border-pastelMint/30 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono uppercase text-pastelMint font-semibold">1. Como Número Entero</span>
+                                <span class="text-xs font-mono px-2 py-0.5 rounded bg-pastelMint/15 text-pastelMint" id="bin-int-type-tag">uint8_t</span>
+                            </div>
+                            <p id="bin-decimal-display" class="text-4xl font-mono font-extrabold text-white mt-2">65</p>
+                            <p id="bin-decimal-sub" class="text-xs text-slate-400 mt-1">Notación exponencial: 6.50 × 10¹</p>
+                        </div>
+
+                        <div class="pt-3 border-t border-white/10">
+                            <label class="block text-[11px] font-mono text-slate-400 mb-1.5">ESCRIBE UN NÚMERO PARA VER SUS BITS:</label>
+                            <input id="bin-number-input" type="number" min="-128" max="255" value="65" oninput="onNumberInputChange(this.value)"
+                                class="w-full px-3.5 py-2 rounded-xl bg-bgMain border border-white/15 font-mono text-sm text-white focus:outline-none focus:border-pastelMint">
+                        </div>
+                    </div>
+
+                    <!-- Card 2: ASCII Character Input / Output -->
+                    <div class="p-5 rounded-2xl bg-bgElevated/70 border border-pastelLavender/30 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono uppercase text-pastelLavender font-semibold">2. Como Carácter (char ASCII)</span>
+                                <span class="text-xs font-mono px-2 py-0.5 rounded bg-pastelLavender/15 text-pastelLavender">char (1 Byte)</span>
+                            </div>
+                            <div class="flex items-baseline gap-3 mt-2">
+                                <p id="bin-char-display" class="text-4xl font-mono font-extrabold text-pastelLavender">'A'</p>
+                                <span id="bin-char-desc" class="text-xs font-mono text-slate-300 bg-white/5 px-2.5 py-1 rounded-lg">Letra Mayúscula</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-1">En C++: <code id="bin-cpp-char-line" class="text-slate-200 font-mono">char c = 65; // 'A'</code></p>
+                        </div>
+
+                        <div class="pt-3 border-t border-white/10">
+                            <label class="block text-[11px] font-mono text-slate-400 mb-1.5">ESCRIBE UNA LETRA O SÍMBOLO:</label>
+                            <input id="bin-char-input" type="text" maxlength="1" value="A" oninput="onCharInputChange(this.value)"
+                                class="w-full px-3.5 py-2 rounded-xl bg-bgMain border border-white/15 font-mono text-sm text-pastelLavender font-bold focus:outline-none focus:border-pastelLavender">
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Binary, Hex & Bitwise Operations -->
+                    <div class="p-5 rounded-2xl bg-bgElevated/70 border border-pastelSky/30 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono uppercase text-pastelSky font-semibold">3. Representación en C++</span>
+                                <span class="text-xs font-mono px-2 py-0.5 rounded bg-pastelSky/15 text-pastelSky">Base 2 / Base 16</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-bgMain/90 border border-white/5 font-mono text-xs flex justify-between">
+                                <span class="text-slate-400">Literal Binario:</span>
+                                <span id="bin-literal-display" class="text-pastelMint font-bold">0b01000001</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-bgMain/90 border border-white/5 font-mono text-xs flex justify-between">
+                                <span class="text-slate-400">Hexadecimal:</span>
+                                <span id="bin-hex-display" class="text-pastelSky font-bold">0x41</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-bgMain/90 border border-white/5 font-mono text-xs flex justify-between">
+                                <span class="text-slate-400">Bits encendidos:</span>
+                                <span id="bin-popcount-display" class="text-pastelPeach font-bold">__builtin_popcount = 2</span>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Bitwise Operations -->
+                        <div class="pt-2 border-t border-white/10 flex flex-wrap gap-1.5">
+                            <button onclick="bitShiftLeft()" class="flex-1 py-1.5 px-2 rounded-xl bg-white/5 hover:bg-pastelSky/20 text-xs font-mono text-pastelSky border border-white/10 transition" title="Desplazar a la izquierda (Multiplica por 2)">
+                                &lt;&lt; 1 (×2)
+                            </button>
+                            <button onclick="bitShiftRight()" class="flex-1 py-1.5 px-2 rounded-xl bg-white/5 hover:bg-pastelSky/20 text-xs font-mono text-pastelSky border border-white/10 transition" title="Desplazar a la derecha (Divide entre 2)">
+                                &gt;&gt; 1 (÷2)
+                            </button>
+                            <button onclick="bitInvert()" class="flex-1 py-1.5 px-2 rounded-xl bg-white/5 hover:bg-pastelPeach/20 text-xs font-mono text-pastelPeach border border-white/10 transition" title="Invertir todos los bits (NOT)">
+                                ~ Invertir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Educational Examples Strip -->
+                <div class="pt-2">
+                    <span class="text-xs font-mono uppercase text-slate-400 block mb-2.5">Ejemplos Clásicos en Programación Competitiva (Haz clic para cargar):</span>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="loadBinaryExample(65, false)" class="px-3.5 py-2 rounded-xl text-xs font-mono bg-pastelLavender/15 text-pastelLavender border border-pastelLavender/30 hover:bg-pastelLavender/25 transition">
+                            Letra 'A' (65)
+                        </button>
+                        <button onclick="loadBinaryExample(97, false)" class="px-3.5 py-2 rounded-xl text-xs font-mono bg-pastelLavender/15 text-pastelLavender border border-pastelLavender/30 hover:bg-pastelLavender/25 transition">
+                            Letra 'a' (97 = 'A' + 32)
+                        </button>
+                        <button onclick="loadBinaryExample(48, false)" class="px-3.5 py-2 rounded-xl text-xs font-mono bg-pastelSky/15 text-pastelSky border border-pastelSky/30 hover:bg-pastelSky/25 transition">
+                            Dígito '0' (ASCII 48)
+                        </button>
+                        <button onclick="loadBinaryExample(127, true)" class="px-3.5 py-2 rounded-xl text-xs font-mono bg-pastelMint/15 text-pastelMint border border-pastelMint/30 hover:bg-pastelMint/25 transition">
+                            Máximo char con signo (+127)
+                        </button>
+                        <button onclick="loadBinaryExample(255, true)" class="px-3.5 py-2 rounded-xl text-xs font-mono bg-pastelRose/15 text-pastelRose border border-pastelRose/30 hover:bg-pastelRose/25 transition">
+                            Número -1 en Complemento a 2 (11111111)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Tab Call to Action -->
+            <div class="flex justify-end">
+                <button onclick="switchTab('tab-explorador')" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-pastelMint/20 to-pastelSky/20 hover:from-pastelMint/30 hover:to-pastelSky/30 border border-pastelMint/40 text-pastelMint font-semibold text-sm flex items-center gap-2 transition">
+                    <span>Ir a Pestaña 2: Explorador de Tipos de Datos en C++</span>
+                    <i class="ph-bold ph-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             PESTAÑA 2: EXPLORADOR INTERACTIVO DE TIPOS DE DATOS EN C++
+             ===================================================================== -->
+        <section id="tab-explorador" class="tab-panel hidden space-y-6">
+            <!-- Mini Summary Cards at Top of Explorer -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-4 rounded-2xl glass-card border border-pastelMint/25 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-mono uppercase text-pastelMint">Regla de Oro 32-bit (<code class="font-bold">int</code>)</span>
+                        <p class="text-2xl font-mono font-extrabold text-white mt-0.5">≈ 2 × 10⁹</p>
+                        <span class="text-[11px] font-mono text-slate-400">2³¹ - 1 = 2,147,483,647</span>
+                    </div>
+                    <i class="ph-duotone ph-check-circle text-3xl text-pastelMint"></i>
+                </div>
+                <div class="p-4 rounded-2xl glass-card border border-pastelLavender/25 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-mono uppercase text-pastelLavender">Regla de Oro 64-bit (<code class="font-bold">long long</code>)</span>
+                        <p class="text-2xl font-mono font-extrabold text-white mt-0.5">≈ 9 × 10¹⁸</p>
+                        <span class="text-[11px] font-mono text-slate-400">2⁶³ - 1 ≈ 9.22 × 10¹⁸</span>
+                    </div>
+                    <i class="ph-duotone ph-shield-check text-3xl text-pastelLavender"></i>
+                </div>
+                <div class="p-4 rounded-2xl glass-card border border-pastelPeach/25 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-mono uppercase text-pastelPeach">Super Entero 128-bit (<code class="font-bold">__int128</code>)</span>
+                        <p class="text-2xl font-mono font-extrabold text-white mt-0.5">≈ 1.7 × 10³⁸</p>
+                        <span class="text-[11px] font-mono text-slate-400">2¹²⁷ - 1 (Compiladores GCC 64-bit)</span>
+                    </div>
+                    <i class="ph-duotone ph-lightning text-3xl text-pastelPeach"></i>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pt-2">
+                <div>
+                    <span class="text-xs font-mono uppercase tracking-wider text-pastelSky">Pestaña 02 / Inspector de Capacidad</span>
+                    <h3 class="text-2xl sm:text-3xl font-bold text-white mt-1">Explorador de Tipos en C++ (Bits, Exponencial y Enteros)</h3>
+                </div>
+                <!-- Category Filter Buttons -->
+                <div class="flex flex-wrap gap-2" id="category-filters">
+                    <button onclick="filterCategory('all')" data-cat="all" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-pastelMint text-slate-950 transition">
+                        Todos (10)
+                    </button>
+                    <button onclick="filterCategory('entero')" data-cat="entero" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-bgCard text-slate-300 border border-white/10 hover:border-pastelSky/50 transition">
+                        Enteros con Signo
+                    </button>
+                    <button onclick="filterCategory('unsigned')" data-cat="unsigned" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-bgCard text-slate-300 border border-white/10 hover:border-pastelLavender/50 transition">
+                        Sin Signo (Unsigned)
+                    </button>
+                    <button onclick="filterCategory('flotante')" data-cat="flotante" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-bgCard text-slate-300 border border-white/10 hover:border-pastelPeach/50 transition">
+                        Punto Flotante / Otros
+                    </button>
+                </div>
+            </div>
+
+            <!-- Type Selector Pills Grid -->
+            <div id="type-buttons-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Main Inspector Display Card -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 glow-mint transition-all duration-300" id="inspector-card">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+                    <!-- Left Column: Core Identity & Exponential / Integer Capacities -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5">
+                            <div>
+                                <div class="flex items-center gap-2.5">
+                                    <span id="detail-badge" class="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-pastelMint/20 text-pastelMint border border-pastelMint/30">
+                                        Entero 32-bit
+                                    </span>
+                                    <span id="detail-alias" class="text-xs font-mono text-slate-400">
+                                        Alias competitivo: int32_t
+                                    </span>
+                                </div>
+                                <h4 id="detail-name" class="text-3xl sm:text-4xl font-mono font-extrabold text-white mt-2">
+                                    int
+                                </h4>
+                            </div>
+
+                            <!-- Size in Bits & Bytes Badge -->
+                            <div class="flex items-center gap-3 bg-bgElevated px-4 py-3 rounded-2xl border border-white/10">
+                                <div class="text-right">
+                                    <span class="block text-[11px] font-mono uppercase text-slate-400">Capacidad Física</span>
+                                    <div class="flex items-baseline gap-2">
+                                        <span id="detail-bits" class="text-2xl font-mono font-bold text-pastelMint">32 bits</span>
+                                        <span id="detail-bytes" class="text-xs font-mono text-slate-400">(4 Bytes)</span>
+                                    </div>
+                                </div>
+                                <i class="ph-duotone ph-memory text-3xl text-pastelMint"></i>
+                            </div>
+                        </div>
+
+                        <!-- Two High-Impact Metric Boxes: Bits Formula & Exponential -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Potencia de 2 (Bits) -->
+                            <div class="p-4 rounded-2xl bg-bgElevated/80 border border-pastelSky/25 space-y-1">
+                                <div class="flex items-center justify-between text-xs font-mono text-pastelSky">
+                                    <span>NOTACIÓN EN POTENCIA DE 2 (BITS)</span>
+                                    <i class="ph ph-binary text-base"></i>
+                                </div>
+                                <p id="detail-power2" class="text-lg sm:text-xl font-mono font-bold text-white">
+                                    [-2³¹, 2³¹ - 1]
+                                </p>
+                                <p id="detail-power2-sub" class="text-xs text-slate-400">
+                                    1 bit de signo + 31 bits de magnitud
+                                </p>
+                            </div>
+
+                            <!-- Notación Exponencial / Científica -->
+                            <div class="p-4 rounded-2xl bg-bgElevated/80 border border-pastelLavender/25 space-y-1">
+                                <div class="flex items-center justify-between text-xs font-mono text-pastelLavender">
+                                    <span>NOTACIÓN EXPONENCIAL (COTA)</span>
+                                    <i class="ph ph-chart-line-up text-base"></i>
+                                </div>
+                                <p id="detail-scientific" class="text-lg sm:text-xl font-mono font-bold text-white">
+                                    ≈ ±2.14 × 10⁹ (2e9)
+                                </p>
+                                <p id="detail-scientific-sub" class="text-xs text-slate-400">
+                                    Hasta ~9 dígitos decimales seguros
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Exact Integer Range Box -->
+                        <div class="p-5 rounded-2xl bg-black/35 border border-white/10 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono uppercase tracking-wider text-pastelMint flex items-center gap-1.5">
+                                    <i class="ph-fill ph-hash"></i> Rango Exacto en Números Enteros / Real
+                                </span>
+                                <button onclick="copySnippet()" class="text-xs font-mono text-slate-300 hover:text-pastelMint flex items-center gap-1 bg-white/5 px-2.5 py-1 rounded-lg border border-white/10 transition">
+                                    <i class="ph ph-copy"></i> <span id="copy-label">Copiar C++</span>
+                                </button>
+                            </div>
+
+                            <div class="space-y-2 font-mono text-xs sm:text-sm">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between p-2.5 rounded-xl bg-bgCard/90 border border-white/5">
+                                    <span class="text-slate-400">Mínimo:</span>
+                                    <span id="detail-min" class="text-pastelRose font-semibold break-all">-2,147,483,648</span>
+                                </div>
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between p-2.5 rounded-xl bg-bgCard/90 border border-white/5">
+                                    <span class="text-slate-400">Máximo:</span>
+                                    <span id="detail-max" class="text-pastelMint font-semibold break-all">+2,147,483,647</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Competitive Programming Use Case -->
+                        <div class="p-4 rounded-2xl bg-pastelMint/10 border border-pastelMint/25 flex items-start gap-3.5">
+                            <i class="ph-fill ph-trophy text-2xl text-pastelMint shrink-0 mt-0.5"></i>
+                            <div class="space-y-1">
+                                <h5 class="text-sm font-bold text-white">Aplicación en Programación Competitiva (BugSquad)</h5>
+                                <p id="detail-usecase" class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                    El tipo estándar para contadores de ciclos, índices de arreglos, grafos medianos y problemas donde N ≤ 10⁹.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Visual Bit Architecture & Code Snippet -->
+                    <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
+                        <!-- Visual Bit Map -->
+                        <div class="p-5 rounded-2xl bg-bgElevated/60 border border-white/10 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="text-sm font-bold text-white flex items-center gap-2">
+                                        <i class="ph-fill ph-squares-four text-pastelSky"></i> Arquitectura de Bits en Memoria
+                                    </h5>
+                                    <p class="text-xs text-slate-400">Distribución interna de los bits del tipo seleccionado</p>
+                                </div>
+                                <span id="bit-legend-tag" class="text-[11px] font-mono px-2 py-0.5 rounded bg-white/5 text-slate-300">
+                                    Complemento a 2
+                                </span>
+                            </div>
+
+                            <!-- Legend -->
+                            <div class="flex flex-wrap gap-3 text-xs">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-3 h-3 rounded-sm bg-pastelRose inline-block"></span>
+                                    <span class="text-slate-300">Signo (S)</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-3 h-3 rounded-sm bg-pastelPeach inline-block"></span>
+                                    <span class="text-slate-300">Exponente (E)</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-3 h-3 rounded-sm bg-pastelMint inline-block"></span>
+                                    <span class="text-slate-300">Magnitud / Mantisa (M)</span>
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Grid of Bits -->
+                            <div id="bit-grid-container" class="grid grid-cols-8 gap-1.5 pt-1">
+                                <!-- Generated dynamically by JS -->
+                            </div>
+
+                            <p id="bit-explanation" class="text-xs text-slate-400 font-mono bg-black/30 p-2.5 rounded-xl border border-white/5">
+                                Bit 31 define el signo (0 = positivo, 1 = negativo). Bits 0..30 almacenan hasta 2³¹ combinaciones.
+                            </p>
+                        </div>
+
+                        <!-- Ready-to-use C++ Snippet -->
+                        <div class="p-5 rounded-2xl bg-black/50 border border-white/10 space-y-2">
+                            <div class="flex items-center justify-between text-xs text-slate-400 font-mono">
+                                <span>EJEMPLO EN C++ (<code class="text-pastelSky">&lt;climits&gt;</code>)</span>
+                                <span class="text-pastelMint">C++20</span>
+                            </div>
+                            <pre id="detail-code" class="text-xs sm:text-sm font-mono text-slate-200 overflow-x-auto leading-relaxed"></pre>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             PESTAÑA 3: SELECTOR INTERACTIVO DE COTAS PARA PROBLEMAS
+             ===================================================================== -->
+        <section id="tab-cotas" class="tab-panel hidden space-y-6">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 border border-white/10 glow-lavender">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-6 space-y-5">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pastelLavender/15 border border-pastelLavender/30 text-pastelLavender text-xs font-mono">
+                            <i class="ph-fill ph-sliders-horizontal"></i> Pestaña 03 · Asistente para Problemas de Concurso
+                        </div>
+                        <h3 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
+                            ¿Qué tipo de dato necesito según la <span class="text-pastelSky">cota del problema</span>?
+                        </h3>
+                        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                            En plataformas como <strong>Codeforces, OmegaUp, AtCoder o ICPC</strong>, cada problema especifica las restricciones de entrada (por ejemplo, <code class="font-mono text-pastelSky">1 ≤ N ≤ 10¹²</code>). Desliza el control para encontrar el tipo de dato ideal sin desperdiciar memoria ni sufrir overflow.
+                        </p>
+
+                        <div class="pt-2 space-y-3 bg-bgElevated/60 p-5 rounded-2xl border border-white/10">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono uppercase text-slate-400">Cota Máxima a Almacenar:</span>
+                                <span id="slider-exp-label" class="text-xl sm:text-2xl font-mono font-extrabold text-pastelSky">10⁹ (1,000,000,000)</span>
+                            </div>
+                            <input id="constraint-slider" type="range" min="1" max="36" value="9" class="w-full" oninput="updateConstraintAdvisor(this.value)">
+                            <div class="flex justify-between text-[11px] font-mono text-slate-400">
+                                <span>10¹</span>
+                                <span>10⁴ (short)</span>
+                                <span>10⁹ (int)</span>
+                                <span>10¹⁸ (long long)</span>
+                                <span>10³⁶ (__int128)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendation Output Card -->
+                    <div class="lg:col-span-6">
+                        <div class="p-6 sm:p-8 rounded-3xl bg-bgElevated border border-white/10 space-y-5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono uppercase text-slate-400">Tipo Recomendado por BugSquad</span>
+                                <span id="advisor-status-badge" class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-pastelMint/20 text-pastelMint">
+                                    ÓPTIMO EN 32 BITS
+                                </span>
+                            </div>
+
+                            <div class="flex items-baseline justify-between gap-4 border-b border-white/10 pb-5">
+                                <div>
+                                    <p id="advisor-type" class="text-3xl sm:text-5xl font-mono font-extrabold text-white">int</p>
+                                    <p id="advisor-typedef" class="text-xs sm:text-sm font-mono text-pastelSky mt-2">Capacidad máxima: ≈ 2.14 × 10⁹ (32 bits)</p>
+                                </div>
+                                <div class="text-right font-mono">
+                                    <span class="text-xs text-slate-400 block">Memoria por variable</span>
+                                    <span id="advisor-memory" class="text-xl font-bold text-pastelMint">4 Bytes</span>
+                                </div>
+                            </div>
+
+                            <p id="advisor-advice" class="text-sm text-slate-300 leading-relaxed">
+                                Para valores hasta 10⁹, <code class="text-pastelMint font-mono">int</code> es suficiente para almacenar y sumar un par de números, pero <strong>cuidado</strong>: si multiplicas dos números de 10⁹, alcanzarás 10¹⁸ y necesitarás <code class="text-pastelLavender font-mono">long long</code>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             PESTAÑA 4: SIMULADOR DE DESBORDAMIENTO (OVERFLOW LAB)
+             ===================================================================== -->
+        <section id="tab-overflow" class="tab-panel hidden space-y-6">
+            <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/10 glow-peach">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+                    <div>
+                        <span class="text-xs font-mono uppercase tracking-wider text-pastelPeach">Pestaña 04 / Laboratorio Práctico</span>
+                        <h3 class="text-2xl sm:text-3xl font-bold text-white mt-1">Simulador de Desbordamiento (Integer Overflow)</h3>
+                        <p class="text-slate-300 text-sm mt-1">
+                            Experimenta cómo un cálculo rebasa los 32 bits de <code class="font-mono text-pastelRose">int</code> dando la vuelta a números negativos, mientras que en <code class="font-mono text-pastelMint">long long</code> (64 bits) conserva su valor exacto.
+                        </p>
+                    </div>
+
+                    <!-- Preset Problem Scenarios -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="setLabPreset(2147483647, '+', 1)" class="px-3 py-1.5 rounded-xl text-xs font-mono bg-pastelRose/15 text-pastelRose border border-pastelRose/30 hover:bg-pastelRose/25 transition">
+                            INT_MAX + 1
+                        </button>
+                        <button onclick="setLabPreset(100000, '*', 100000)" class="px-3 py-1.5 rounded-xl text-xs font-mono bg-pastelPeach/15 text-pastelPeach border border-pastelPeach/30 hover:bg-pastelPeach/25 transition">
+                            10⁵ × 10⁵ (Clásico WA)
+                        </button>
+                        <button onclick="setLabPreset(1000000000, '+', 1000000000)" class="px-3 py-1.5 rounded-xl text-xs font-mono bg-pastelMint/15 text-pastelMint border border-pastelMint/30 hover:bg-pastelMint/25 transition">
+                            10⁹ + 10⁹ (Seguro)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Calculator Inputs -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-bgElevated/70 p-5 rounded-2xl border border-white/10">
+                    <div class="md:col-span-5">
+                        <label class="block text-xs font-mono text-slate-400 mb-1">OPERANDO A</label>
+                        <input id="lab-input-a" type="number" value="100000" oninput="runOverflowSimulation()"
+                            class="w-full px-4 py-3 rounded-xl bg-bgMain border border-white/15 font-mono text-white focus:outline-none focus:border-pastelSky">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-mono text-slate-400 mb-1 text-center">OPERACIÓN</label>
+                        <select id="lab-op" onchange="runOverflowSimulation()"
+                            class="w-full px-3 py-3 rounded-xl bg-bgMain border border-white/15 font-mono text-pastelSky text-center font-bold focus:outline-none">
+                            <option value="+">+ (Suma)</option>
+                            <option value="*" selected>× (Producto)</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-5">
+                        <label class="block text-xs font-mono text-slate-400 mb-1">OPERANDO B</label>
+                        <input id="lab-input-b" type="number" value="100000" oninput="runOverflowSimulation()"
+                            class="w-full px-4 py-3 rounded-xl bg-bgMain border border-white/15 font-mono text-white focus:outline-none focus:border-pastelSky">
+                    </div>
+                </div>
+
+                <!-- Comparison Output: 32-bit int vs 64-bit long long -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <!-- Resultado en int (32 bits) -->
+                    <div id="lab-card-int" class="p-5 rounded-2xl bg-bgElevated border border-pastelRose/40 space-y-3 transition">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-sm font-bold text-white flex items-center gap-2">
+                                <i class="ph-fill ph-cpu text-pastelSky"></i> Resultado en <code class="text-pastelSky">int</code> (32 bits)
+                            </span>
+                            <span id="lab-badge-int" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-pastelRose/20 text-pastelRose border border-pastelRose/30">
+                                ¡OVERFLOW!
+                            </span>
+                        </div>
+                        <p id="lab-res-int" class="text-2xl sm:text-3xl font-mono font-extrabold text-pastelRose break-all">
+                            1,410,065,408
+                        </p>
+                        <p id="lab-desc-int" class="text-xs text-slate-300 leading-relaxed">
+                            El valor real (10¹⁰) supera <code class="font-mono">2,147,483,647</code>. Los bits superiores se truncan y el resultado da vueltas en complemento a 2.
+                        </p>
+                    </div>
+
+                    <!-- Resultado en long long (64 bits) -->
+                    <div id="lab-card-ll" class="p-5 rounded-2xl bg-bgElevated border border-pastelMint/40 space-y-3 transition">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-sm font-bold text-white flex items-center gap-2">
+                                <i class="ph-fill ph-shield-check text-pastelMint"></i> Resultado en <code class="text-pastelMint">long long</code> (64 bits)
+                            </span>
+                            <span id="lab-badge-ll" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-pastelMint/20 text-pastelMint border border-pastelMint/30">
+                                EXACTO (AC)
+                            </span>
+                        </div>
+                        <p id="lab-res-ll" class="text-2xl sm:text-3xl font-mono font-extrabold text-pastelMint break-all">
+                            10,000,000,000
+                        </p>
+                        <p id="lab-desc-ll" class="text-xs text-slate-300 leading-relaxed">
+                            Notación exponencial: <span id="lab-exp-ll" class="font-mono text-white">1.00 × 10¹⁰</span>. Cabe holgadamente dentro del límite de 64 bits (~9.22 × 10¹⁸).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             PESTAÑA 5: TABLA MAESTRA DE REFERENCIA RÁPIDA (CHEAT SHEET)
+             ===================================================================== -->
+        <section id="tab-tabla" class="tab-panel hidden space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+                <div>
+                    <span class="text-xs font-mono uppercase tracking-wider text-pastelRose">Pestaña 05 / Referencia Rápida BugSquad</span>
+                    <h3 class="text-2xl sm:text-3xl font-bold text-white mt-1">Tabla Maestra de Capacidades en C++</h3>
+                </div>
+                <span class="text-xs font-mono text-pastelSky bg-pastelSky/10 border border-pastelSky/20 px-3 py-1.5 rounded-xl">
+                    💡 Haz clic en cualquier fila para abrir su arquitectura detallada en la Pestaña 2
+                </span>
+            </div>
+
+            <div class="glass-card rounded-3xl overflow-hidden border border-white/10">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-white/10 bg-bgElevated/90 text-[11px] font-mono uppercase text-slate-300">
+                                <th class="py-4 px-4">Tipo de Dato</th>
+                                <th class="py-4 px-4">Bits / Bytes</th>
+                                <th class="py-4 px-4">Potencia de 2</th>
+                                <th class="py-4 px-4">Notación Exponencial</th>
+                                <th class="py-4 px-4">Rango en Números Enteros / Precisión</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cheat-sheet-body" class="divide-y divide-white/5 text-xs sm:text-sm font-mono">
+                            <!-- Populated dynamically by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 bg-bgMain/90 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+            <div class="flex items-center gap-2">
+                <i class="ph-fill ph-bug-beetle text-pastelMint text-lg"></i>
+                <span class="font-semibold text-white">BugSquad</span> — Curso de Programación Competitiva en C++
+            </div>
+            <div class="font-mono text-slate-400">
+                Arquitectura de referencia: GCC / Clang x86_64 (Estándar en Codeforces, OmegaUp & ICPC)
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Application Logic -->
+    <script>
+        // =========================================================================
+        // NAVEGACIÓN POR PESTAÑAS
+        // =========================================================================
+        const tabIds = ['tab-binario', 'tab-explorador', 'tab-cotas', 'tab-overflow', 'tab-tabla'];
+
+        function switchTab(targetTabId) {
+            tabIds.forEach(id => {
+                const section = document.getElementById(id);
+                const btn = document.getElementById('btn-' + id);
+                if (id === targetTabId) {
+                    section.classList.remove('hidden');
+                    btn.className = 'tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center gap-2 bg-gradient-to-r from-pastelMint/20 to-pastelSky/20 text-pastelMint border border-pastelMint/40 shadow-sm';
+                } else {
+                    section.classList.add('hidden');
+                    btn.className = 'tab-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2 border border-transparent';
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // =========================================================================
+        // PESTAÑA 1: SIMULADOR INTERACTIVO DE LENGUAJE BINARIO (8 BITS = 1 BYTE)
+        // =========================================================================
+        // Almacena los 8 bits desde el índice 7 (MSB: 2^7) hasta el índice 0 (LSB: 2^0)
+        // Por defecto inicia en 65 ('A' -> 01000001)
+        let byteBits = [0, 1, 0, 0, 0, 0, 0, 1]; // posición 0 es bit 7, posición 7 es bit 0
+        let isSignedByteMode = false;
+
+        function getBitAtPosition(powerIndex) {
+            // powerIndex: 7 down to 0
+            return byteBits[7 - powerIndex];
+        }
+
+        function setBitAtPosition(powerIndex, val) {
+            byteBits[7 - powerIndex] = val ? 1 : 0;
+        }
+
+        function toggleBitPosition(powerIndex) {
+            const current = getBitAtPosition(powerIndex);
+            setBitAtPosition(powerIndex, current === 1 ? 0 : 1);
+            renderBinaryPlayground();
+        }
+
+        function setBinarySignMode(signedMode) {
+            isSignedByteMode = signedMode;
+            const uBtn = document.getElementById('mode-unsigned-btn');
+            const sBtn = document.getElementById('mode-signed-btn');
+            if (!signedMode) {
+                uBtn.className = 'px-3.5 py-2 rounded-xl text-xs font-mono font-bold bg-emerald-200 text-emerald-950 border border-emerald-300 transition shadow-sm';
+                sBtn.className = 'px-3.5 py-2 rounded-xl text-xs font-mono font-semibold bg-bgElevated text-slate-300 border border-white/10 hover:border-pastelRose/40 transition';
+            } else {
+                sBtn.className = 'px-3.5 py-2 rounded-xl text-xs font-mono font-bold bg-rose-200 text-rose-950 border border-rose-300 transition shadow-sm';
+                uBtn.className = 'px-3.5 py-2 rounded-xl text-xs font-mono font-semibold bg-bgElevated text-slate-300 border border-white/10 hover:border-pastelMint/40 transition';
+            }
+            renderBinaryPlayground();
+        }
+
+        function getUnsignedByteValue() {
+            let total = 0;
+            for (let p = 7; p >= 0; p--) {
+                if (getBitAtPosition(p) === 1) {
+                    total += (1 << p);
+                }
+            }
+            return total;
+        }
+
+        function getCurrentNumericValue() {
+            const unsignedVal = getUnsignedByteValue();
+            if (!isSignedByteMode) return unsignedVal;
+            return (unsignedVal & 0x80) ? unsignedVal - 256 : unsignedVal;
+        }
+
+        function setByteValue(unsignedVal) {
+            const clamped = ((unsignedVal % 256) + 256) % 256;
+            for (let p = 7; p >= 0; p--) {
+                setBitAtPosition(p, (clamped >> p) & 1);
+            }
+            renderBinaryPlayground();
+        }
+
+        function loadBinaryExample(unsignedVal, signedMode) {
+            setBinarySignMode(signedMode);
+            setByteValue(unsignedVal);
+        }
+
+        function onNumberInputChange(rawVal) {
+            if (rawVal === '' || rawVal === '-') return;
+            let num = parseInt(rawVal, 10);
+            if (isNaN(num)) return;
+
+            if (num < 0 && !isSignedByteMode) {
+                setBinarySignMode(true);
+            }
+            if (isSignedByteMode) {
+                if (num < -128) num = -128;
+                if (num > 127) num = 127;
+            } else {
+                if (num < 0) num = 0;
+                if (num > 255) num = 255;
+            }
+            setByteValue(num);
+        }
+
+        function onCharInputChange(str) {
+            if (!str || str.length === 0) return;
+            const code = str.charCodeAt(0);
+            if (code >= 0 && code <= 255) {
+                setByteValue(code);
+            }
+        }
+
+        function bitShiftLeft() {
+            const u = getUnsignedByteValue();
+            setByteValue((u << 1) & 0xFF);
+        }
+
+        function bitShiftRight() {
+            const u = getUnsignedByteValue();
+            setByteValue((u >> 1) & 0xFF);
+        }
+
+        function bitInvert() {
+            const u = getUnsignedByteValue();
+            setByteValue((~u) & 0xFF);
+        }
+
+        function getAsciiDescription(code) {
+            if (code === 32) return { symbol: "' ' (Espacio)", category: 'Espacio en blanco (ASCII 32)' };
+            if (code >= 48 && code <= 57) return { symbol: `'${String.fromCharCode(code)}'`, category: 'Dígito Numérico ASCII' };
+            if (code >= 65 && code <= 90) return { symbol: `'${String.fromCharCode(code)}'`, category: 'Letra Mayúscula ASCII' };
+            if (code >= 97 && code <= 122) return { symbol: `'${String.fromCharCode(code)}'`, category: 'Letra Minúscula ASCII' };
+            if (code >= 33 && code <= 126) return { symbol: `'${String.fromCharCode(code)}'`, category: 'Símbolo Imprimible ASCII' };
+            if (code < 32 || code === 127) {
+                const ctrlNames = { 0: 'NUL (Fin de cadena \\0)', 9: 'TAB (\\t)', 10: 'Enter / Salto de línea (\\n)', 13: 'Retorno (\\r)', 27: 'ESC', 127: 'DEL' };
+                return { symbol: `ASCII ${code}`, category: ctrlNames[code] || 'Carácter de Control No Imprimible' };
+            }
+            return { symbol: `0x${code.toString(16).toUpperCase()}`, category: 'ASCII Extendido (128-255)' };
+        }
+
+        function renderBinaryPlayground() {
+            const container = document.getElementById('byte-switches-container');
+            container.innerHTML = '';
+
+            const supDigits = ['⁰','¹','²','³','⁴','⁵','⁶','⁷'];
+            let activeTerms = [];
+
+            for (let p = 7; p >= 0; p--) {
+                const bitVal = getBitAtPosition(p);
+                const isSignBit = isSignedByteMode && p === 7;
+                const weight = isSignBit ? -128 : (1 << p);
+
+                if (bitVal === 1) {
+                    activeTerms.push(weight);
+                }
+
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.onclick = () => toggleBitPosition(p);
+
+                let styleClasses = '';
+                if (bitVal === 1) {
+                    styleClasses = isSignBit
+                        ? 'bg-rose-100/90 border-rose-300 text-white shadow-md shadow-rose-200/50'
+                        : 'bg-emerald-100/90 border-emerald-300 text-white shadow-md shadow-emerald-200/50';
+                } else {
+                    styleClasses = 'bg-white border-slate-200 text-slate-400 hover:border-slate-300 shadow-sm';
+                }
+
+                card.className = `bit-switch p-3.5 rounded-2xl border flex flex-col items-center justify-between gap-2 cursor-pointer select-none ${styleClasses}`;
+                card.innerHTML = `
+                    <div class="w-full flex items-center justify-between text-[10px] font-mono">
+                        <span class="${isSignBit ? 'text-pastelRose font-bold' : 'text-slate-400'}">Bit ${p}</span>
+                        <span class="px-1.5 py-0.5 rounded bg-slate-100 ${bitVal === 1 ? 'text-pastelSky font-bold' : 'text-slate-500'}">
+                            ${isSignBit ? '-2⁷' : '2' + supDigits[p]}
+                        </span>
+                    </div>
+                    <div class="my-1 text-3xl sm:text-4xl font-mono font-extrabold ${
+                        bitVal === 1 ? (isSignBit ? 'text-pastelRose' : 'text-pastelMint') : 'text-slate-300'
+                    }">
+                        ${bitVal}
+                    </div>
+                    <div class="text-xs font-mono font-semibold ${
+                        bitVal === 1 ? 'text-white' : 'text-slate-400'
+                    }">
+                        ${bitVal === 1 ? (weight > 0 ? '+' + weight : weight) : '0'}
+                    </div>
+                `;
+                container.appendChild(card);
+            }
+
+            // Actualizar fórmula de suma
+            const numValue = getCurrentNumericValue();
+            const unsignedValue = getUnsignedByteValue();
+            const formulaEl = document.getElementById('binary-sum-formula');
+
+            if (activeTerms.length === 0) {
+                formulaEl.innerHTML = `<span class="text-slate-400">Todos los bits apagados (0) = </span> <span class="text-pastelMint">0</span>`;
+            } else {
+                const partsHtml = activeTerms.map((term, idx) => {
+                    const color = term < 0 ? 'text-pastelRose' : 'text-pastelSky';
+                    const prefix = idx === 0 ? '' : (term >= 0 ? ' + ' : ' - ');
+                    return `${prefix}<span class="${color}">${Math.abs(term)}</span>`;
+                }).join('');
+                formulaEl.innerHTML = `${partsHtml} <span class="text-slate-400 mx-1">=</span> <span class="text-pastelMint text-xl">${numValue}</span>`;
+            }
+
+            // Actualizar tarjeta 1: Número Decimal
+            document.getElementById('bin-int-type-tag').textContent = isSignedByteMode ? 'int8_t / char' : 'uint8_t / unsigned char';
+            document.getElementById('bin-decimal-display').textContent = numValue;
+            const expNotation = numValue === 0 ? '0 × 10⁰' : Number(numValue).toExponential(2).replace('e+', ' × 10^').replace('e-', ' × 10^-');
+            document.getElementById('bin-decimal-sub').textContent = `Notación exponencial: ${expNotation}`;
+
+            const numInput = document.getElementById('bin-number-input');
+            if (document.activeElement !== numInput) {
+                numInput.value = numValue;
+            }
+
+            // Actualizar tarjeta 2: Carácter ASCII
+            const asciiInfo = getAsciiDescription(unsignedValue);
+            document.getElementById('bin-char-display').textContent = asciiInfo.symbol;
+            document.getElementById('bin-char-desc').textContent = asciiInfo.category;
+            document.getElementById('bin-cpp-char-line').textContent = `char c = ${unsignedValue}; // ${asciiInfo.symbol}`;
+
+            const charInput = document.getElementById('bin-char-input');
+            if (document.activeElement !== charInput && unsignedValue >= 32 && unsignedValue <= 126) {
+                charInput.value = String.fromCharCode(unsignedValue);
+            }
+
+            // Actualizar tarjeta 3: Binario, Hex y Popcount
+            const binString = byteBits.join('');
+            const popcount = byteBits.reduce((a, b) => a + b, 0);
+            document.getElementById('bin-literal-display').textContent = `0b${binString}`;
+            document.getElementById('bin-hex-display').textContent = `0x${unsignedValue.toString(16).toUpperCase().padStart(2, '0')}`;
+            document.getElementById('bin-popcount-display').textContent = `__builtin_popcount = ${popcount}`;
+        }
+
+        // =========================================================================
+        // PESTAÑA 2: EXPLORADOR DE TIPOS DE DATOS EN C++
+        // =========================================================================
+        const cppDataTypes = [
+            {
+                id: 'bool',
+                name: 'bool',
+                alias: 'Booleano lógico',
+                category: 'flotante',
+                badge: 'Lógico · 8 bits en RAM',
+                accent: 'pastelMint',
+                bits: 8,
+                bytes: 1,
+                power2: '2¹ estados (0 o 1)',
+                power2Sub: 'Usa 1 bit efectivo, pero ocupa 1 byte (8 bits) para direccionamiento en RAM',
+                scientific: '0 a 1 (10⁰)',
+                scientificSub: 'Representa únicamente false (0) o true (1)',
+                minExact: '0 (false)',
+                maxExact: '1 (true)',
+                useCase: 'Banderas de visitados en grafos (DFS/BFS) o tablas de criba. Tip pro: usa std::bitset<N> si deseas compactar 1 bit real por posición y ahorrar 8x memoria.',
+                bitLayout: { sign: 0, exp: 0, mantissa: 8, mode: 'bool' },
+                bitExplain: '7 bits permanecen en 0; el bit menos significativo (Bit 0) indica true (1) o false (0).',
+                code: `bool visitado = true;\n// Para optimizar memoria 8x en CP:\nbitset<1000005> criba;\ncriba.set(); // 1 bit real por elemento`
+            },
+            {
+                id: 'char',
+                name: 'char',
+                alias: 'int8_t / Carácter ASCII',
+                category: 'entero',
+                badge: 'Entero / Carácter 8-bit',
+                accent: 'pastelSky',
+                bits: 8,
+                bytes: 1,
+                power2: '[-2⁷, 2⁷ - 1]',
+                power2Sub: '1 bit de signo + 7 bits de magnitud (256 valores totales)',
+                scientific: '≈ ±1.27 × 10² (1.2e2)',
+                scientificSub: 'Almacena enteros muy pequeños o caracteres ASCII estándar',
+                minExact: '-128',
+                maxExact: '+127',
+                useCase: 'Procesamiento de cadenas (strings), grillas de laberintos (\'#\', \'.\') y conversión rápida de dígitos haciendo c - \'0\'.',
+                bitLayout: { sign: 1, exp: 0, mantissa: 7, mode: 'signed' },
+                bitExplain: 'Bit 7 es el bit de signo. Bits 0..6 almacenan magnitudes de 0 a 127.',
+                code: `char letra = 'A'; // Valor ASCII: 65\nint digito = '7' - '0'; // Convierte char a int (7)\ncout << (int)SCHAR_MAX; // Imprime 127`
+            },
+            {
+                id: 'short',
+                name: 'short',
+                alias: 'int16_t',
+                category: 'entero',
+                badge: 'Entero 16-bit',
+                accent: 'pastelSky',
+                bits: 16,
+                bytes: 2,
+                power2: '[-2¹⁵, 2¹⁵ - 1]',
+                power2Sub: '1 bit de signo + 15 bits de magnitud (65,536 valores)',
+                scientific: '≈ ±3.27 × 10⁴ (3.2e4)',
+                scientificSub: 'Hasta ~4 dígitos decimales seguros',
+                minExact: '-32,768',
+                maxExact: '+32,767',
+                useCase: 'Útil cuando una tabla de Programación Dinámica (DP) tiene millones de estados con valores pequeños y el límite de memoria es estricto (ej. 16 MB o 32 MB).',
+                bitLayout: { sign: 1, exp: 0, mantissa: 15, mode: 'signed' },
+                bitExplain: '1 bit de signo (Bit 15) y 15 bits de valor numérico en complemento a 2.',
+                code: `short dp[5000][5000]; // Ocupa ~50 MB en vez de ~100 MB\ncout << SHRT_MIN << " a " << SHRT_MAX;`
+            },
+            {
+                id: 'int',
+                name: 'int',
+                alias: 'int32_t (Estándar CP)',
+                category: 'entero',
+                badge: 'Entero 32-bit',
+                accent: 'pastelMint',
+                bits: 32,
+                bytes: 4,
+                power2: '[-2³¹, 2³¹ - 1]',
+                power2Sub: '1 bit de signo + 31 bits de magnitud (4,294,967,296 valores)',
+                scientific: '≈ ±2.14 × 10⁹ (2e9)',
+                scientificSub: 'Cubre con seguridad cotas hasta 10⁹ (9 dígitos decimales)',
+                minExact: '-2,147,483,648',
+                maxExact: '+2,147,483,647',
+                useCase: 'El caballo de batalla en C++. Ideal para variables de hasta 10⁹, índices de vectores y aritmética modular donde sumas dos números menores a 10⁹ + 7.',
+                bitLayout: { sign: 1, exp: 0, mantissa: 31, mode: 'signed' },
+                bitExplain: 'Bit 31 indica el signo. Los 31 bits restantes representan hasta 2³¹ - 1 = 2,147,483,647.',
+                code: `const int INF = 1e9; // Infinito seguro para evitar overflow al sumar\nint a = INT_MAX;     // 2147483647`
+            },
+            {
+                id: 'uint',
+                name: 'unsigned int',
+                alias: 'uint32_t',
+                category: 'unsigned',
+                badge: 'Sin Signo 32-bit',
+                accent: 'pastelLavender',
+                bits: 32,
+                bytes: 4,
+                power2: '[0, 2³² - 1]',
+                power2Sub: 'Los 32 bits completos se dedican a la magnitud positiva',
+                scientific: '≈ 4.29 × 10⁹ (4.2e9)',
+                scientificSub: 'Duplica el límite positivo de int, pero no admite negativos',
+                minExact: '0',
+                maxExact: '+4,294,967,295',
+                useCase: 'Manipulación de máscaras de bits (bitmasks), hashes polinomiales y funciones intrínsecas como __builtin_popcount(). ¡Cuidado al restar (0u - 1u = 4,294,967,295)!',
+                bitLayout: { sign: 0, exp: 0, mantissa: 32, mode: 'unsigned' },
+                bitExplain: 'Sin bit de signo: los 32 bits aportan potencias desde 2⁰ hasta 2³¹.',
+                code: `unsigned int mask = (1u << 31);\ncout << UINT_MAX; // 4294967295`
+            },
+            {
+                id: 'll',
+                name: 'long long',
+                alias: 'int64_t / ll',
+                category: 'entero',
+                badge: 'Entero 64-bit · Favorito CP',
+                accent: 'pastelLavender',
+                bits: 64,
+                bytes: 8,
+                power2: '[-2⁶³, 2⁶³ - 1]',
+                power2Sub: '1 bit de signo + 63 bits de magnitud',
+                scientific: '≈ ±9.22 × 10¹⁸ (9e18)',
+                scientificSub: 'Cubre con seguridad cotas hasta 10¹⁸ (18 dígitos decimales)',
+                minExact: '-9,223,372,036,854,775,808',
+                maxExact: '+9,223,372,036,854,775,807',
+                useCase: 'Indispensable para sumas acumuladas (Prefix Sums), áreas geométricas, multiplicación de dos enteros de 10⁹ (ej. en aritmética módulo 10⁹+7) y distancias en Dijkstra.',
+                bitLayout: { sign: 1, exp: 0, mantissa: 63, mode: 'signed' },
+                bitExplain: 'Bit 63 es el signo. Los 63 bits de magnitud permiten llegar hasta ~9.22 × 10¹⁸.',
+                code: `using ll = long long;\nconst ll INF64 = 4e18; // Infinito seguro para Dijkstra\nll prod = 1LL * 1000000000 * 1000000000; // 10^18 sin overflow`
+            },
+            {
+                id: 'ull',
+                name: 'unsigned long long',
+                alias: 'uint64_t / ull',
+                category: 'unsigned',
+                badge: 'Sin Signo 64-bit',
+                accent: 'pastelLavender',
+                bits: 64,
+                bytes: 8,
+                power2: '[0, 2⁶⁴ - 1]',
+                power2Sub: '64 bits puros de magnitud positiva',
+                scientific: '≈ 1.84 × 10¹⁹ (1.8e19)',
+                scientificSub: 'Permite alcanzar casi 2 × 10¹⁹ sin signo',
+                minExact: '0',
+                maxExact: '+18,446,744,073,709,551,615',
+                useCase: 'Rolling Hash (Rabin-Karp) con módulo automático 2⁶⁴ y problemas de teoría de números con cotas cercanas a 10¹⁹.',
+                bitLayout: { sign: 0, exp: 0, mantissa: 64, mode: 'unsigned' },
+                bitExplain: '64 bits íntegros de magnitud (de 2⁰ a 2⁶³). Su desbordamiento aplica módulo 2⁶⁴ de forma nativa.',
+                code: `using ull = unsigned long long;\null maximo = ULLONG_MAX; // 18446744073709551615ULL`
+            },
+            {
+                id: 'int128',
+                name: '__int128_t',
+                alias: 'Extensión GCC 128-bit',
+                category: 'entero',
+                badge: 'Super Entero 128-bit (GCC)',
+                accent: 'pastelPeach',
+                bits: 128,
+                bytes: 16,
+                power2: '[-2¹²⁷, 2¹²⁷ - 1]',
+                power2Sub: '1 bit de signo + 127 bits de magnitud en compiladores GCC 64-bit',
+                scientific: '≈ ±1.70 × 10³⁸ (1.7e38)',
+                scientificSub: 'Hasta ~38 dígitos decimales exactos sin BigInt',
+                minExact: '-170,141,183,460,469,231,731,687,303,715,884,105,728',
+                maxExact: '+170,141,183,460,469,231,731,687,303,715,884,105,727',
+                useCase: 'Arma secreta en programación competitiva: evita overflow al multiplicar dos números de 10¹⁸ (como en el test de primalidad Miller-Rabin o determinantes geométricos grandes).',
+                bitLayout: { sign: 1, exp: 0, mantissa: 63, mode: 'int128' },
+                bitExplain: '1 bit de signo + 127 bits de magnitud (mostrando 64 bloques representativos de 2 bits cada uno).',
+                code: `__int128_t a = 1e18;\n__int128_t b = a * a; // 10^36 ¡Sin overflow!\n// Nota: requiere función propia para cin/cout`
+            },
+            {
+                id: 'double',
+                name: 'double',
+                alias: 'IEEE 754 64-bit Float',
+                category: 'flotante',
+                badge: 'Punto Flotante 64-bit',
+                accent: 'pastelPeach',
+                bits: 64,
+                bytes: 8,
+                power2: '±2⁻¹⁰²² a ±2¹⁰²³',
+                power2Sub: '1 bit signo + 11 bits exponente + 52 bits mantisa (fracción)',
+                scientific: '≈ ±1.79 × 10³⁰⁸',
+                scientificSub: 'Precisión segura de 15 a 17 dígitos significativos',
+                minExact: 'Enteros exactos hasta 2⁵³ (9,007,199,254,740,992)',
+                maxExact: 'Máximo real: ≈ 1.7976931348623157 × 10³⁰⁸',
+                useCase: 'Geometría computacional, probabilidades y búsqueda binaria en reales. Preferir siempre double o long double sobre float (float solo tiene 6-7 dígitos de precisión).',
+                bitLayout: { sign: 1, exp: 11, mantissa: 52, mode: 'float' },
+                bitExplain: 'Estándar IEEE 754: 1 bit de signo (rosa), 11 bits de exponente (durazno) y 52 bits de mantisa (menta).',
+                code: `double pi = acos(-1.0);\ncout << fixed << setprecision(9) << pi;\n// Comparar siempre con EPS = 1e-9`
+            },
+            {
+                id: 'ldouble',
+                name: 'long double',
+                alias: 'Precisión Extendida 80/128-bit',
+                category: 'flotante',
+                badge: 'Alta Precisión Flotante',
+                accent: 'pastelRose',
+                bits: 80,
+                bytes: 16,
+                power2: '±2⁻¹⁶³⁸² a ±2¹⁶³⁸³',
+                power2Sub: '1 bit signo + 15 bits exponente + 64 bits mantisa (x86 Extended)',
+                scientific: '≈ ±1.18 × 10⁴⁹³²',
+                scientificSub: 'Precisión superior: ~19 dígitos significativos exactos',
+                minExact: 'Enteros exactos hasta 2⁶⁴ (1.84 × 10¹⁹)',
+                maxExact: 'Máximo real: ≈ 1.1897 × 10⁴⁹³²',
+                useCase: 'Problemas geométricos extremos o transformada rápida de Fourier (FFT) donde el error de redondeo de double puede causar WA.',
+                bitLayout: { sign: 1, exp: 15, mantissa: 48, mode: 'float' },
+                bitExplain: 'En x86_64 usa 80 bits efectivos (1 signo, 15 exponente, 64 mantisa) alineados en 16 bytes de memoria.',
+                code: `long double ans = 1.0L / 7.0L;\ncout << fixed << setprecision(15) << ans;`
+            }
+        ];
+
+        let currentCategory = 'all';
+        let selectedTypeId = 'int';
+
+        function renderTypeButtons() {
+            const container = document.getElementById('type-buttons-grid');
+            container.innerHTML = '';
+
+            const filtered = currentCategory === 'all'
+                ? cppDataTypes
+                : cppDataTypes.filter(t => t.category === currentCategory);
+
+            filtered.forEach(t => {
+                const isSelected = t.id === selectedTypeId;
+                const btn = document.createElement('button');
+                btn.onclick = () => selectDataType(t.id);
+                btn.className = `p-3.5 rounded-2xl text-left transition-all border flex flex-col justify-between ${
+                    isSelected
+                        ? 'bg-bgElevated border-pastelMint shadow-lg shadow-pastelMint/10 scale-[1.02]'
+                        : 'bg-bgCard/70 border-white/10 hover:border-white/25 hover:bg-bgElevated/40'
+                }`;
+
+                btn.innerHTML = `
+                    <div class="flex items-center justify-between w-full mb-1.5">
+                        <span class="text-[11px] font-mono px-2 py-0.5 rounded-md ${
+                            isSelected ? 'bg-pastelMint/20 text-pastelMint font-bold' : 'bg-white/5 text-slate-400'
+                        }">${t.bits} bits</span>
+                        <span class="text-[11px] font-mono text-slate-400">${t.scientific.split(' ')[1] || t.scientific}</span>
+                    </div>
+                    <div class="font-mono font-bold text-sm sm:text-base text-white truncate">${t.name}</div>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = 'cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-200 text-emerald-950 border border-emerald-300 transition shadow-sm';
+                } else {
+                    btn.className = 'cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-bgCard text-slate-300 border border-white/10 hover:border-pastelSky/50 transition';
+                }
+            });
+
+            const filtered = cat === 'all' ? cppDataTypes : cppDataTypes.filter(t => t.category === cat);
+            if (!filtered.some(t => t.id === selectedTypeId) && filtered.length > 0) {
+                selectedTypeId = filtered[0].id;
+            }
+            renderTypeButtons();
+            updateInspector(selectedTypeId);
+        }
+
+        function selectDataType(id) {
+            selectedTypeId = id;
+            renderTypeButtons();
+            updateInspector(id);
+        }
+
+        function updateInspector(id) {
+            const data = cppDataTypes.find(t => t.id === id);
+            if (!data) return;
+
+            document.getElementById('detail-badge').textContent = data.badge;
+            document.getElementById('detail-alias').textContent = data.alias;
+            document.getElementById('detail-name').textContent = data.name;
+            document.getElementById('detail-bits').textContent = `${data.bits} bits`;
+            document.getElementById('detail-bytes').textContent = `(${data.bytes} ${data.bytes === 1 ? 'Byte' : 'Bytes'})`;
+            document.getElementById('detail-power2').textContent = data.power2;
+            document.getElementById('detail-power2-sub').textContent = data.power2Sub;
+            document.getElementById('detail-scientific').textContent = data.scientific;
+            document.getElementById('detail-scientific-sub').textContent = data.scientificSub;
+            document.getElementById('detail-min').textContent = data.minExact;
+            document.getElementById('detail-max').textContent = data.maxExact;
+            document.getElementById('detail-usecase').textContent = data.useCase;
+            document.getElementById('detail-code').textContent = data.code;
+            document.getElementById('bit-explanation').textContent = data.bitExplain;
+
+            const modeTag = document.getElementById('bit-legend-tag');
+            if (data.bitLayout.mode === 'float') modeTag.textContent = 'IEEE 754 Flotante';
+            else if (data.bitLayout.mode === 'unsigned') modeTag.textContent = 'Binario Puro Sin Signo';
+            else if (data.bitLayout.mode === 'bool') modeTag.textContent = '1 Byte Direccionable';
+            else modeTag.textContent = 'Complemento a 2';
+
+            renderBitGrid(data);
+        }
+
+        function renderBitGrid(data) {
+            const grid = document.getElementById('bit-grid-container');
+            grid.innerHTML = '';
+
+            const { sign, exp, mantissa } = data.bitLayout;
+            const totalBlocks = sign + exp + mantissa;
+
+            for (let i = 0; i < totalBlocks; i++) {
+                const bitIndex = totalBlocks - 1 - i;
+                const cell = document.createElement('div');
+                let colorClass = '';
+                let label = '';
+
+                if (i < sign) {
+                    colorClass = 'bg-pastelRose/25 border-pastelRose text-pastelRose';
+                    label = 'S';
+                } else if (i < sign + exp) {
+                    colorClass = 'bg-pastelPeach/25 border-pastelPeach text-pastelPeach';
+                    label = 'E';
+                } else {
+                    colorClass = 'bg-pastelMint/20 border-pastelMint/50 text-pastelMint';
+                    label = data.bitLayout.mode === 'bool' && i < 7 ? '0' : 'M';
+                }
+
+                cell.className = `bit-cell h-7 rounded-md border flex items-center justify-center text-[10px] font-mono font-bold select-none ${colorClass}`;
+                cell.title = `Bit #${bitIndex} (${label === 'S' ? 'Signo' : label === 'E' ? 'Exponente' : 'Magnitud / Mantisa'})`;
+                cell.textContent = label;
+                grid.appendChild(cell);
+            }
+        }
+
+        function copySnippet() {
+            const code = document.getElementById('detail-code').textContent;
+            const tempInput = document.createElement('textarea');
+            tempInput.value = code;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            const label = document.getElementById('copy-label');
+            label.textContent = '¡Copiado!';
+            setTimeout(() => { label.textContent = 'Copiar C++'; }, 1800);
+        }
+
+        // =========================================================================
+        // PESTAÑA 3: RECOMENDADOR DE COTAS
+        // =========================================================================
+        function updateConstraintAdvisor(exp) {
+            const k = parseInt(exp, 10);
+            const supDigits = ['⁰','¹','²','³','⁴','⁵','⁶','⁷','⁸','⁹'];
+            const toSup = (num) => String(num).split('').map(d => supDigits[d]).join('');
+
+            let approxFormatted = '';
+            if (k <= 18) {
+                approxFormatted = ` (${(BigInt(10) ** BigInt(k)).toLocaleString('en-US')})`;
+            } else {
+                approxFormatted = ` (1e${k})`;
+            }
+
+            document.getElementById('slider-exp-label').textContent = `10${toSup(k)}${approxFormatted}`;
+
+            const badge = document.getElementById('advisor-status-badge');
+            const typeEl = document.getElementById('advisor-type');
+            const defEl = document.getElementById('advisor-typedef');
+            const memEl = document.getElementById('advisor-memory');
+            const adviceEl = document.getElementById('advisor-advice');
+
+            if (k <= 4) {
+                badge.textContent = '16 O 32 BITS SEGURO';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-mono font-bold bg-pastelMint/20 text-pastelMint';
+                typeEl.textContent = 'int (o short)';
+                defEl.textContent = 'Capacidad int: ≈ 2.14 × 10⁹ (32 bits) | short: ≈ 3.27 × 10⁴ (16 bits)';
+                memEl.textContent = '4 Bytes (o 2B)';
+                adviceEl.innerHTML = 'Con cotas pequeñas (<code class="text-pastelMint font-mono">10⁴</code>), usa <code class="text-pastelMint font-mono">int</code> por comodidad y velocidad. Incluso <code class="font-mono text-white">N² = 10⁸</code> cabe perfectamente en un <code class="text-pastelMint font-mono">int</code>.';
+            } else if (k <= 9) {
+                badge.textContent = 'ESTÁNDAR 32 BITS';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-mono font-bold bg-pastelSky/20 text-pastelSky';
+                typeEl.textContent = 'int';
+                defEl.textContent = 'Capacidad máxima: 2³¹ - 1 = 2,147,483,647 (≈ 2.14 × 10⁹)';
+                memEl.textContent = '4 Bytes';
+                adviceEl.innerHTML = 'Cabe en <code class="text-pastelSky font-mono">int</code>, pero <strong>¡alerta de BugSquad!</strong> Si sumas más de dos números de <code class="font-mono text-white">10⁹</code> o calculas un producto <code class="font-mono text-white">A × B</code>, desbordará 32 bits. Usa <code class="text-pastelLavender font-mono">long long</code> para acumuladores.';
+            } else if (k <= 18) {
+                badge.textContent = 'OBLIGATORIO 64 BITS';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-mono font-bold bg-pastelLavender/20 text-pastelLavender';
+                typeEl.textContent = 'long long';
+                defEl.textContent = 'Capacidad máxima: 2⁶³ - 1 ≈ 9.22 × 10¹⁸ (64 bits)';
+                memEl.textContent = '8 Bytes';
+                adviceEl.innerHTML = 'Un <code class="text-pastelRose font-mono">int</code> causará <strong>Wrong Answer por Overflow</strong> inmediatamente. Declara tus variables como <code class="text-pastelLavender font-mono">long long</code> y usa sufijos <code class="font-mono text-white">1LL</code> en constantes.';
+            } else if (k === 19) {
+                badge.textContent = 'SIN SIGNO 64 BITS / 128 BITS';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-mono font-bold bg-pastelPeach/20 text-pastelPeach';
+                typeEl.textContent = 'unsigned long long';
+                defEl.textContent = 'Capacidad máxima: 2⁶⁴ - 1 ≈ 1.84 × 10¹⁹ (64 bits sin signo)';
+                memEl.textContent = '8 Bytes';
+                adviceEl.innerHTML = 'Estás en el límite de 64 bits. Si el valor no supera <code class="font-mono text-white">1.84 × 10¹⁹</code> y no hay restas negativas, usa <code class="text-pastelPeach font-mono">unsigned long long</code>; de lo contrario salta a <code class="text-pastelPeach font-mono">__int128_t</code>.';
+            } else {
+                badge.textContent = 'EXTENSIÓN 128 BITS (GCC)';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-mono font-bold bg-pastelRose/20 text-pastelRose';
+                typeEl.textContent = '__int128_t';
+                defEl.textContent = 'Capacidad máxima: 2¹²⁷ - 1 ≈ 1.70 × 10³⁸ (128 bits)';
+                memEl.textContent = '16 Bytes';
+                adviceEl.innerHTML = 'Supera la capacidad de 64 bits estándar. En jueces como Codeforces u OmegaUp (GCC 64-bit) puedes usar <code class="text-pastelRose font-mono">__int128_t</code> hasta <code class="font-mono text-white">10³⁸</code> o implementar aritmética modular / BigInt.';
+            }
+        }
+
+        // =========================================================================
+        // PESTAÑA 4: SIMULADOR DE OVERFLOW
+        // =========================================================================
+        function setLabPreset(a, op, b) {
+            document.getElementById('lab-input-a').value = a;
+            document.getElementById('lab-op').value = op;
+            document.getElementById('lab-input-b').value = b;
+            runOverflowSimulation();
+        }
+
+        function runOverflowSimulation() {
+            const rawA = document.getElementById('lab-input-a').value || '0';
+            const rawB = document.getElementById('lab-input-b').value || '0';
+            const op = document.getElementById('lab-op').value;
+
+            let a, b;
+            try {
+                a = BigInt(rawA);
+                b = BigInt(rawB);
+            } catch (e) {
+                return;
+            }
+
+            const exact = op === '+' ? a + b : a * b;
+
+            const int32Val = BigInt.asIntN(32, exact);
+            const int64Val = BigInt.asIntN(64, exact);
+
+            const overflow32 = int32Val !== exact;
+            const overflow64 = int64Val !== exact;
+
+            const resIntEl = document.getElementById('lab-res-int');
+            const badgeIntEl = document.getElementById('lab-badge-int');
+            const descIntEl = document.getElementById('lab-desc-int');
+            const cardIntEl = document.getElementById('lab-card-int');
+
+            resIntEl.textContent = int32Val.toLocaleString('en-US');
+
+            if (overflow32) {
+                resIntEl.className = 'text-2xl sm:text-3xl font-mono font-extrabold text-pastelRose break-all';
+                badgeIntEl.textContent = '¡OVERFLOW EN 32 BITS!';
+                badgeIntEl.className = 'px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-pastelRose/20 text-pastelRose border border-pastelRose/30';
+                cardIntEl.className = 'p-5 rounded-2xl bg-bgElevated border border-pastelRose/40 space-y-3 transition';
+                descIntEl.innerHTML = `El resultado real es <code class="font-mono text-white">${exact.toLocaleString('en-US')}</code>, que rebasa el límite de <code class="font-mono">2,147,483,647</code>. En C++ se trunca a 32 bits produciendo un valor erróneo.`;
+            } else {
+                resIntEl.className = 'text-2xl sm:text-3xl font-mono font-extrabold text-pastelMint break-all';
+                badgeIntEl.textContent = 'CORRECTO EN 32 BITS';
+                badgeIntEl.className = 'px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-pastelMint/20 text-pastelMint border border-pastelMint/30';
+                cardIntEl.className = 'p-5 rounded-2xl bg-bgElevated border border-pastelMint/40 space-y-3 transition';
+                descIntEl.innerHTML = `El resultado está dentro de <code class="font-mono">[-2,147,483,648, +2,147,483,647]</code>. No hay pérdida de bits.`;
+            }
+
+            const resLlEl = document.getElementById('lab-res-ll');
+            const badgeLlEl = document.getElementById('lab-badge-ll');
+            const descLlEl = document.getElementById('lab-desc-ll');
+
+            resLlEl.textContent = int64Val.toLocaleString('en-US');
+            const sciStr = Number(exact).toExponential(2).replace('e+', ' × 10^');
+
+            if (overflow64) {
+                resLlEl.className = 'text-2xl sm:text-3xl font-mono font-extrabold text-pastelRose break-all';
+                badgeLlEl.textContent = '¡OVERFLOW EN 64 BITS!';
+                badgeLlEl.className = 'px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-pastelRose/20 text-pastelRose border border-pastelRose/30';
+                descLlEl.innerHTML = `Incluso <code class="font-mono text-pastelLavender">long long</code> se desbordó (> 9.22 × 10¹⁸). Necesitas <code class="font-mono text-pastelPeach">__int128_t</code>.`;
+            } else {
+                resLlEl.className = 'text-2xl sm:text-3xl font-mono font-extrabold text-pastelMint break-all';
+                badgeLlEl.textContent = 'EXACTO EN 64 BITS (AC)';
+                badgeLlEl.className = 'px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-pastelMint/20 text-pastelMint border border-pastelMint/30';
+                descLlEl.innerHTML = `Notación exponencial: <span class="font-mono text-white">${sciStr}</span>. Almacenado con precisión total en 64 bits.`;
+            }
+        }
+
+        // =========================================================================
+        // PESTAÑA 5: TABLA COMPARATIVA (CHEAT SHEET)
+        // =========================================================================
+        function renderCheatSheetTable() {
+            const tbody = document.getElementById('cheat-sheet-body');
+            tbody.innerHTML = '';
+
+            cppDataTypes.forEach(t => {
+                const tr = document.createElement('tr');
+                tr.onclick = () => {
+                    selectDataType(t.id);
+                    switchTab('tab-explorador');
+                };
+                tr.className = 'hover:bg-white/5 cursor-pointer transition';
+
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 font-bold text-white whitespace-nowrap">
+                        <span class="text-pastelMint">${t.name}</span>
+                        <span class="block text-[11px] text-slate-400 font-normal">${t.alias}</span>
+                    </td>
+                    <td class="py-3.5 px-4 whitespace-nowrap">
+                        <span class="px-2 py-0.5 rounded bg-white/5 text-pastelSky font-semibold">${t.bits} bits</span>
+                        <span class="text-xs text-slate-400 ml-1">(${t.bytes} B)</span>
+                    </td>
+                    <td class="py-3.5 px-4 text-slate-200 whitespace-nowrap">${t.power2}</td>
+                    <td class="py-3.5 px-4 text-pastelLavender font-semibold whitespace-nowrap">${t.scientific}</td>
+                    <td class="py-3.5 px-4 text-xs text-slate-300">
+                        <span class="text-pastelRose">${t.minExact}</span>
+                        <span class="text-slate-500 mx-1">→</span>
+                        <span class="text-pastelMint">${t.maxExact}</span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Inicialización general al cargar la ventana
+        window.onload = function () {
+            renderBinaryPlayground();
+            renderTypeButtons();
+            updateInspector('int');
+            updateConstraintAdvisor(9);
+            runOverflowSimulation();
+            renderCheatSheetTable();
+        };
+    </script>
+</body>
+</html>

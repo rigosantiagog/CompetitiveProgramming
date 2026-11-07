@@ -16,7 +16,8 @@ curso-cpp-web/
 │   ├── presentacion-tema2.html Presentación interactiva del Tema 2
 │   └── presentacion-tema3.html Presentación interactiva del Tema 3
 ├── bloque2/
-│   └── index.html              Bloque 2: Aprender, Practicar y Quiz de 3 temas, y plantilla del curso
+│   ├── index.html              Bloque 2: Aprender, Practicar y Quiz de 3 temas, y plantilla del curso
+│   └── guia-tipos-de-datos.html Guía interactiva de tipos de datos en C++ (enlazada desde el Tema 2)
 ├── bloque3/
 │   └── index.html              Bloque 3: lecturas de 4 temas (juez en línea, omegaUp, Codeforces y veredictos)
 ├── css/
