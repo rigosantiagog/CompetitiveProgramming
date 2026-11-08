@@ -127,6 +127,9 @@ pre {
   padding: 1rem 1.2rem;
   border-radius: 12px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  box-sizing: border-box;
   font-family: var(--font-mono);
   font-size: 0.875rem;
   line-height: 1.6;
@@ -138,6 +141,9 @@ pre code {
   padding: 0;
   background: transparent;
   color: inherit;
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 /* ---------- Navegación superior (inspirada en .author-banner + glass header) ---------- */
@@ -1944,4 +1950,44 @@ html, body {
 
 .tarjeta-ejercicio-b2 .lectura-tabla code {
   white-space: pre;
+}
+
+
+/* ---------- Ajustes responsivos para Bloque 3 y visor de lecturas ---------- */
+.tab-panel,
+.bloque-pestana,
+.visor-subtema,
+.lectura-cuerpo {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  margin-bottom: 1rem;
+}
+
+/* Barra de pestañas con un solo botón (Aprender en Bloque 3) */
+.tab-barra:has(.tab-btn:only-child) {
+  background: #f1f5f9;
+  border-color: #dbe4ef;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.tab-barra:has(.tab-btn:only-child) .tab-btn,
+.tab-barra .tab-btn:only-child {
+  cursor: default;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+}
+
+@media (max-width: 576px) {
+  .recursos-tema .btn,
+  .recursos-tema .enlace-recurso {
+    width: 100%;
+    justify-content: center;
+  }
 }
